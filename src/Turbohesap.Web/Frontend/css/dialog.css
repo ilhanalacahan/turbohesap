@@ -1,0 +1,63 @@
+/* Dialog / modal — th-dialog. Ortak panel başlığı kullanılır. */
+
+.th-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--th-overlay);
+  backdrop-filter: blur(2px);
+  z-index: var(--th-z-modal);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  animation: th-fade-in var(--th-transition) var(--th-ease);
+}
+
+/* Mobile-first: tam genişlik, alta yapışık; sm üstünde ortalanır. */
+.th-dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 92dvh;
+  background: var(--th-surface);
+  border-top-left-radius: var(--th-radius-xl);
+  border-top-right-radius: var(--th-radius-xl);
+  box-shadow: var(--th-shadow-xl);
+  overflow: hidden;
+  animation: th-slide-up var(--th-transition) var(--th-ease);
+}
+
+@media (min-width: 640px) {
+  .th-overlay { align-items: center; padding: 1.5rem; }
+  .th-dialog { border-radius: var(--th-radius-xl); max-height: 85dvh; }
+  .th-dialog--sm { width: 24rem; }
+  .th-dialog--md { width: 32rem; }
+  .th-dialog--lg { width: 46rem; }
+  .th-dialog--xl { width: 64rem; }
+}
+
+.th-dialog__body { padding: 1.25rem; overflow-y: auto; }
+.th-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+}
+
+.th-dialog__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--th-radius-md);
+  color: var(--th-text-subtle);
+  cursor: pointer;
+}
+.th-dialog__close:hover { background: var(--th-surface-3); color: var(--th-text); }
+
+@keyframes th-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes th-slide-up { from { transform: translateY(2rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

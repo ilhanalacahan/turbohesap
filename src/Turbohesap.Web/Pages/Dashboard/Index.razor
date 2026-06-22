@@ -1,0 +1,57 @@
+@page "/dashboard"
+@attribute [Authorize]
+<PageTitle>Gösterge Paneli · Turbohesap</PageTitle>
+
+<ThPage Title="Gösterge Paneli" Subtitle="Genel bakış ve özet bilgiler">
+    <Actions>
+        <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-download">Dışa Aktar</ThButton>
+        <ThButton Variant="ButtonVariant.Primary" Icon="fa-solid fa-plus">Yeni Kayıt</ThButton>
+    </Actions>
+    <ChildContent>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        @foreach (var stat in _stats)
+        {
+            <div class="th-card">
+                <div class="th-card__body flex items-center gap-4">
+                    <span class="@($"inline-flex items-center justify-center w-12 h-12 rounded-lg text-lg {stat.IconBg} {stat.IconFg}")">
+                        <i class="@stat.Icon"></i>
+                    </span>
+                    <div>
+                        <div class="text-text-muted text-xs">@stat.Label</div>
+                        <div class="text-2xl font-semibold">@stat.Value</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="th-card lg:col-span-2">
+            <div class="th-panel-header"><div class="th-panel-title">Son Hareketler</div></div>
+            <div class="th-card__body text-text-muted text-sm">
+                Buraya bir grafik veya tablo gelecek. Tüm bileşenler token tabanlıdır;
+                tema değişince otomatik uyum sağlar.
+            </div>
+        </div>
+        <div class="th-card">
+            <div class="th-panel-header"><div class="th-panel-title">Hızlı Erişim</div></div>
+            <div class="th-card__body flex flex-col gap-2">
+                <a href="/customers" class="th-btn th-btn--subtle th-btn--block"><i class="fa-solid fa-users"></i> Müşteriler</a>
+                <a href="/settings/theme" class="th-btn th-btn--ghost th-btn--block"><i class="fa-solid fa-palette"></i> Tema Ayarları</a>
+            </div>
+        </div>
+    </div>
+    </ChildContent>
+</ThPage>
+
+@code {
+    private record Stat(string Label, string Value, string Icon, string IconBg, string IconFg);
+
+    private readonly Stat[] _stats =
+    [
+        new("Toplam Müşteri", "128", "fa-solid fa-users", "bg-primary-subtle", "text-primary"),
+        new("Aylık Satış", "₺ 84.300", "fa-solid fa-arrow-trend-up", "bg-success-subtle", "text-success"),
+        new("Bekleyen Fatura", "12", "fa-solid fa-file-invoice", "bg-warning-subtle", "text-warning"),
+        new("Açık Talep", "5", "fa-solid fa-headset", "bg-info-subtle", "text-info")
+    ];
+}

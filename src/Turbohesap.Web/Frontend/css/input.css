@@ -1,0 +1,112 @@
+/* Form alanları — th-field sarmalayıcı + th-input. */
+
+.th-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.th-label {
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-medium);
+  color: var(--th-text);
+}
+.th-label--required::after {
+  content: ' *';
+  color: var(--th-danger);
+}
+
+.th-input,
+.th-textarea,
+.th-select {
+  width: 100%;
+  height: var(--th-control-height);
+  padding-inline: 0.75rem;
+  background: var(--th-surface);
+  color: var(--th-text);
+  border: 1px solid var(--th-border-strong);
+  border-radius: var(--th-radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: border-color var(--th-transition-fast) var(--th-ease),
+    box-shadow var(--th-transition-fast) var(--th-ease);
+}
+
+.th-textarea {
+  height: auto;
+  min-height: 5rem;
+  padding-block: 0.5rem;
+  resize: vertical;
+}
+
+.th-input::placeholder,
+.th-textarea::placeholder {
+  color: var(--th-text-subtle);
+}
+
+.th-input:focus,
+.th-textarea:focus,
+.th-select:focus {
+  outline: none;
+  border-color: var(--th-primary);
+  box-shadow: 0 0 0 3px var(--th-ring);
+}
+
+.th-input:disabled,
+.th-textarea:disabled,
+.th-select:disabled {
+  background: var(--th-surface-3);
+  color: var(--th-text-subtle);
+  cursor: not-allowed;
+}
+
+/* Boyutlar */
+.th-input--sm { height: var(--th-control-height-sm); font-size: 0.8125rem; }
+.th-input--lg { height: var(--th-control-height-lg); font-size: 0.9375rem; }
+
+/* Hata durumu */
+.th-input--error,
+.th-textarea--error,
+.th-select--error {
+  border-color: var(--th-danger);
+}
+.th-input--error:focus { box-shadow: 0 0 0 3px var(--th-danger-subtle); }
+
+.th-hint { font-size: 0.75rem; color: var(--th-text-subtle); }
+.th-error { font-size: 0.75rem; color: var(--th-danger); }
+
+/* Önek/sonek ikonlu alan */
+.th-input-group { position: relative; display: flex; align-items: center; }
+.th-input-group .th-input { padding-left: 2.25rem; }
+.th-input-group__icon {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--th-text-subtle);
+  pointer-events: none;
+  font-size: 0.875rem;
+}
+
+/* Anahtar (switch) */
+.th-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 2.5rem;
+  height: 1.4rem;
+  border-radius: var(--th-radius-full);
+  background: var(--th-border-strong);
+  cursor: pointer;
+  transition: background-color var(--th-transition) var(--th-ease);
+}
+.th-switch[aria-checked='true'] { background: var(--th-primary); }
+.th-switch__thumb {
+  position: absolute;
+  left: 2px;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: var(--th-radius-full);
+  background: #fff;
+  box-shadow: var(--th-shadow-sm);
+  transition: transform var(--th-transition) var(--th-ease);
+}
+.th-switch[aria-checked='true'] .th-switch__thumb { transform: translateX(1.1rem); }

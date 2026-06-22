@@ -1,0 +1,39 @@
+/* Yan panel (drawer) — th-drawer. Sağ/sol; mobile-first tam genişlik. */
+
+.th-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--th-overlay);
+  z-index: var(--th-z-drawer);
+  display: flex;
+  animation: th-fade-in var(--th-transition) var(--th-ease);
+}
+.th-drawer-overlay--right { justify-content: flex-end; }
+.th-drawer-overlay--left { justify-content: flex-start; }
+
+.th-drawer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 26rem;
+  height: 100%;
+  background: var(--th-surface);
+  box-shadow: var(--th-shadow-xl);
+  overflow: hidden;
+}
+.th-drawer-overlay--right .th-drawer { animation: th-slide-left var(--th-transition) var(--th-ease); }
+.th-drawer-overlay--left .th-drawer { animation: th-slide-right var(--th-transition) var(--th-ease); }
+
+.th-drawer__body { padding: 1.25rem; overflow-y: auto; flex: 1; }
+.th-drawer__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+}
+
+@keyframes th-slide-left { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes th-slide-right { from { transform: translateX(-100%); } to { transform: translateX(0); } }

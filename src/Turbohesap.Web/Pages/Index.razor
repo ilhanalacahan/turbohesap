@@ -1,0 +1,19 @@
+@page "/"
+@layout Turbohesap.Web.Components.Layout.AuthLayout
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Nav
+
+@* Kök sayfa: giriş kontrolü yapar; oturum varsa /dashboard, yoksa /login (req 28). *@
+<div class="th-card" style="padding:2rem;text-align:center">
+    <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;color:var(--th-primary)"></i>
+    <p style="margin-top:0.75rem;color:var(--th-text-muted)">Yönlendiriliyor…</p>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthProvider.GetAuthenticationStateAsync();
+        var authenticated = state.User.Identity?.IsAuthenticated == true;
+        Nav.NavigateTo(authenticated ? "/dashboard" : "/login", forceLoad: false);
+    }
+}

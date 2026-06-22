@@ -1,0 +1,76 @@
+/* Uygulama kabuğu yerleşimi — sol sabit sidebar + sağda appbar/içerik/footer (req 29).
+   Mobile-first: içerik tek sütun, sidebar mobilde üstüne kayar (off-canvas). */
+
+.th-shell {
+  display: flex;
+  min-height: 100dvh;
+  background: var(--th-bg);
+}
+
+.th-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0; /* içerik taşmasını engeller (tablolar vb.) */
+}
+
+/* Kaydırılabilir içerik bölgesi */
+.th-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sayfa sarmalayıcı: normal sayfalarda kenar boşluğu; harita gibi tam-ekran için --flush */
+.th-page {
+  flex: 1;
+  padding: var(--th-content-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--th-content-padding);
+}
+.th-page--flush { padding: 0; gap: 0; }
+
+@media (min-width: 768px) {
+  .th-page { padding: var(--th-content-padding-lg); gap: var(--th-content-padding-lg); }
+  .th-page--flush { padding: 0; gap: 0; }
+}
+
+/* Sayfa başlığı: solda başlık, sağda aksiyonlar (req 29) */
+.th-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.th-page-title { font-size: 1.25rem; font-weight: var(--th-fw-semibold); }
+.th-page-subtitle { font-size: 0.875rem; color: var(--th-text-muted); margin-top: 0.15rem; }
+.th-page-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+/* Opsiyonel footer: sidebar footer ile aynı yükseklik (req 29) */
+.th-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  height: var(--th-footer-height);
+  padding-inline: var(--th-content-padding-lg);
+  border-top: 1px solid var(--th-border);
+  background: var(--th-surface);
+  color: var(--th-text-muted);
+  font-size: 0.8125rem;
+}
+.th-footer--fixed { position: sticky; bottom: 0; z-index: var(--th-z-sticky); }
+
+/* Mobilde sidebar açıkken arka plan karartması */
+.th-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--th-overlay);
+  z-index: calc(var(--th-z-drawer) - 1);
+}
+@media (min-width: 768px) {
+  .th-backdrop { display: none; }
+}

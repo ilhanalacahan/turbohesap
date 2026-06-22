@@ -1,0 +1,110 @@
+/* ============================================================================
+   Turbohesap tasarım sistemi — ana CSS giriş noktası.
+   Sıra önemlidir: Tailwind çekirdeği → koyu mod varyantı → tokenlar →
+   Tailwind token eşlemesi → temel stiller → bileşenler → ikonlar.
+   ============================================================================ */
+
+@import 'tailwindcss';
+
+/* Tailwind utility'leri Blazor (.razor) işaretlemesinden tarar; aksi halde markup'ta
+   kullanılan sınıflar derlenmez (req 20: sınıf adları açıkça yazıldığı için taranabilir). */
+@source '../Components/**/*.razor';
+@source '../Pages/**/*.razor';
+
+/* Koyu mod, Tailwind'in varsayılan .dark sınıfı yerine <html data-theme="dark">
+   özniteliğiyle çalışır. Böylece dark: utility'leri de bizim sistemimize uyar. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* Tüm görsel parametreler (renk, radius, gölge, font, ölçü...) burada tanımlı. */
+@import './themes/tokens.css';
+
+/* Tailwind utility'lerini çalışma zamanı --th-* değişkenlerine bağlar.
+   "inline" sayesinde utility'ler doğrudan var(--th-*) kullanır; token değişince
+   (örn. koyu mod) tüm utility'ler otomatik güncellenir (req 16). */
+@theme inline {
+  /* Yüzeyler ve metin */
+  --color-bg: var(--th-bg);
+  --color-surface: var(--th-surface);
+  --color-surface-2: var(--th-surface-2);
+  --color-surface-3: var(--th-surface-3);
+  --color-overlay: var(--th-overlay);
+  --color-border: var(--th-border);
+  --color-border-strong: var(--th-border-strong);
+  --color-ring: var(--th-ring);
+  --color-text: var(--th-text);
+  --color-text-muted: var(--th-text-muted);
+  --color-text-subtle: var(--th-text-subtle);
+  --color-text-inverted: var(--th-text-inverted);
+
+  /* Marka + durum renkleri */
+  --color-primary: var(--th-primary);
+  --color-primary-hover: var(--th-primary-hover);
+  --color-primary-active: var(--th-primary-active);
+  --color-primary-fg: var(--th-primary-fg);
+  --color-primary-subtle: var(--th-primary-subtle);
+  --color-accent: var(--th-accent);
+  --color-success: var(--th-success);
+  --color-success-fg: var(--th-success-fg);
+  --color-success-subtle: var(--th-success-subtle);
+  --color-warning: var(--th-warning);
+  --color-warning-fg: var(--th-warning-fg);
+  --color-warning-subtle: var(--th-warning-subtle);
+  --color-danger: var(--th-danger);
+  --color-danger-fg: var(--th-danger-fg);
+  --color-danger-subtle: var(--th-danger-subtle);
+  --color-info: var(--th-info);
+  --color-info-fg: var(--th-info-fg);
+  --color-info-subtle: var(--th-info-subtle);
+
+  /* Yerleşim bölgeleri */
+  --color-sidebar: var(--th-sidebar-bg);
+  --color-sidebar-fg: var(--th-sidebar-fg);
+  --color-sidebar-muted: var(--th-sidebar-muted);
+  --color-sidebar-active: var(--th-sidebar-active);
+  --color-appbar: var(--th-appbar-bg);
+  --color-appbar-fg: var(--th-appbar-fg);
+
+  /* Köşe yarıçapları */
+  --radius-xs: var(--th-radius-xs);
+  --radius-sm: var(--th-radius-sm);
+  --radius-md: var(--th-radius-md);
+  --radius-lg: var(--th-radius-lg);
+  --radius-xl: var(--th-radius-xl);
+  --radius-2xl: var(--th-radius-2xl);
+
+  /* Gölgeler */
+  --shadow-xs: var(--th-shadow-xs);
+  --shadow-sm: var(--th-shadow-sm);
+  --shadow-md: var(--th-shadow-md);
+  --shadow-lg: var(--th-shadow-lg);
+  --shadow-xl: var(--th-shadow-xl);
+
+  /* Tipografi */
+  --font-sans: var(--th-font-sans);
+  --font-mono: var(--th-font-mono);
+}
+
+/* Temel element stilleri (reset, gövde, scrollbar, odak halkası). */
+@import './themes/base.css' layer(base);
+
+/* Yeniden kullanılan bileşenler (req: input, toast, dialog, modal, drawer, datatable...) */
+@import './css/button.css' layer(components);
+@import './css/input.css' layer(components);
+@import './css/card.css' layer(components);
+@import './css/badge.css' layer(components);
+@import './css/dialog.css' layer(components);
+@import './css/drawer.css' layer(components);
+@import './css/toast.css' layer(components);
+@import './css/datatable.css' layer(components);
+
+/* Kabuk (shell) bileşenleri */
+@import './css/sidebar.css' layer(components);
+@import './css/appbar.css' layer(components);
+@import './css/layout.css' layer(components);
+@import './css/tabs.css' layer(components);
+@import './css/command-launcher.css' layer(components);
+@import './css/app-launcher.css' layer(components);
+@import './css/ai-chat.css' layer(components);
+
+/* Font Awesome (ikon webfont'ları fonts/ altına ayrı derlenir). */
+@import '@fortawesome/fontawesome-free/css/all.css';

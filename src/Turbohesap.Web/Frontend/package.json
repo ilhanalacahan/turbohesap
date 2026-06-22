@@ -1,0 +1,21 @@
+{
+  "name": "turbohesap-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Turbohesap tasarım sistemi: Tailwind v4 + TypeScript, wwwroot/turbohesap.{css,js} olarak derlenir.",
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "dev": "vite build --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.1",
+    "tailwindcss": "4.3.1",
+    "typescript": "6.0.3",
+    "vite": "8.0.16"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "7.2.0"
+  }
+}

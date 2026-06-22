@@ -1,0 +1,52 @@
+/* Sekme şeridi — th-tabbar. Menüden açılan sayfalar sekme olarak yönetilir (req 29). */
+
+.th-tabbar {
+  display: flex;
+  align-items: stretch;
+  height: var(--th-tabbar-height);
+  background: var(--th-surface);
+  border-bottom: 1px solid var(--th-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.th-tabbar::-webkit-scrollbar { display: none; }
+
+.th-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.875rem;
+  max-width: 14rem;
+  border-inline-end: 1px solid var(--th-border);
+  color: var(--th-text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+  flex: 0 0 auto;
+}
+.th-tab:hover { background: var(--th-surface-2); color: var(--th-text); }
+
+.th-tab--active { color: var(--th-text); background: var(--th-bg); }
+.th-tab--active::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--th-primary);
+}
+
+.th-tab__icon { font-size: 0.8rem; }
+.th-tab__label { overflow: hidden; text-overflow: ellipsis; }
+.th-tab__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: var(--th-radius-sm);
+  color: var(--th-text-subtle);
+  font-size: 0.7rem;
+}
+.th-tab__close:hover { background: var(--th-surface-3); color: var(--th-text); }

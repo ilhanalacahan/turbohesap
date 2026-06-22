@@ -1,0 +1,165 @@
+/* ============================================================================
+   TASARIM TOKENLARI — tasarım sisteminin tek doğruluk kaynağı.
+   Tüm bileşenler yalnızca --th-* değişkenlerini kullanır; hiçbir bileşen sabit
+   renk/ölçü içermez. Bir token değişince ona bağlı her şey otomatik güncellenir
+   (req 16, 29). Renk tokenları hem açık (:root) hem koyu ([data-theme=dark]) için
+   ayrı tanımlıdır. Ölçü/yarıçap/tipografi gibi yapısal tokenlar moddan bağımsızdır.
+   ============================================================================ */
+
+:root {
+  /* ---- Global ölçek (tema editöründen değiştirilebilir) ---- */
+  --th-scale: 1;
+  --th-font-size-base: 16px;
+
+  /* ---- Tipografi ---- */
+  --th-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --th-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --th-fw-normal: 400;
+  --th-fw-medium: 500;
+  --th-fw-semibold: 600;
+  --th-fw-bold: 700;
+
+  /* ---- Köşe yarıçapları ---- */
+  --th-radius-xs: 4px;
+  --th-radius-sm: 6px;
+  --th-radius-md: 8px;
+  --th-radius-lg: 12px;
+  --th-radius-xl: 16px;
+  --th-radius-2xl: 24px;
+  --th-radius-full: 9999px;
+
+  /* ---- Yerleşim ölçüleri ---- */
+  --th-sidebar-width: 16rem;
+  --th-sidebar-collapsed-width: 4rem;
+  --th-appbar-height: 3.5rem;
+  --th-footer-height: 2.75rem;
+  --th-tabbar-height: 2.75rem;
+  --th-content-padding: 1rem;
+  --th-content-padding-lg: 1.5rem;
+  --th-control-height: 2.5rem;
+  --th-control-height-sm: 2rem;
+  --th-control-height-lg: 3rem;
+
+  /* ---- Hareket ---- */
+  --th-transition-fast: 120ms;
+  --th-transition: 200ms;
+  --th-transition-slow: 320ms;
+  --th-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- Katman sırası (z-index) ---- */
+  --th-z-sticky: 100;
+  --th-z-dropdown: 1000;
+  --th-z-drawer: 1100;
+  --th-z-modal: 1200;
+  --th-z-toast: 1300;
+  --th-z-tooltip: 1400;
+  --th-z-command: 1500;
+
+  /* ======================= AÇIK TEMA RENKLERİ ======================= */
+  --th-bg: #f5f6f8;
+  --th-surface: #ffffff;
+  --th-surface-2: #f8f9fb;
+  --th-surface-3: #eef1f4;
+  --th-overlay: rgba(15, 23, 42, 0.45);
+
+  --th-border: #e4e7eb;
+  --th-border-strong: #cdd3da;
+  --th-ring: rgba(37, 99, 235, 0.45);
+
+  --th-text: #1a2230;
+  --th-text-muted: #586073;
+  --th-text-subtle: #8b93a3;
+  --th-text-inverted: #ffffff;
+
+  --th-primary: #2563eb;
+  --th-primary-hover: #1d4ed8;
+  --th-primary-active: #1e40af;
+  --th-primary-fg: #ffffff;
+  --th-primary-subtle: #e8f0fe;
+
+  --th-accent: #7c3aed;
+
+  --th-success: #16a34a;
+  --th-success-fg: #ffffff;
+  --th-success-subtle: #e7f6ec;
+  --th-warning: #d97706;
+  --th-warning-fg: #ffffff;
+  --th-warning-subtle: #fdf1e2;
+  --th-danger: #dc2626;
+  --th-danger-fg: #ffffff;
+  --th-danger-subtle: #fdeaea;
+  --th-info: #0891b2;
+  --th-info-fg: #ffffff;
+  --th-info-subtle: #e2f5f9;
+
+  /* Yerleşim bölgeleri — açık temada da koyu, premium bir kenar çubuğu */
+  --th-sidebar-bg: #111827;
+  --th-sidebar-fg: #e5e7eb;
+  --th-sidebar-muted: #97a1b2;
+  --th-sidebar-active: rgba(255, 255, 255, 0.10);
+  --th-sidebar-border: rgba(255, 255, 255, 0.07);
+  --th-appbar-bg: #ffffff;
+  --th-appbar-fg: #1a2230;
+  --th-appbar-border: var(--th-border);
+
+  /* ---- Gölgeler (açık) ---- */
+  --th-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --th-shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.10), 0 1px 2px rgba(16, 24, 40, 0.06);
+  --th-shadow-md: 0 4px 6px -1px rgba(16, 24, 40, 0.10), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --th-shadow-lg: 0 10px 15px -3px rgba(16, 24, 40, 0.10), 0 4px 6px -4px rgba(16, 24, 40, 0.05);
+  --th-shadow-xl: 0 20px 25px -5px rgba(16, 24, 40, 0.10), 0 8px 10px -6px rgba(16, 24, 40, 0.04);
+}
+
+/* ======================= KOYU TEMA RENKLERİ ======================= */
+[data-theme='dark'] {
+  --th-bg: #0b1016;
+  --th-surface: #131a23;
+  --th-surface-2: #1a232e;
+  --th-surface-3: #212c39;
+  --th-overlay: rgba(0, 0, 0, 0.62);
+
+  --th-border: #283341;
+  --th-border-strong: #3a4757;
+  --th-ring: rgba(59, 130, 246, 0.55);
+
+  --th-text: #e6eaf0;
+  --th-text-muted: #9aa6b5;
+  --th-text-subtle: #6b7888;
+  --th-text-inverted: #0b1016;
+
+  --th-primary: #3b82f6;
+  --th-primary-hover: #60a5fa;
+  --th-primary-active: #2563eb;
+  --th-primary-fg: #ffffff;
+  --th-primary-subtle: rgba(59, 130, 246, 0.16);
+
+  --th-accent: #a78bfa;
+
+  --th-success: #22c55e;
+  --th-success-fg: #052e16;
+  --th-success-subtle: rgba(34, 197, 94, 0.15);
+  --th-warning: #f59e0b;
+  --th-warning-fg: #451a03;
+  --th-warning-subtle: rgba(245, 158, 11, 0.15);
+  --th-danger: #ef4444;
+  --th-danger-fg: #450a0a;
+  --th-danger-subtle: rgba(239, 68, 68, 0.15);
+  --th-info: #06b6d4;
+  --th-info-fg: #042f2e;
+  --th-info-subtle: rgba(6, 182, 212, 0.15);
+
+  --th-sidebar-bg: #0a0f16;
+  --th-sidebar-fg: #cdd5e0;
+  --th-sidebar-muted: #7f8b9b;
+  --th-sidebar-active: rgba(255, 255, 255, 0.08);
+  --th-sidebar-border: rgba(255, 255, 255, 0.06);
+  --th-appbar-bg: #131a23;
+  --th-appbar-fg: #e6eaf0;
+  --th-appbar-border: var(--th-border);
+
+  --th-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.40);
+  --th-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.50), 0 1px 2px rgba(0, 0, 0, 0.40);
+  --th-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.50), 0 2px 4px -2px rgba(0, 0, 0, 0.40);
+  --th-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.55), 0 4px 6px -4px rgba(0, 0, 0, 0.40);
+  --th-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.60), 0 8px 10px -6px rgba(0, 0, 0, 0.40);
+}

@@ -1,0 +1,15 @@
+@using Microsoft.AspNetCore.Components.Authorization
+
+<Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Turbohesap.Web.Pages.NotFound)">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Turbohesap.Web.Components.Layout.MainLayout)">
+            <NotAuthorized>
+                <Turbohesap.Web.Components.Shared.RedirectToLogin />
+            </NotAuthorized>
+            <Authorizing>
+                <div class="th-page"><i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor…</div>
+            </Authorizing>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+</Router>

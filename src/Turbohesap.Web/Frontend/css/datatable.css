@@ -1,0 +1,72 @@
+/* Veri tablosu — th-table + th-table-toolbar + th-pagination. Mobile-first: yatay kaydırma. */
+
+.th-table-wrap {
+  display: flex;
+  flex-direction: column;
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-lg);
+  overflow: hidden;
+}
+
+.th-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--th-border);
+  flex-wrap: wrap;
+}
+
+.th-table-scroll { overflow-x: auto; }
+
+.th-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.th-table thead th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  padding: 0.625rem 1rem;
+  background: var(--th-surface-2);
+  color: var(--th-text-muted);
+  font-weight: var(--th-fw-semibold);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--th-border);
+  user-select: none;
+}
+.th-table thead th.th-th--sortable { cursor: pointer; }
+.th-table thead th.th-th--sortable:hover { color: var(--th-text); }
+.th-table tbody td {
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--th-border);
+  color: var(--th-text);
+  vertical-align: middle;
+}
+.th-table tbody tr:last-child td { border-bottom: none; }
+.th-table tbody tr:hover { background: var(--th-surface-2); }
+
+.th-table__empty,
+.th-table__loading {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--th-text-subtle);
+  font-size: 0.875rem;
+}
+
+/* Sayfalama çubuğu (req 13) */
+.th-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--th-border);
+  flex-wrap: wrap;
+}
+.th-pagination__info { font-size: 0.8125rem; color: var(--th-text-muted); }
+.th-pagination__controls { display: flex; align-items: center; gap: 0.25rem; }
+.th-pagination__page-size { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--th-text-muted); }

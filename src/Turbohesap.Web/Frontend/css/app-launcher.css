@@ -1,0 +1,59 @@
+/* Uygulama başlatıcı — th-applauncher. App ikonuna tıklayınca açılan uygulama ızgarası
+   (Microsoft 365 / Ubuntu Unity tarzı, req 29). */
+
+.th-applauncher-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--th-z-command);
+  background: var(--th-overlay);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0.75rem;
+  animation: th-fade-in var(--th-transition) var(--th-ease);
+}
+
+.th-applauncher {
+  width: 100%;
+  max-width: 24rem;
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-xl);
+  box-shadow: var(--th-shadow-xl);
+  overflow: hidden;
+  animation: th-slide-up var(--th-transition) var(--th-ease);
+}
+
+.th-applauncher__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.th-app-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 0.5rem;
+  border-radius: var(--th-radius-lg);
+  color: var(--th-text);
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--th-transition-fast) var(--th-ease);
+}
+.th-app-tile:hover { background: var(--th-surface-3); }
+.th-app-tile__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--th-radius-lg);
+  background: var(--th-primary-subtle);
+  color: var(--th-primary);
+  font-size: 1.15rem;
+}
+.th-app-tile__label { font-size: 0.75rem; line-height: 1.2; }

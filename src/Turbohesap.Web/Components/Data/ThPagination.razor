@@ -1,0 +1,49 @@
+@namespace Turbohesap.Web.Components.Data
+@using Turbohesap.Web.Components.Button
+
+@* Sayfalama çubuğu. Sayfa boyutu parametriktir (req 13). *@
+<div class="th-pagination">
+    <div class="th-pagination__info">
+        @TotalCount kayıt · Sayfa @Page / @Math.Max(1, TotalPages)
+    </div>
+
+    <div class="th-pagination__page-size">
+        <span>Sayfa boyutu</span>
+        <select class="th-select th-input--sm" style="width:auto" value="@PageSize" @onchange="OnPageSizeChanged">
+            @foreach (var size in PageSizeOptions)
+            {
+                <option value="@size" selected="@(size == PageSize)">@size</option>
+            }
+        </select>
+    </div>
+
+    <div class="th-pagination__controls">
+        <ThButton Variant="ButtonVariant.Ghost" Size="Base.ComponentSize.Sm" IconOnly Icon="fa-solid fa-angles-left"
+                  Disabled="@(Page <= 1)" OnClick="() => GoTo(1)" />
+        <ThButton Variant="ButtonVariant.Ghost" Size="Base.ComponentSize.Sm" IconOnly Icon="fa-solid fa-angle-left"
+                  Disabled="@(Page <= 1)" OnClick="() => GoTo(Page - 1)" />
+        <ThButton Variant="ButtonVariant.Ghost" Size="Base.ComponentSize.Sm" IconOnly Icon="fa-solid fa-angle-right"
+                  Disabled="@(Page >= TotalPages)" OnClick="() => GoTo(Page + 1)" />
+        <ThButton Variant="ButtonVariant.Ghost" Size="Base.ComponentSize.Sm" IconOnly Icon="fa-solid fa-angles-right"
+                  Disabled="@(Page >= TotalPages)" OnClick="() => GoTo(TotalPages)" />
+    </div>
+</div>
+
+@code {
+    [Parameter] public int Page { get; set; } = 1;
+    [Parameter] public int PageSize { get; set; } = 20;
+    [Parameter] public int TotalCount { get; set; }
+    [Parameter] public int TotalPages { get; set; }
+    [Parameter] public EventCallback<int> PageChanged { get; set; }
+    [Parameter] public EventCallback<int> PageSizeChanged { get; set; }
+    [Parameter] public int[] PageSizeOptions { get; set; } = [10, 20, 50, 100];
+
+    private Task GoTo(int page)
+    {
+        var target = Math.Clamp(page, 1, Math.Max(1, TotalPages));
+        return target == Page ? Task.CompletedTask : PageChanged.InvokeAsync(target);
+    }
+
+    private Task OnPageSizeChanged(ChangeEventArgs e)
+        => int.TryParse(e.Value?.ToString(), out var size) ? PageSizeChanged.InvokeAsync(size) : Task.CompletedTask;
+}

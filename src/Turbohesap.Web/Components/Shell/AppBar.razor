@@ -1,0 +1,126 @@
+@namespace Turbohesap.Web.Components.Shell
+@implements IDisposable
+@inject Turbohesap.Web.Services.LayoutState Layout
+@inject Turbohesap.Web.Services.ThemeInterop Theme
+@inject Turbohesap.Web.Services.AuthClientService Auth
+@inject NavigationManager Nav
+
+<header class="th-appbar">
+    <div class="th-appbar__left">
+        <span class="th-appbar__menu" @onclick="Layout.ToggleSidebar"><i class="fa-solid fa-bars"></i></span>
+        <nav class="th-breadcrumb">
+            @for (var i = 0; i < _crumbs.Count; i++)
+            {
+                var isLast = i == _crumbs.Count - 1;
+                <span class="@(isLast ? "th-breadcrumb__item th-breadcrumb__item--current" : "th-breadcrumb__item")">@_crumbs[i]</span>
+                @if (!isLast)
+                {
+                    <i class="th-breadcrumb__sep fa-solid fa-chevron-right"></i>
+                }
+            }
+        </nav>
+    </div>
+
+    <div class="th-appbar__center">
+        <div class="th-appbar__search" @onclick="Layout.ToggleCommand">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Ara veya komut çalıştır…</span>
+            <kbd>Ctrl K</kbd>
+        </div>
+    </div>
+
+    <div class="th-appbar__right">
+        <span class="th-iconbtn" title="Tema özelleştir" @onclick="@(() => Nav.NavigateTo("/settings/theme"))">
+            <i class="fa-solid fa-palette"></i>
+        </span>
+        <span class="th-iconbtn" title="Bildirimler">
+            <i class="fa-solid fa-bell"></i>
+            <span class="th-iconbtn__badge">3</span>
+        </span>
+        <span class="th-iconbtn" title="Gece/Gündüz" @onclick="ToggleDarkAsync">
+            <i class="fa-solid fa-circle-half-stroke"></i>
+        </span>
+
+        <div style="position:relative">
+            <span class="th-avatar" @onclick="ToggleUserMenu">@_initials</span>
+            @if (_userMenuOpen)
+            {
+                <div class="th-card" style="position:absolute;right:0;top:2.5rem;width:14rem;z-index:var(--th-z-dropdown)">
+                    <div class="th-card__body" style="padding:0.75rem">
+                        <div style="font-weight:600;font-size:0.875rem">@_fullName</div>
+                        <div style="font-size:0.75rem;color:var(--th-text-muted)">@_email</div>
+                    </div>
+                    <div class="th-card__footer" style="justify-content:stretch">
+                        <button class="th-btn th-btn--ghost th-btn--block th-btn--sm" @onclick="LogoutAsync">
+                            <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</header>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private List<string> _crumbs = ["Gösterge Paneli"];
+    private bool _userMenuOpen;
+    private string _initials = "TH";
+    private string _fullName = "Kullanıcı";
+    private string _email = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Nav.LocationChanged += OnLocationChanged;
+        BuildCrumbs();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (AuthState is not null)
+        {
+            var user = (await AuthState).User;
+            _fullName = user.Identity?.Name ?? "Kullanıcı";
+            _email = user.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? string.Empty;
+            _initials = BuildInitials(_fullName);
+        }
+    }
+
+    private void BuildCrumbs()
+    {
+        var path = new Uri(Nav.Uri).AbsolutePath.Trim('/');
+        _crumbs = string.IsNullOrEmpty(path)
+            ? ["Gösterge Paneli"]
+            : path.Split('/').Select(Humanize).ToList();
+    }
+
+    private static string Humanize(string segment)
+        => segment.Length == 0 ? segment : char.ToUpperInvariant(segment[0]) + segment[1..].Replace('-', ' ');
+
+    private static string BuildInitials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length == 0 ? "TH" : string.Concat(parts.Take(2).Select(p => char.ToUpperInvariant(p[0])));
+    }
+
+    private void ToggleUserMenu() => _userMenuOpen = !_userMenuOpen;
+
+    private async Task ToggleDarkAsync() => await Theme.ToggleAsync();
+
+    private async Task LogoutAsync()
+    {
+        _userMenuOpen = false;
+        await Auth.LogoutAsync();
+        Nav.NavigateTo("/login", forceLoad: false);
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        BuildCrumbs();
+        _userMenuOpen = false;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose() => Nav.LocationChanged -= OnLocationChanged;
+}

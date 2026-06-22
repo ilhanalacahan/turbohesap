@@ -1,0 +1,36 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject Turbohesap.Web.Services.LayoutState Layout
+
+@* Uygulama kabuğu: sol sidebar + (appbar + tabbar + içerik). Overlay'ler ve toast en üstte (req 29). *@
+<div class="th-shell">
+    <Sidebar />
+    @if (Layout.SidebarOpen)
+    {
+        <div class="th-backdrop" @onclick="Layout.CloseSidebar"></div>
+    }
+    <div class="th-main">
+        <AppBar />
+        <TabBar />
+        <div class="th-content">
+            @Body
+        </div>
+    </div>
+</div>
+
+<AppLauncher />
+<CommandLauncher />
+<AiChat />
+<ThToastHost />
+
+<div id="blazor-error-ui" data-nosnippet>
+    Beklenmeyen bir hata oluştu.
+    <a href="." class="reload">Yenile</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    protected override void OnInitialized() => Layout.OnChange += Changed;
+    private void Changed() => InvokeAsync(StateHasChanged);
+    public void Dispose() => Layout.OnChange -= Changed;
+}

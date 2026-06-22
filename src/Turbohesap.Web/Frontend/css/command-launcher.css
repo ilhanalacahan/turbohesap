@@ -1,0 +1,67 @@
+/* Komut başlatıcı (command palette) — th-command. Appbar aramasından açılır (req 29). */
+
+.th-command-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--th-z-command);
+  background: var(--th-overlay);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1rem;
+  animation: th-fade-in var(--th-transition) var(--th-ease);
+}
+@media (min-width: 640px) { .th-command-overlay { padding-top: 12vh; } }
+
+.th-command {
+  width: 100%;
+  max-width: 38rem;
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-xl);
+  box-shadow: var(--th-shadow-xl);
+  overflow: hidden;
+  animation: th-slide-up var(--th-transition) var(--th-ease);
+}
+
+.th-command__search {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--th-border);
+}
+.th-command__search i { color: var(--th-text-subtle); }
+.th-command__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--th-text);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.th-command__results { max-height: 22rem; overflow-y: auto; padding: 0.5rem; }
+.th-command__group-label {
+  padding: 0.5rem 0.625rem 0.25rem;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--th-text-subtle);
+}
+.th-command__item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.55rem 0.625rem;
+  border-radius: var(--th-radius-md);
+  color: var(--th-text);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.th-command__item:hover,
+.th-command__item--active { background: var(--th-primary-subtle); color: var(--th-primary); }
+.th-command__item-icon { width: 1.1rem; text-align: center; color: var(--th-text-subtle); }
+.th-command__item--active .th-command__item-icon { color: var(--th-primary); }
+.th-command__empty { padding: 2rem; text-align: center; color: var(--th-text-subtle); font-size: 0.875rem; }

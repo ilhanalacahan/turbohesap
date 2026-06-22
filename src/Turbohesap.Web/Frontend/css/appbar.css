@@ -1,0 +1,113 @@
+/* Üst bar — th-appbar. Solda hamburger+breadcrumb, ortada arama, sağda aksiyonlar (req 29). */
+
+.th-appbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--th-z-sticky);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: var(--th-appbar-height);
+  padding-inline: 0.75rem;
+  background: var(--th-appbar-bg);
+  color: var(--th-appbar-fg);
+  border-bottom: 1px solid var(--th-appbar-border);
+}
+
+.th-appbar__left { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+.th-appbar__center { flex: 1; display: flex; justify-content: center; min-width: 0; }
+.th-appbar__right { display: flex; align-items: center; gap: 0.25rem; }
+
+/* Mobil hamburger (masaüstünde gizli, sidebar zaten sabit) */
+.th-appbar__menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--th-radius-md);
+  color: var(--th-text-muted);
+  cursor: pointer;
+}
+.th-appbar__menu:hover { background: var(--th-surface-3); }
+@media (min-width: 768px) { .th-appbar__menu { display: none; } }
+
+/* Breadcrumb */
+.th-breadcrumb { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8125rem; min-width: 0; overflow: hidden; }
+.th-breadcrumb__item { color: var(--th-text-muted); white-space: nowrap; }
+.th-breadcrumb__item--current { color: var(--th-text); font-weight: var(--th-fw-medium); }
+.th-breadcrumb__sep { color: var(--th-text-subtle); font-size: 0.65rem; }
+@media (max-width: 520px) { .th-breadcrumb__item:not(.th-breadcrumb__item--current) { display: none; } .th-breadcrumb__sep { display: none; } }
+
+/* Ortadaki arama — CommandLauncher'ı açan tetikleyici (req 29) */
+.th-appbar__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 28rem;
+  height: 2.25rem;
+  padding-inline: 0.75rem;
+  background: var(--th-surface-3);
+  color: var(--th-text-subtle);
+  border: 1px solid transparent;
+  border-radius: var(--th-radius-md);
+  font-size: 0.8125rem;
+  cursor: text;
+}
+.th-appbar__search:hover { border-color: var(--th-border-strong); }
+.th-appbar__search kbd {
+  margin-inline-start: auto;
+  padding: 0.05rem 0.35rem;
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-sm);
+  font-size: 0.6875rem;
+  font-family: var(--th-font-mono);
+  color: var(--th-text-muted);
+}
+@media (max-width: 640px) { .th-appbar__search kbd { display: none; } }
+
+/* Sağ ikon aksiyonları */
+.th-iconbtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--th-radius-md);
+  color: var(--th-text-muted);
+  cursor: pointer;
+  transition: background-color var(--th-transition-fast) var(--th-ease);
+}
+.th-iconbtn:hover { background: var(--th-surface-3); color: var(--th-text); }
+.th-iconbtn__badge {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  min-width: 1rem;
+  height: 1rem;
+  padding-inline: 0.2rem;
+  border-radius: var(--th-radius-full);
+  background: var(--th-danger);
+  color: #fff;
+  font-size: 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.th-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--th-radius-full);
+  background: var(--th-primary-subtle);
+  color: var(--th-primary);
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-semibold);
+  cursor: pointer;
+}

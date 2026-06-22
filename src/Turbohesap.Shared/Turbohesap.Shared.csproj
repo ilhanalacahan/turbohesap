@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Shared contracts: DTOs, CQRS messages, service interfaces, validators, role names.
+       Must stay free of EF Core / ASP.NET references so both Api and Web can depend on it. -->
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+  </ItemGroup>
+
+</Project>

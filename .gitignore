@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+*.user
+artifacts/
+
+# Çalışma zamanı (make run) — PID, log
+.run/
+logs/
+src/Turbohesap.Api/logs/
+
+# Node / Vite
+node_modules/
+
+# Vite derleme çıktıları (make front ile üretilir)
+src/Turbohesap.Web/wwwroot/turbohesap.css
+src/Turbohesap.Web/wwwroot/turbohesap.js
+src/Turbohesap.Web/wwwroot/turbohesap-*.js
+src/Turbohesap.Web/wwwroot/fonts/
+
+# IDE
+.vs/
+.idea/
+*.swp
+.DS_Store

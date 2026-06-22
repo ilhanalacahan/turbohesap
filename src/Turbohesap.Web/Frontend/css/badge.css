@@ -1,0 +1,23 @@
+/* Rozet / etiket — th-badge. Durum renkleri token'lardan gelir. */
+
+.th-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--th-radius-full);
+  font-size: 0.75rem;
+  font-weight: var(--th-fw-medium);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.th-badge--neutral { background: var(--th-surface-3); color: var(--th-text-muted); }
+.th-badge--primary { background: var(--th-primary-subtle); color: var(--th-primary); }
+.th-badge--success { background: var(--th-success-subtle); color: var(--th-success); }
+.th-badge--warning { background: var(--th-warning-subtle); color: var(--th-warning); }
+.th-badge--danger { background: var(--th-danger-subtle); color: var(--th-danger); }
+.th-badge--info { background: var(--th-info-subtle); color: var(--th-info); }
+
+/* Nokta göstergeli */
+.th-badge__dot { width: 0.45rem; height: 0.45rem; border-radius: var(--th-radius-full); background: currentColor; }

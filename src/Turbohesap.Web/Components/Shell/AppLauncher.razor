@@ -1,0 +1,43 @@
+@namespace Turbohesap.Web.Components.Shell
+@implements IDisposable
+@inject Turbohesap.Web.Services.LayoutState Layout
+@inject Turbohesap.Web.Services.AppNavigation Navigation
+@inject NavigationManager Nav
+
+@if (Layout.AppLauncherOpen)
+{
+    <div class="th-applauncher-overlay" @onclick="Layout.CloseAppLauncher">
+        <div class="th-applauncher" @onclick:stopPropagation="true">
+            <div class="th-panel-header">
+                <div class="th-panel-title">Uygulamalar</div>
+                <span class="th-dialog__close" @onclick="Layout.CloseAppLauncher"><i class="fa-solid fa-xmark"></i></span>
+            </div>
+            <div class="th-applauncher__grid">
+                @foreach (var app in Navigation.Apps)
+                {
+                    <div class="th-app-tile" @onclick="() => Open(app)">
+                        <span class="th-app-tile__icon"><i class="@app.Icon"></i></span>
+                        <span class="th-app-tile__label">@app.Name</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    protected override void OnInitialized() => Layout.OnChange += Changed;
+
+    private void Open(AppItem app)
+    {
+        Layout.CloseAppLauncher();
+        if (app.Href != "#")
+        {
+            Nav.NavigateTo(app.Href);
+        }
+    }
+
+    private void Changed() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Layout.OnChange -= Changed;
+}

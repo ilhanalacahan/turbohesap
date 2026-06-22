@@ -1,0 +1,85 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <!--
+    Central Package Management: every version lives here; .csproj files reference
+    packages WITHOUT a Version attribute. Keep this list alphabetised per group.
+  -->
+
+  <!-- ASP.NET Core / framework -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.7.0" />
+  </ItemGroup>
+
+  <!-- Entity Framework Core + PostgreSQL -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+    <PackageVersion Include="EFCore.NamingConventions" Version="10.0.1" />
+  </ItemGroup>
+
+  <!-- CQRS / messaging -->
+  <ItemGroup>
+    <PackageVersion Include="WolverineFx" Version="6.13.1" />
+    <PackageVersion Include="WolverineFx.FluentValidation" Version="6.13.1" />
+    <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="6.13.1" />
+  </ItemGroup>
+
+  <!-- Auditing -->
+  <ItemGroup>
+    <PackageVersion Include="Audit.NET" Version="32.2.0" />
+    <PackageVersion Include="Audit.EntityFramework.Core" Version="32.2.0" />
+  </ItemGroup>
+
+  <!-- Mapping -->
+  <ItemGroup>
+    <PackageVersion Include="Mapster" Version="10.0.8" />
+    <PackageVersion Include="Mapster.DependencyInjection" Version="10.0.8" />
+  </ItemGroup>
+
+  <!-- Validation -->
+  <ItemGroup>
+    <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageVersion Include="Blazored.FluentValidation" Version="2.2.0" />
+  </ItemGroup>
+
+  <!-- API documentation / versioning -->
+  <ItemGroup>
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.16.4" />
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="10.0.0" />
+    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.0" />
+  </ItemGroup>
+
+  <!-- Logging (Serilog) -->
+  <ItemGroup>
+    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+  <!-- Telemetry (OpenTelemetry) -->
+  <ItemGroup>
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.2" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.15.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.1" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.16.0" />
+    <PackageVersion Include="Npgsql.OpenTelemetry" Version="10.0.3" />
+  </ItemGroup>
+
+  <!-- Blazor WebAssembly (only kept for reference; Web is Interactive Server) -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.5" />
+  </ItemGroup>
+
+</Project>

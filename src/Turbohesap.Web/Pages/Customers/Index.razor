@@ -1,0 +1,279 @@
+@page "/customers"
+@attribute [Authorize]
+@inject Turbohesap.Web.Services.CustomerApiService Customers
+@inject Turbohesap.Web.Services.ToastService Toasts
+<PageTitle>Müşteriler · Turbohesap</PageTitle>
+
+<ThPage Title="Müşteriler" Subtitle="Cari kart listesi">
+    <Actions>
+        <ThButton Variant="ButtonVariant.Primary" Icon="fa-solid fa-plus" OnClick="OpenCreate">Yeni Müşteri</ThButton>
+    </Actions>
+    <ChildContent>
+    <ThDataTable TItem="CustomerDto" Items="_result.Items" Loading="_loading" ColumnCount="6">
+        <Toolbar>
+            <div class="th-input-group" style="max-width:18rem;width:100%">
+                <i class="th-input-group__icon fa-solid fa-magnifying-glass"></i>
+                <input class="th-input th-input--sm" type="search" placeholder="Ara: kod, ad, e-posta…"
+                       value="@_query.Search" @oninput="OnSearch" />
+            </div>
+            <label class="flex items-center gap-2 text-sm text-text-muted">
+                <input type="checkbox" checked="@(_query.OnlyActive == true)" @onchange="OnOnlyActiveChanged" />
+                Sadece aktif
+            </label>
+        </Toolbar>
+
+        <Header>
+            <th class="th-th--sortable" @onclick="@(() => Sort("code"))">Kod @SortIcon("code")</th>
+            <th class="th-th--sortable" @onclick="@(() => Sort("name"))">Ad @SortIcon("name")</th>
+            <th>E-posta</th>
+            <th>Telefon</th>
+            <th>Durum</th>
+            <th style="text-align:right">İşlemler</th>
+        </Header>
+
+        <Row Context="customer">
+            <td class="font-medium">@customer.Code</td>
+            <td>@customer.Name</td>
+            <td class="text-text-muted">@(string.IsNullOrEmpty(customer.Email) ? "—" : customer.Email)</td>
+            <td class="text-text-muted">@(string.IsNullOrEmpty(customer.PhoneNumber) ? "—" : customer.PhoneNumber)</td>
+            <td>
+                @if (customer.IsActive)
+                {
+                    <span class="th-badge th-badge--success"><span class="th-badge__dot"></span> Aktif</span>
+                }
+                else
+                {
+                    <span class="th-badge th-badge--neutral"><span class="th-badge__dot"></span> Pasif</span>
+                }
+            </td>
+            <td style="text-align:right">
+                <ThButton Variant="ButtonVariant.Ghost" Size="ComponentSize.Sm" IconOnly Icon="fa-solid fa-pen"
+                          OnClick="@(() => OpenEdit(customer))" />
+                <ThButton Variant="ButtonVariant.Ghost" Size="ComponentSize.Sm" IconOnly Icon="fa-solid fa-trash"
+                          OnClick="@(() => OpenDelete(customer))" />
+            </td>
+        </Row>
+
+        <Footer>
+            <ThPagination Page="_result.Page" PageSize="_result.PageSize" TotalCount="_result.TotalCount"
+                          TotalPages="_result.TotalPages" PageChanged="OnPageChanged" PageSizeChanged="OnPageSizeChanged" />
+        </Footer>
+    </ThDataTable>
+    </ChildContent>
+</ThPage>
+
+@* Oluştur / Düzenle *@
+<ThDialog @bind-Visible="_formOpen" Title="@(_editId is null ? "Yeni Müşteri" : "Müşteriyi Düzenle")" Size="DialogSize.Md">
+    <ChildContent>
+    <EditForm Model="_form" OnValidSubmit="SaveAsync" id="customer-form">
+        <FluentValidationValidator />
+        <div class="flex flex-col gap-4">
+            <ThField TValue="string" Label="Kod" Required For="() => _form.Code">
+                <InputText class="th-input" @bind-Value="_form.Code" placeholder="örn. MUS001" />
+            </ThField>
+            <ThField TValue="string" Label="Ad" Required For="() => _form.Name">
+                <InputText class="th-input" @bind-Value="_form.Name" placeholder="Firma / kişi adı" />
+            </ThField>
+            <ThField TValue="string" Label="E-posta" For="() => _form.Email">
+                <InputText class="th-input" @bind-Value="_form.Email" placeholder="info@firma.com" />
+            </ThField>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <ThField TValue="string" Label="Telefon" For="() => _form.PhoneNumber">
+                    <InputText class="th-input" @bind-Value="_form.PhoneNumber" />
+                </ThField>
+                <ThField TValue="string" Label="Vergi No" For="() => _form.TaxNumber">
+                    <InputText class="th-input" @bind-Value="_form.TaxNumber" />
+                </ThField>
+            </div>
+            <label class="flex items-center gap-2 text-sm">
+                <InputCheckbox @bind-Value="_form.IsActive" /> Aktif
+            </label>
+        </div>
+    </EditForm>
+    </ChildContent>
+    <Footer>
+        <ThButton Variant="ButtonVariant.Ghost" OnClick="@(() => _formOpen = false)">İptal</ThButton>
+        <ThButton Variant="ButtonVariant.Primary" Type="submit" Loading="_saving" Icon="fa-solid fa-floppy-disk"
+                  AdditionalAttributes="@(new Dictionary<string, object> { ["form"] = "customer-form" })">
+            Kaydet
+        </ThButton>
+    </Footer>
+</ThDialog>
+
+@* Silme onayı *@
+<ThDialog @bind-Visible="_deleteOpen" Title="Müşteriyi Sil" Size="DialogSize.Sm">
+    <ChildContent>
+        <p>“<strong>@_deleteTarget?.Name</strong>” adlı müşteriyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</p>
+    </ChildContent>
+    <Footer>
+        <ThButton Variant="ButtonVariant.Ghost" OnClick="@(() => _deleteOpen = false)">Vazgeç</ThButton>
+        <ThButton Variant="ButtonVariant.Danger" Loading="_saving" Icon="fa-solid fa-trash" OnClick="ConfirmDeleteAsync">Sil</ThButton>
+    </Footer>
+</ThDialog>
+
+@code {
+    private readonly GetCustomersQuery _query = new() { PageSize = 20, SortBy = "createdAtUtc", SortDirection = SortDirection.Descending };
+    private PagedResult<CustomerDto> _result = PagedResult<CustomerDto>.Empty(1, 20);
+    private bool _loading = true;
+
+    private bool _formOpen;
+    private bool _saving;
+    private Guid? _editId;
+    private CreateCustomerCommand _form = new();
+
+    private bool _deleteOpen;
+    private CustomerDto? _deleteTarget;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        try
+        {
+            _result = await Customers.GetListAsync(_query);
+        }
+        catch (ApiException ex)
+        {
+            Toasts.Error(ex.Message, "Liste alınamadı");
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task OnSearch(ChangeEventArgs e)
+    {
+        _query.Search = e.Value?.ToString();
+        _query.Page = 1;
+        await LoadAsync();
+    }
+
+    private async Task OnOnlyActiveChanged(ChangeEventArgs e)
+    {
+        _query.OnlyActive = (bool?)e.Value == true ? true : null;
+        _query.Page = 1;
+        await LoadAsync();
+    }
+
+    private async Task Sort(string field)
+    {
+        if (_query.SortBy == field)
+        {
+            _query.SortDirection = _query.SortDirection == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;
+        }
+        else
+        {
+            _query.SortBy = field;
+            _query.SortDirection = SortDirection.Ascending;
+        }
+        await LoadAsync();
+    }
+
+    private RenderFragment SortIcon(string field) => builder =>
+    {
+        if (_query.SortBy != field) return;
+        var icon = _query.SortDirection == SortDirection.Ascending ? "fa-arrow-up-short-wide" : "fa-arrow-down-wide-short";
+        builder.AddMarkupContent(0, $"<i class=\"fa-solid {icon}\" style=\"margin-left:.25rem;font-size:.7rem\"></i>");
+    };
+
+    private async Task OnPageChanged(int page)
+    {
+        _query.Page = page;
+        await LoadAsync();
+    }
+
+    private async Task OnPageSizeChanged(int size)
+    {
+        _query.PageSize = size;
+        _query.Page = 1;
+        await LoadAsync();
+    }
+
+    private void OpenCreate()
+    {
+        _editId = null;
+        _form = new CreateCustomerCommand { IsActive = true };
+        _formOpen = true;
+    }
+
+    private void OpenEdit(CustomerDto customer)
+    {
+        _editId = customer.Id;
+        _form = new CreateCustomerCommand
+        {
+            Code = customer.Code,
+            Name = customer.Name,
+            Email = customer.Email,
+            PhoneNumber = customer.PhoneNumber,
+            TaxNumber = customer.TaxNumber,
+            IsActive = customer.IsActive
+        };
+        _formOpen = true;
+    }
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        try
+        {
+            if (_editId is null)
+            {
+                await Customers.CreateAsync(_form);
+                Toasts.Success("Müşteri oluşturuldu.");
+            }
+            else
+            {
+                await Customers.UpdateAsync(_editId.Value, new UpdateCustomerCommand
+                {
+                    Id = _editId.Value,
+                    Code = _form.Code,
+                    Name = _form.Name,
+                    Email = _form.Email,
+                    PhoneNumber = _form.PhoneNumber,
+                    TaxNumber = _form.TaxNumber,
+                    IsActive = _form.IsActive
+                });
+                Toasts.Success("Müşteri güncellendi.");
+            }
+            _formOpen = false;
+            await LoadAsync();
+        }
+        catch (ApiException ex)
+        {
+            Toasts.Error(ex.Message, "Kaydedilemedi");
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+
+    private void OpenDelete(CustomerDto customer)
+    {
+        _deleteTarget = customer;
+        _deleteOpen = true;
+    }
+
+    private async Task ConfirmDeleteAsync()
+    {
+        if (_deleteTarget is null) return;
+        _saving = true;
+        try
+        {
+            await Customers.DeleteAsync(_deleteTarget.Id);
+            Toasts.Success("Müşteri silindi.");
+            _deleteOpen = false;
+            await LoadAsync();
+        }
+        catch (ApiException ex)
+        {
+            Toasts.Error(ex.Message, "Silinemedi");
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+}

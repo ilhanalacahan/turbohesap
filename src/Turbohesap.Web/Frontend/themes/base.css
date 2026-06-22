@@ -1,0 +1,69 @@
+/* Temel element stilleri. Tailwind preflight üzerine tokenize gövde/odak/scrollbar. */
+
+html {
+  /* Global ölçek: --th-scale değişince tüm rem tabanlı boyutlar büyür/küçülür. */
+  font-size: calc(var(--th-font-size-base) * var(--th-scale));
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--th-font-sans);
+  font-weight: var(--th-fw-normal);
+  line-height: 1.5;
+  background-color: var(--th-bg);
+  color: var(--th-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--th-ring);
+  outline-offset: 2px;
+  border-radius: var(--th-radius-sm);
+}
+
+::selection {
+  background: var(--th-primary);
+  color: var(--th-primary-fg);
+}
+
+/* İnce, tokenize scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--th-border-strong) transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--th-border-strong);
+  border-radius: var(--th-radius-full);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--th-text-subtle);
+}
+
+/* Tüm geçişler azaltılmış hareket tercihine saygı duyar. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

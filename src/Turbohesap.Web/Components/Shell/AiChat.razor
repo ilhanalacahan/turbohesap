@@ -1,0 +1,59 @@
+@namespace Turbohesap.Web.Components.Shell
+@implements IDisposable
+@inject Turbohesap.Web.Services.LayoutState Layout
+
+<span class="th-ai-fab" title="Yapay Zeka Asistanı" @onclick="Layout.ToggleAi">
+    <i class="fa-solid fa-robot"></i>
+</span>
+
+@if (Layout.AiOpen)
+{
+    <div class="th-ai-panel">
+        <div class="th-panel-header">
+            <div class="th-panel-title"><i class="fa-solid fa-robot"></i> Asistan</div>
+            <span class="th-dialog__close" @onclick="Layout.CloseAi"><i class="fa-solid fa-xmark"></i></span>
+        </div>
+        <div class="th-ai-panel__body">
+            <div class="th-ai-msg th-ai-msg--bot">Merhaba! Size nasıl yardımcı olabilirim?</div>
+            @foreach (var message in _messages)
+            {
+                <div class="@(message.IsUser ? "th-ai-msg th-ai-msg--user" : "th-ai-msg th-ai-msg--bot")">@message.Text</div>
+            }
+        </div>
+        <div class="th-ai-panel__input">
+            <input class="th-input th-input--sm" placeholder="Mesaj yazın…" value="@_draft"
+                   @oninput="@(e => _draft = e.Value?.ToString() ?? string.Empty)" @onkeydown="OnKeyDown" />
+            <button class="th-btn th-btn--primary th-btn--icon th-btn--sm" @onclick="Send"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+}
+
+@code {
+    private readonly List<(string Text, bool IsUser)> _messages = [];
+    private string _draft = string.Empty;
+
+    protected override void OnInitialized() => Layout.OnChange += Changed;
+
+    private void Send()
+    {
+        if (string.IsNullOrWhiteSpace(_draft))
+        {
+            return;
+        }
+        _messages.Add((_draft, true));
+        _messages.Add(("Bu bir demo asistandır. Gerçek entegrasyon Claude API ile yapılabilir.", false));
+        _draft = string.Empty;
+    }
+
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            Send();
+        }
+    }
+
+    private void Changed() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Layout.OnChange -= Changed;
+}

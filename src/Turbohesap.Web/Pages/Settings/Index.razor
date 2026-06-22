@@ -1,0 +1,17 @@
+@page "/settings"
+@attribute [Authorize]
+<PageTitle>Ayarlar · Turbohesap</PageTitle>
+
+<ThPage Title="Ayarlar" Subtitle="Uygulama tercihleri">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="/settings/theme" class="th-card">
+            <div class="th-card__body flex items-center gap-3">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary-subtle text-primary"><i class="fa-solid fa-palette"></i></span>
+                <div>
+                    <div class="font-medium">Tema</div>
+                    <div class="text-text-muted text-sm">Renk, yarıçap ve ölçek</div>
+                </div>
+            </div>
+        </a>
+    </div>
+</ThPage>

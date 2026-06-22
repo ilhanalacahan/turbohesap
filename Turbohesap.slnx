@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Turbohesap.Api/Turbohesap.Api.csproj" />
+    <Project Path="src/Turbohesap.Shared/Turbohesap.Shared.csproj" />
+    <Project Path="src/Turbohesap.Web/Turbohesap.Web.csproj" />
+  </Folder>
+</Solution>

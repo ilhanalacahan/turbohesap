@@ -1,0 +1,94 @@
+/* Popover — th-popover. Yalnızca --th-* token'ları kullanır. */
+.th-popover-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.th-popover-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: calc(var(--th-z-dropdown) - 1);
+  background: transparent;
+}
+
+.th-popover-content {
+  position: absolute;
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-md);
+  box-shadow: var(--th-shadow-lg);
+  min-width: 16rem;
+  max-width: 24rem;
+  z-index: var(--th-z-dropdown);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  --th-popover-translate: translate(0, 0);
+  transform: var(--th-popover-translate);
+  animation: th-popover-in var(--th-transition-fast) var(--th-ease) forwards;
+}
+
+@keyframes th-popover-in {
+  from { opacity: 0; transform: var(--th-popover-translate) scale(0.95); }
+  to { opacity: 1; transform: var(--th-popover-translate) scale(1); }
+}
+
+/* Yönlendirmeler */
+.th-popover--bottom {
+  top: 100%;
+  left: 50%;
+  --th-popover-translate: translateX(-50%);
+  margin-top: 0.5rem;
+}
+.th-popover--top {
+  bottom: 100%;
+  left: 50%;
+  --th-popover-translate: translateX(-50%);
+  margin-bottom: 0.5rem;
+}
+.th-popover--left {
+  right: 100%;
+  top: 50%;
+  --th-popover-translate: translateY(-50%);
+  margin-right: 0.5rem;
+}
+.th-popover--right {
+  left: 100%;
+  top: 50%;
+  --th-popover-translate: translateY(-50%);
+  margin-left: 0.5rem;
+}
+
+.th-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+}
+.th-popover-title {
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text);
+}
+.th-popover-close {
+  background: transparent;
+  border: none;
+  color: var(--th-text-muted);
+  cursor: pointer;
+  padding: 0.125rem;
+  font-size: 0.875rem;
+}
+.th-popover-close:hover {
+  color: var(--th-text);
+}
+
+.th-popover-body {
+  padding: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--th-text);
+}

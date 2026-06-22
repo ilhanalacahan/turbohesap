@@ -22,7 +22,7 @@
   border-radius: var(--th-radius-xl);
   box-shadow: var(--th-shadow-xl);
   overflow: hidden;
-  animation: th-slide-up var(--th-transition) var(--th-ease);
+  animation: th-fade-in var(--th-transition) var(--th-ease);
 }
 
 .th-applauncher__head {

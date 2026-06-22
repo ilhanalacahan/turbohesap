@@ -1,12 +1,7 @@
 @namespace Turbohesap.Web.Pages.Showcase.Modal
 
-<!-- ThModal Test Kartı -->
-<div class="th-card">
-    <div class="th-panel-header">
-        <div class="th-panel-title"><i class="fa-solid fa-window-restore me-2"></i>Modal Bileşeni Testleri (Blazor-Markup)</div>
-        <div class="th-panel-subtitle">Taşınabilir, genişletilebilir ve çok amaçlı modal yapısı</div>
-    </div>
-    <div class="th-card__body flex flex-col gap-4">
+<ThCard Title="Modal Bileşeni Testleri (Blazor-Markup)" Subtitle="Taşınabilir, genişletilebilir ve çok amaçlı modal yapısı" Icon="fa-solid fa-window-restore">
+    <div class="flex flex-col gap-4">
         <div>
             <h4 class="text-sm font-semibold mb-2">Satır İçi Modal Testleri</h4>
             <div class="flex flex-wrap gap-2">
@@ -24,7 +19,7 @@
             </div>
         </div>
     </div>
-</div>
+</ThCard>
 
 <!-- Inline Modal Tanımlamaları -->
 <ThModal @bind-Visible="_inlineModalOpen" Title="Satır İçi Modal" Subtitle="Bu modal satır içi tanımlanmıştır" Maximizable="true">

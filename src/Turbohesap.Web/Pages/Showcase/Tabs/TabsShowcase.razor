@@ -1,12 +1,7 @@
 @namespace Turbohesap.Web.Pages.Showcase.Tabs
 
-<!-- ThTabs Test Kartı -->
-<div class="th-card col-span-1 lg:col-span-2">
-    <div class="th-panel-header">
-        <div class="th-panel-title"><i class="fa-solid fa-folder-minus me-2"></i>Sekme (Tabs) Bileşeni Testleri</div>
-        <div class="th-panel-subtitle">Çoklu stil, carousel kaydırmalı, kapatılabilir ve onay olaylı dinamik sekmeler</div>
-    </div>
-    <div class="th-card__body flex flex-col gap-6">
+<ThCard Title="Sekme (Tabs) Bileşeni Testleri" Subtitle="Çoklu stil, carousel kaydırmalı, kapatılabilir ve onay olaylı dinamik sekmeler" Icon="fa-solid fa-folder-minus" Class="col-span-1 lg:col-span-2">
+    <div class="flex flex-col gap-6">
         <!-- 1. Varyantlar (Styles) -->
         <div>
             <h4 class="text-sm font-semibold mb-3">1. Sekme Stilleri (Variants)</h4>
@@ -110,6 +105,35 @@
                     <ThTabPanel Header="Rapor">Lazy yüklenen Rapor sekmesi içeriği (tıklanmadan önce DOM'da yer almaz)...</ThTabPanel>
                 </ThTabs>
             </div>
+
+            <hr class="border-border" />
+
+            <div>
+                <h4 class="text-sm font-semibold mb-2">6. Dikey Sekmeler (Vertical Tabs)</h4>
+                <p class="text-xs text-text-muted mb-3">Dikey modda sekmeler solda dikey olarak sıralanır, içerik sağda gösterilir.</p>
+                <div class="border border-border rounded-lg p-4 bg-surface-2">
+                    <ThTabs Variant="TabVariant.Flat" Vertical="true">
+                        <ThTabPanel Header="Hesap Detayı" Icon="fa-solid fa-wallet">
+                            <div class="flex flex-col gap-2">
+                                <span class="font-semibold text-text">Banka Hesap Kartı Bilgileri</span>
+                                <p class="text-xs text-text-muted">Dikey sekme düzeninde ilk panel içeriği.</p>
+                            </div>
+                        </ThTabPanel>
+                        <ThTabPanel Header="Hareketler" Icon="fa-solid fa-list-check">
+                            <div class="flex flex-col gap-2">
+                                <span class="font-semibold text-text">Hesap Ekstresi</span>
+                                <p class="text-xs text-text-muted">Son 30 günlük hesap hareketleri dökümü.</p>
+                            </div>
+                        </ThTabPanel>
+                        <ThTabPanel Header="Limitler" Icon="fa-solid fa-shield-halved">
+                            <div class="flex flex-col gap-2">
+                                <span class="font-semibold text-text">Günlük Limit Tanımları</span>
+                                <p class="text-xs text-text-muted">Güvenlik ve işlem limitleri ayarları.</p>
+                            </div>
+                        </ThTabPanel>
+                    </ThTabs>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</ThCard>

@@ -1,0 +1,172 @@
+@namespace Turbohesap.Web.Pages.Showcase.DataTable
+
+<ThCard Title="DataTable Bileşeni Testleri" Subtitle="Seçim, sıralama, sayfalama, kolon seçimi ve satır tıklama olayları" Icon="fa-solid fa-table" Class="col-span-1 lg:col-span-2">
+    <div class="flex flex-col gap-6">
+
+        <!-- Query Builder & Dinamik Filtreleme -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Query Builder & Dinamik Filtreleme (AI & Web için Ortak Modeller)</h4>
+            <p class="text-xs text-text-muted mb-4">
+                Gruplar (VE/VEYA) ve kurallar (büyük/küçük/içerir...) ekleyip dinamik SQL, LINQ ve JSON çıktılarını canlı inceleyin. 
+                Filtreler aşağıdaki tabloya anlık uygulanmaktadır.
+            </p>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+                <!-- Sol Taraf: Query Builder Filtre Editörü -->
+                <div class="xl:col-span-2 flex flex-col gap-3">
+                    <div class="text-xs font-semibold text-text-muted uppercase tracking-wider">Filtre Oluşturucu</div>
+                    <ThQueryBuilder Fields="_queryBuilderFields" Value="_queryGroup" ValueChanged="OnQueryGroupChanged" />
+                </div>
+
+                <!-- Sağ Taraf: Canlı Kod Önizlemeleri -->
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <div class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">SQL WHERE Önizlemesi</div>
+                        <pre class="bg-surface-2 p-3 border border-border rounded-md text-xs font-mono whitespace-pre-wrap break-all text-primary">@_sqlQuery</pre>
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">LINQ Lambda Önizlemesi</div>
+                        <pre class="bg-surface-2 p-3 border border-border rounded-md text-xs font-mono whitespace-pre-wrap break-all text-success">@_linqQuery</pre>
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">JSON Model Önizlemesi</div>
+                        <pre class="bg-surface-2 p-3 border border-border rounded-md text-[10px] font-mono overflow-auto max-h-[160px] text-text-muted">@_jsonQuery</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtrelenmiş Canlı Sonuç Tablosu -->
+            <div class="mb-6">
+                <div class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Filtrelenmiş Ürün Listesi (@_filteredProducts.Count sonuç)</div>
+                <ThDataTable TItem="DataTableShowcase.ShowcaseProduct" Items="_filteredProducts">
+                    <Columns>
+                        <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Kod" Property="p => p.Code" Width="8rem" />
+                        <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Ad" Property="p => p.Name" />
+                        <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Kategori" Property="p => p.Category" Width="10rem" />
+                        <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Fiyat" Width="8rem">
+                            @context.Price.ToString("C0")
+                        </ThDataTableColumn>
+                        <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Stok" Property="p => p.Stock" Width="6rem" />
+                        <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Son Güncelleme" Width="10rem">
+                            @context.UpdatedAt.ToString("dd.MM.yyyy")
+                        </ThDataTableColumn>
+                        <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Durum" Width="7rem">
+                            @if (context.IsActive)
+                            {
+                                <span class="th-badge th-badge--success"><span class="th-badge__dot"></span> Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="th-badge th-badge--neutral"><span class="th-badge__dot"></span> Pasif</span>
+                            }
+                        </ThDataTableColumn>
+                    </Columns>
+                </ThDataTable>
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 1. Deklaratif mod: tüm özellikler -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">1. Deklaratif Kolonlar (çoklu seçim + sıralama + kolon seçici + sayfalama)</h4>
+            <p class="text-xs text-text-muted mb-3">
+                Başlıklara tıklayarak sıralayın; satırları seçin; sağ üstteki dişli ile kolonları gizleyin/gösterin.
+                Tek tıklama bilgi, çift tıklama başarı toast’u verir.
+            </p>
+            <ThDataTable TItem="DataTableShowcase.ShowcaseProduct" Items="_displayProducts"
+                         SelectionMode="DataTableSelectionMode.Multiple"
+                         @bind-SelectedItems="_selected"
+                         SelectOnRowClick="true"
+                         OnRowClick="OnRowClick"
+                         OnRowDoubleClick="OnRowDoubleClick"
+                         @bind-SortKey="_sortKey" @bind-SortDirection="_sortDirection" SortChanged="OnSort"
+                         ShowColumnSelector="true"
+                         Page="_page" PageSize="_pageSize" TotalCount="_totalCount" TotalPages="_totalPages"
+                         PageChanged="OnPageChanged" PageSizeChanged="OnPageSizeChanged">
+                <Toolbar>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-text-muted">
+                            @_selected.Count ürün seçildi
+                        </span>
+                        @if (_selected.Count > 0)
+                        {
+                            <ThButton Variant="ButtonVariant.Danger" Size="ComponentSize.Sm" Icon="fa-solid fa-trash"
+                                      OnClick="DeleteSelected">
+                                Seçilenleri Sil
+                            </ThButton>
+                        }
+                    </div>
+                </Toolbar>
+
+                <Columns>
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Kod" SortKey="code" Property="p => p.Code" Width="8rem" />
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Ad" SortKey="name" Property="p => p.Name" />
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Kategori" SortKey="category" Property="p => p.Category" Width="10rem" />
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Fiyat" SortKey="price" Width="8rem">
+                        @context.Price.ToString("C0")
+                    </ThDataTableColumn>
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Stok" SortKey="stock" Property="p => p.Stock" Width="6rem" />
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Son Güncelleme" SortKey="updatedAt" Width="10rem">
+                        @context.UpdatedAt.ToString("dd.MM.yyyy")
+                    </ThDataTableColumn>
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Durum" Width="7rem">
+                        @if (context.IsActive)
+                        {
+                            <span class="th-badge th-badge--success"><span class="th-badge__dot"></span> Aktif</span>
+                        }
+                        else
+                        {
+                            <span class="th-badge th-badge--neutral"><span class="th-badge__dot"></span> Pasif</span>
+                        }
+                    </ThDataTableColumn>
+                </Columns>
+            </ThDataTable>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 2. Tekli seçim -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">2. Tekli Seçim (Single Selection)</h4>
+            <p class="text-xs text-text-muted mb-3">Her satırda radyo düğmesi ile yalnızca bir kayıt seçilir.</p>
+            <ThDataTable TItem="DataTableShowcase.ShowcaseProduct" Items="_displayProducts.Take(5).ToList()"
+                         SelectionMode="DataTableSelectionMode.Single"
+                         @bind-SelectedItems="_singleSelected">
+                <Columns>
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Kod" Property="p => p.Code" />
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Ad" Property="p => p.Name" />
+                    <ThDataTableColumn TItem="DataTableShowcase.ShowcaseProduct" Title="Kategori" Property="p => p.Category" />
+                </Columns>
+            </ThDataTable>
+            @if (_singleSelected.Count > 0)
+            {
+                <div class="mt-2 text-sm text-text-muted">
+                    Seçili: <strong>@_singleSelected.First().Name</strong>
+                </div>
+            }
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 3. Yuva (manuel) modu -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">3. Yuva Modu (Header/Row) — Geriye Dönük Uyumluluk</h4>
+            <p class="text-xs text-text-muted mb-3">Mevcut müşteri listesi gibi manuel kolon tanımı hâlâ çalışır.</p>
+            <ThDataTable TItem="DataTableShowcase.ShowcaseProduct" Items="_displayProducts.Take(5).ToList()" ColumnCount="4">
+                <Header>
+                    <th>Kod</th>
+                    <th>Ad</th>
+                    <th>Kategori</th>
+                    <th style="text-align:right">Fiyat</th>
+                </Header>
+                <Row Context="p">
+                    <td>@p.Code</td>
+                    <td>@p.Name</td>
+                    <td>@p.Category</td>
+                    <td style="text-align:right">@p.Price.ToString("C0")</td>
+                </Row>
+            </ThDataTable>
+        </div>
+    </div>
+</ThCard>

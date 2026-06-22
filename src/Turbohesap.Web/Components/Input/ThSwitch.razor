@@ -1,0 +1,23 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<bool>
+@* Kod tarafı: ThSwitch.razor.cs *@
+
+<label class="th-switch-container" style="@Style">
+    <button type="button"
+            role="switch"
+            aria-checked="@Value.ToString().ToLowerInvariant()"
+            class="@RootClass"
+            disabled="@Disabled"
+            @onclick="Toggle"
+            @attributes="AdditionalAttributes">
+        <span class="th-switch__thumb"></span>
+    </button>
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <span class="th-switch-label">@Label</span>
+    }
+    else if (ChildContent is not null)
+    {
+        <span class="th-switch-label">@ChildContent</span>
+    }
+</label>

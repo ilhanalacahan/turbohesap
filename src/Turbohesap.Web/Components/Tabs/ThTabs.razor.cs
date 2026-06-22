@@ -17,6 +17,7 @@ public partial class ThTabs : TurboComponentBase, IAsyncDisposable
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public TabVariant Variant { get; set; } = TabVariant.Line;
     [Parameter] public bool Lazy { get; set; } = false;
+    [Parameter] public bool Vertical { get; set; } = false;
     [Parameter] public EventCallback<TabCloseEventArgs> OnTabClose { get; set; }
 
     protected readonly List<ThTabPanel> _tabs = [];
@@ -36,6 +37,7 @@ public partial class ThTabs : TurboComponentBase, IAsyncDisposable
             TabVariant.Flat => "th-tabs--flat",
             _ => "th-tabs--line"
         },
+        Vertical ? "th-tabs--vertical" : "",
         Class
     );
 
@@ -101,7 +103,7 @@ public partial class ThTabs : TurboComponentBase, IAsyncDisposable
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && !Vertical)
         {
             try
             {

@@ -1,12 +1,7 @@
 @namespace Turbohesap.Web.Pages.Showcase.Drawer
 
-<!-- ThDrawer Test Kartı -->
-<div class="th-card">
-    <div class="th-panel-header">
-        <div class="th-panel-title"><i class="fa-solid fa-indent me-2"></i>Yan Panel (Drawer) Testleri</div>
-        <div class="th-panel-subtitle">Dört yönden açılabilen, genişletilebilir ve form davranışlı yan paneller</div>
-    </div>
-    <div class="th-card__body flex flex-col gap-4">
+<ThCard Title="Yan Panel (Drawer) Testleri" Subtitle="Dört yönden açılabilen, genişletilebilir ve form davranışlı yan paneller" Icon="fa-solid fa-indent">
+    <div class="flex flex-col gap-4">
         <div>
             <h4 class="text-sm font-semibold mb-2">Satır İçi Drawer Testleri</h4>
             <div class="flex flex-wrap gap-2">
@@ -27,7 +22,7 @@
             </div>
         </div>
     </div>
-</div>
+</ThCard>
 
 <!-- Inline Drawer Tanımlaması -->
 <ThDrawer @bind-Visible="_inlineDrawerOpen" 

@@ -1,0 +1,43 @@
+@namespace Turbohesap.Web.Pages.Showcase
+
+<ThCard Title="Yeni Giriş Bileşenleri" Subtitle="Switch, Checkbox ve TextArea form kontrol bileşenleri" Icon="fa-solid fa-square-check">
+    <div class="flex flex-col gap-4">
+        
+        <!-- Switch (Anahtar) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Seçenek Anahtarları (Switches)</h4>
+            <div class="flex flex-wrap gap-4 items-center py-1">
+                <ThSwitch @bind-Value="_switch1" Label="Sm" Size="ComponentSize.Sm" />
+                <ThSwitch @bind-Value="_switch2" Label="Md" Size="ComponentSize.Md" />
+                <ThSwitch @bind-Value="_switch3" Label="Lg" Size="ComponentSize.Lg" />
+                <ThSwitch @bind-Value="_switchDisabled" Label="Pasif" Disabled="true" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Checkbox (Seçim Kutusu) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Seçim Kutuları (Checkboxes)</h4>
+            <div class="flex flex-wrap gap-4 items-center py-1">
+                <ThCheckbox @bind-Value="_check1" Label="Sm" Size="ComponentSize.Sm" />
+                <ThCheckbox @bind-Value="_check2" Label="Md" Size="ComponentSize.Md" />
+                <ThCheckbox @bind-Value="_check3" Label="Lg" Size="ComponentSize.Lg" />
+                <ThCheckbox @bind-Value="_checkDisabled" Label="Pasif" Disabled="true" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- TextArea (Çok Satırlı Metin) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Çok Satırlı Girişler (Text Areas)</h4>
+            <div class="flex flex-col gap-3 py-1">
+                <ThTextArea @bind-Value="_text1" Placeholder="Küçük metin alanı (Sm, 2 satır)..." Size="ComponentSize.Sm" Rows="2" />
+                <ThTextArea @bind-Value="_text2" Placeholder="Normal metin alanı (Md, 3 satır)..." Size="ComponentSize.Md" Rows="3" />
+                <ThTextArea @bind-Value="_textDisabled" Placeholder="Pasif metin alanı..." Disabled="true" Rows="2" />
+            </div>
+        </div>
+
+    </div>
+</ThCard>

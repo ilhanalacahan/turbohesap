@@ -12,6 +12,7 @@
 | `ChildContent` | `RenderFragment?` | — | Sekme panellerinin (`ThTabPanel`) listesi. |
 | `Variant` | `TabVariant` | `TabVariant.Line` | Sekme görsel stili (`Line`, `Pills`, `Bordered`, `Flat`). |
 | `Lazy` | `bool` | `false` | true ise sekmelerin içeriği yalnızca o sekme aktif olduğunda yüklenir (Lazy Loading). |
+| `Vertical` | `bool` | `false` | true ise sekmeleri dikey yönde (yan yana menü ve içerik) listeler. |
 | `OnTabClose` | `EventCallback<TabCloseEventArgs>` | — | Herhangi bir sekme kapatılırken tetiklenir (iptal edilebilir). |
 
 ## Parametreler (ThTabPanel)

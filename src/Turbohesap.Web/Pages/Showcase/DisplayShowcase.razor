@@ -1,0 +1,61 @@
+@namespace Turbohesap.Web.Pages.Showcase
+
+<ThCard Title="Yeni Görsel Bileşenler" Subtitle="Card, Badge, Avatar ve Progress gösterim bileşenleri" Icon="fa-solid fa-box">
+    <div class="flex flex-col gap-4">
+        
+        <!-- Avatar (Profil) Gösterimleri -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Profil Resimleri & Durumlar (Avatars)</h4>
+            <div class="flex flex-wrap gap-3 items-center py-1">
+                <ThAvatar ImageUrl="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" Size="ComponentSize.Lg" ShowStatus="true" Status="AvatarStatus.Online" />
+                <ThAvatar Initials="EY" Size="ComponentSize.Md" ShowStatus="true" Status="AvatarStatus.Away" />
+                <ThAvatar Initials="SM" Size="ComponentSize.Sm" ShowStatus="true" Status="AvatarStatus.Busy" />
+                <ThAvatar Initials="SQ" Shape="AvatarShape.Square" Size="ComponentSize.Md" ShowStatus="true" Status="AvatarStatus.Offline" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Badge (Rozet) Gösterimleri -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Rozetler ve Etiketler (Badges)</h4>
+            <div class="flex flex-wrap gap-2 items-center py-1">
+                <ThBadge Variant="BadgeVariant.Neutral">Neutral</ThBadge>
+                <ThBadge Variant="BadgeVariant.Primary">Primary</ThBadge>
+                <ThBadge Variant="BadgeVariant.Success" ShowDot="true">Success</ThBadge>
+                <ThBadge Variant="BadgeVariant.Warning" ShowDot="true" Size="ComponentSize.Sm">Warning</ThBadge>
+                <ThBadge Variant="BadgeVariant.Danger" Size="ComponentSize.Lg">Danger</ThBadge>
+                <ThBadge Variant="BadgeVariant.Info">Info</ThBadge>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Progress (İlerleme Çubuğu) Gösterimleri -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">İlerleme Göstergeleri (Progress)</h4>
+            <div class="flex flex-col gap-3 py-1">
+                <ThProgress Value="@_progressValue" Variant="ProgressVariant.Info" Label="Dinamik İlerleme" ShowValue="true" />
+                <div class="flex items-center gap-2 justify-end text-xs">
+                    <ThButton Variant="ButtonVariant.Ghost" Size="ComponentSize.Sm" OnClick="DecreaseProgress" Disabled="@(_progressValue <= 0)">-10</ThButton>
+                    <ThButton Variant="ButtonVariant.Secondary" Size="ComponentSize.Sm" OnClick="IncreaseProgress" Disabled="@(_progressValue >= 100)">+10</ThButton>
+                </div>
+                <ThProgress Value="95" Variant="ProgressVariant.Success" Size="ComponentSize.Sm" Label="İnce Çubuk (Sm)" ShowValue="true" />
+                <ThProgress Value="35" Variant="ProgressVariant.Danger" Size="ComponentSize.Lg" Label="Kalın Çubuk (Lg)" ShowValue="true" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Card Örneği -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Kart Yapısı (Cards)</h4>
+            <ThCard Title="Örnek Kart Başlığı" Subtitle="Bu bir alt başlıktır">
+                <p class="text-xs text-text-muted leading-relaxed">
+                    Kart bileşeni başlık, alt başlık ve gövde bölümlerini düzenli şekilde bir araya getirir.
+                </p>
+            </ThCard>
+        </div>
+
+    </div>
+</ThCard>

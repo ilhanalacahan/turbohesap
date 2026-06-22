@@ -1,0 +1,58 @@
+@namespace Turbohesap.Web.Components.Card
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThCard.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (Header is not null || !string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
+    {
+        <div class="th-panel-header">
+            <div>
+                @if (Header is not null)
+                {
+                    @Header
+                }
+                else
+                {
+                    @if (!string.IsNullOrEmpty(Title))
+                    {
+                        <h3 class="th-panel-title">
+                            @if (!string.IsNullOrEmpty(Icon))
+                            {
+                                <i class="@Icon me-2"></i>
+                            }
+                            @Title
+                        </h3>
+                    }
+                    @if (!string.IsNullOrEmpty(Subtitle))
+                    {
+                        <span class="th-panel-subtitle">@Subtitle</span>
+                    }
+                }
+            </div>
+            @if (HeaderActions is not null)
+            {
+                <div>
+                    @HeaderActions
+                </div>
+            }
+        </div>
+    }
+    
+    @if (NoPadding)
+    {
+        @ChildContent
+    }
+    else
+    {
+        <div class="th-card__body">
+            @ChildContent
+        </div>
+    }
+
+    @if (Footer is not null)
+    {
+        <div class="th-card__footer">
+            @Footer
+        </div>
+    }
+</div>

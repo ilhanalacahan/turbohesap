@@ -1,0 +1,158 @@
+/* ============================================================================
+   Accordion — th-accordion. Açılır/kapanır içerik grupları.
+   Ortak panel başlığı dilini kullanır; yalnızca --th-* token'larına bağlıdır,
+   böylece renk/tema/yoğunluk/yarıçap/gölge/font değişimlerine otomatik uyar.
+   ============================================================================ */
+
+.th-accordion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-lg);
+  box-shadow: var(--th-card-shadow);
+  overflow: hidden;
+}
+
+.th-accordion__item {
+  display: flex;
+  flex-direction: column;
+}
+.th-accordion__item + .th-accordion__item {
+  border-top: 1px solid var(--th-border);
+}
+
+/* Tetikleyici (ortak panel başlığı dili) */
+.th-accordion__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--th-density-gap);
+  padding: var(--th-nav-pad-y) var(--th-content-padding);
+  min-height: var(--th-control-height);
+  background: var(--th-surface);
+  color: var(--th-text);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: var(--th-fw-semibold);
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--th-transition-fast) var(--th-ease);
+}
+.th-accordion__trigger:hover {
+  background: var(--th-surface-2);
+}
+.th-accordion__trigger:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--th-ring);
+}
+
+.th-accordion__heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+.th-accordion__icon {
+  flex: 0 0 auto;
+  color: var(--th-text-subtle);
+  font-size: 0.9rem;
+}
+.th-accordion__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+.th-accordion__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.th-accordion__subtitle {
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-normal);
+  color: var(--th-text-muted);
+}
+
+.th-accordion__chevron {
+  flex: 0 0 auto;
+  color: var(--th-text-subtle);
+  font-size: 0.8rem;
+  transition: transform var(--th-transition) var(--th-ease);
+}
+.th-accordion__item--open > .th-accordion__trigger .th-accordion__chevron {
+  transform: rotate(90deg);
+  color: var(--th-primary);
+}
+
+/* Devre dışı öğe */
+.th-accordion__item--disabled .th-accordion__trigger {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.th-accordion__item--disabled .th-accordion__trigger:hover {
+  background: var(--th-surface);
+}
+
+/* Açılır panel — pürüzsüz yükseklik animasyonu (grid 0fr → 1fr) */
+.th-accordion__panel-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--th-transition) var(--th-ease);
+}
+.th-accordion__item--open > .th-accordion__panel-wrap {
+  grid-template-rows: 1fr;
+}
+.th-accordion__panel {
+  overflow: hidden;
+}
+.th-accordion__panel-inner {
+  padding: var(--th-content-padding);
+  border-top: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+  color: var(--th-text);
+  font-size: 0.875rem;
+}
+
+/* ---- Boyutlar ---- */
+.th-accordion--sm .th-accordion__trigger {
+  min-height: var(--th-control-height-sm);
+  font-size: 0.8125rem;
+}
+.th-accordion--sm .th-accordion__panel-inner {
+  font-size: 0.8125rem;
+}
+.th-accordion--lg .th-accordion__trigger {
+  min-height: var(--th-control-height-lg);
+  font-size: 1.0625rem;
+}
+.th-accordion--lg .th-accordion__panel-inner {
+  font-size: 0.9375rem;
+}
+
+/* ---- Varyant: Flush (dış çerçeve/gölge yok — kart içine gömmek için) ---- */
+.th-accordion--flush {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* ---- Varyant: Separated (her öğe ayrı kart, aralıklı) ---- */
+.th-accordion--separated {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  overflow: visible;
+  gap: var(--th-density-gap);
+}
+.th-accordion--separated .th-accordion__item {
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-lg);
+  background: var(--th-surface);
+  box-shadow: var(--th-card-shadow);
+  overflow: hidden;
+}

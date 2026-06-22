@@ -233,3 +233,96 @@
 .th-tabs__pane--active {
   display: block;
 }
+
+/* ============================================================================
+   Vertical Tabs Style — th-tabs--vertical
+   ============================================================================ */
+
+.th-tabs--vertical {
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1.5rem;
+}
+
+.th-tabs--vertical .th-tabs__nav-wrapper {
+  flex-direction: column;
+  border-bottom: none;
+  border-right: 1px solid var(--th-border);
+  margin-bottom: 0;
+  align-items: stretch;
+  flex-shrink: 0;
+  min-width: 11rem;
+}
+
+.th-tabs--vertical .th-tabs__viewport {
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.th-tabs--vertical .th-tabs__nav {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+.th-tabs--vertical .th-tabs__tab {
+  justify-content: flex-start;
+  padding: 0.625rem 1rem;
+  border: 1px solid transparent;
+}
+
+.th-tabs--vertical .th-tabs__arrow {
+  display: none !important; /* Hide navigation arrows in vertical mode */
+}
+
+.th-tabs--vertical .th-tabs__content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 1. Line Style (Vertical) */
+.th-tabs--vertical.th-tabs--line .th-tabs__tab {
+  border-bottom: none;
+  border-right: 2px solid transparent;
+  margin-bottom: 0;
+  margin-right: -1px;
+}
+.th-tabs--vertical.th-tabs--line .th-tabs__tab--active {
+  color: var(--th-primary);
+  border-right-color: var(--th-primary);
+}
+
+/* 2. Pills Style (Vertical) */
+.th-tabs--vertical.th-tabs--pills .th-tabs__nav-wrapper {
+  border-right: none;
+  background: var(--th-surface-2);
+  padding: 0.375rem;
+  border-radius: var(--th-radius-lg);
+  border: 1px solid var(--th-border);
+}
+.th-tabs--vertical.th-tabs--pills .th-tabs__tab {
+  border-radius: var(--th-radius-md);
+}
+
+/* 3. Bordered Style (Vertical) */
+.th-tabs--vertical.th-tabs--bordered .th-tabs__tab {
+  border: 1px solid transparent;
+  border-right: none;
+  border-top-left-radius: var(--th-radius-md);
+  border-bottom-left-radius: var(--th-radius-md);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
+  margin-right: -1px;
+}
+.th-tabs--vertical.th-tabs--bordered .th-tabs__tab--active {
+  color: var(--th-primary);
+  background: var(--th-surface);
+  border-color: var(--th-border);
+}
+
+/* 4. Flat Style (Vertical) */
+.th-tabs--vertical.th-tabs--flat .th-tabs__tab {
+  border-radius: var(--th-radius-md);
+}

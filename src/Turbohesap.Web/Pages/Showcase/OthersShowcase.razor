@@ -1,0 +1,70 @@
+@namespace Turbohesap.Web.Pages.Showcase
+@using Turbohesap.Web.Components.Tooltip
+@using Turbohesap.Web.Components.Popover
+@using Turbohesap.Web.Components.Alert
+@using Turbohesap.Web.Components.Breadcrumb
+@using Turbohesap.Web.Components.Spinner
+
+<ThCard Title="Yeni Yardımcı Bileşenler" Subtitle="Tooltip, Popover, Alert, Breadcrumb ve Spinner bileşenleri" Icon="fa-solid fa-layer-group">
+    <div class="flex flex-col gap-4">
+        
+        <!-- Breadcrumb (Ekmek Kırıntısı) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Yol Patikası (Breadcrumb)</h4>
+            <ThBreadcrumb Items="_breadcrumbItems" />
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Alert (Uyarı Kutuları) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Uyarı Kutuları (Alerts)</h4>
+            <div class="flex flex-col gap-2 py-1">
+                <ThAlert Variant="AlertVariant.Success" Title="Başarılı İşlem" Closable="true" OnClose="OnAlertClosed">
+                    Veriler başarıyla eşitlendi ve kaydedildi.
+                </ThAlert>
+                <ThAlert Variant="AlertVariant.Danger" Title="Sistem Hatası" Closable="true">
+                    Sunucu bağlantısı kurulamadı. Lütfen tekrar deneyin.
+                </ThAlert>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Tooltip & Popover Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">İpuçları & Balonlar (Tooltip & Popover)</h4>
+            <div class="flex flex-wrap gap-3 items-center py-1">
+                <ThTooltip Text="Üst İpucu (Top)" Position="TooltipPosition.Top">
+                    <ThButton Variant="ButtonVariant.Outline" Size="ComponentSize.Sm">Tooltip (Hover)</ThButton>
+                </ThTooltip>
+                
+                <ThPopover Title="Popover Seçenekleri" Position="PopoverPosition.Bottom" ShowCloseButton="true">
+                    <Trigger>
+                        <ThButton Variant="ButtonVariant.Primary" Size="ComponentSize.Sm" Icon="fa-solid fa-sliders">Popover (Tıkla)</ThButton>
+                    </Trigger>
+                    <ChildContent>
+                        <div class="flex flex-col gap-2 min-w-[180px] p-1">
+                            <span class="text-xs font-semibold text-text-muted">GÖSTERİM AYARLARI</span>
+                            <ThCheckbox @bind-Value="_showGrid" Label="Izgarayı Göster" />
+                            <ThCheckbox @bind-Value="_enableLogs" Label="Logları Etkinleştir" />
+                        </div>
+                    </ChildContent>
+                </ThPopover>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Spinner (Döndürücü) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Yükleniyor Göstergeleri (Spinners)</h4>
+            <div class="flex flex-wrap gap-4 items-center py-1">
+                <ThSpinner Size="ComponentSize.Sm" Variant="SpinnerVariant.Primary" />
+                <ThSpinner Size="ComponentSize.Md" Variant="SpinnerVariant.Success" />
+                <ThSpinner Size="ComponentSize.Lg" Variant="SpinnerVariant.Danger" />
+            </div>
+        </div>
+
+    </div>
+</ThCard>

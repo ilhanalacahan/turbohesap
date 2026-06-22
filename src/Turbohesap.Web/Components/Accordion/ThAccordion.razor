@@ -1,0 +1,9 @@
+@namespace Turbohesap.Web.Components.Accordion
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThAccordion.razor.cs *@
+
+<CascadingValue Value="this" IsFixed="true">
+    <div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</CascadingValue>

@@ -102,12 +102,21 @@
 @import './css/button.css' layer(components);
 @import './css/input.css' layer(components);
 @import './css/card.css' layer(components);
+@import './css/accordion.css' layer(components);
 @import './css/badge.css' layer(components);
+@import './css/avatar.css' layer(components);
+@import './css/progress.css' layer(components);
 @import './css/dialog.css' layer(components);
+@import './css/tooltip.css' layer(components);
+@import './css/popover.css' layer(components);
+@import './css/alert.css' layer(components);
+@import './css/breadcrumb.css' layer(components);
+@import './css/spinner.css' layer(components);
 @import './css/modal.css' layer(components);
 @import './css/drawer.css' layer(components);
 @import './css/toast.css' layer(components);
 @import './css/datatable.css' layer(components);
+@import './css/query-builder.css' layer(components);
 
 /* Kabuk (shell) bileşenleri */
 @import './css/sidebar.css' layer(components);

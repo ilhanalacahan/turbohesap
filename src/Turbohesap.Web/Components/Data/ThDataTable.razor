@@ -1,36 +1,149 @@
 @namespace Turbohesap.Web.Components.Data
 @typeparam TItem
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@using Turbohesap.Shared.Common
 
-@* Genel veri tablosu. Başlık/satır şablonları sayfadan gelir; yükleniyor/boş durumları
-   ve isteğe bağlı araç çubuğu + sayfalama yuvaları vardır (req 13). *@
-<div class="th-table-wrap">
-    @if (Toolbar is not null)
-    {
-        <div class="th-table-toolbar">@Toolbar</div>
-    }
-    <div class="th-table-scroll">
-        <table class="th-table">
-            <thead>
-                <tr>@Header</tr>
-            </thead>
-            <tbody>
-                @if (Loading)
+@* Genel veri tablosu. Yuva modu (Header/Row) veya deklaratif kolon modu
+   (<Columns> içinde ThDataTableColumn) destekler. Seçim, sıralama, sayfalama,
+   kolon seçimi ve satır tıklama olayları içerir. *@
+<CascadingValue Value="this" IsFixed="true">
+    <div style="display: none;">@Columns</div>
+
+    <div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+        @if (Toolbar is not null || (ShowColumnSelector && _columns.Any(c => c.ShowInSelector)))
+        {
+            <div class="th-table-toolbar">
+                @if (Toolbar is not null)
                 {
-                    <tr><td colspan="@ColumnCount" class="th-table__loading"><i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor…</td></tr>
+                    <div class="th-table-toolbar__left">@Toolbar</div>
                 }
-                else if (Items.Count == 0)
+
+                @if (ShowColumnSelector && _columns.Any(c => c.ShowInSelector))
                 {
-                    <tr><td colspan="@ColumnCount" class="th-table__empty">@EmptyText</td></tr>
+                    <details class="th-column-selector">
+                        <summary class="th-column-selector__trigger" type="button" title="Kolonları göster/gizle">
+                            <i class="fa-solid fa-gear"></i>
+                        </summary>
+                        <div class="th-column-selector__dropdown">
+                            <div class="th-column-selector__title">Kolonlar</div>
+                            @foreach (var col in _columns.Where(c => c.ShowInSelector))
+                            {
+                                var currentCol = col;
+                                <label class="th-column-selector__item">
+                                    <input type="checkbox" checked="@currentCol.Visible" @onchange="() => ToggleColumnVisibility(currentCol)" />
+                                    <span>@currentCol.Title</span>
+                                </label>
+                            }
+                        </div>
+                    </details>
                 }
-                else if (Row is not null)
-                {
-                    @foreach (var item in Items)
+            </div>
+        }
+
+        <div class="th-table-scroll">
+            <table class="th-table">
+                <thead>
+                    @if (UseDeclarativeColumns)
                     {
-                        <tr @key="item">@Row(item)</tr>
+                        <tr>
+                            @if (HasSelection)
+                            {
+                                <th class="th-table__select-cell">
+                                    @if (SelectionMode == DataTableSelectionMode.Multiple)
+                                    {
+                                        <input type="checkbox" class="th-table__checkbox" checked="@AllSelected" @onchange="ToggleSelectAll" />
+                                    }
+                                </th>
+                            }
+                            @foreach (var col in _columns.Where(c => c.Visible))
+                            {
+                                var currentCol = col;
+                                <th class="@HeaderClass(currentCol)" style="@(currentCol.Width is not null ? $"width:{currentCol.Width}" : null)" @onclick="() => HandleSort(currentCol)">
+                                    <span class="th-table__th-text">@currentCol.Title</span>
+                                    @if (currentCol.IsSortable)
+                                    {
+                                        <i class="@SortIconClass(currentCol)"></i>
+                                    }
+                                </th>
+                            }
+                        </tr>
                     }
-                }
-            </tbody>
-        </table>
+                    else
+                    {
+                        <tr>@Header</tr>
+                    }
+                </thead>
+                <tbody>
+                    @if (Loading)
+                    {
+                        <tr><td colspan="@DisplayColumnCount" class="th-table__loading"><i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor…</td></tr>
+                    }
+                    else if (Items.Count == 0)
+                    {
+                        <tr><td colspan="@DisplayColumnCount" class="th-table__empty">@EmptyText</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Items)
+                        {
+                            var currentItem = item;
+                            <tr @key="currentItem" class="@RowClass(currentItem, UseDeclarativeColumns)"
+                                @onclick="() => HandleRowClick(currentItem)"
+                                @ondblclick="() => HandleRowDoubleClick(currentItem)">
+                                @if (UseDeclarativeColumns)
+                                {
+                                    @if (HasSelection)
+                                    {
+                                        <td class="th-table__select-cell" @onclick:stopPropagation>
+                                            @if (SelectionMode == DataTableSelectionMode.Single)
+                                            {
+                                                <input type="radio" class="th-table__radio" name="@_tableId" checked="@IsSelected(currentItem)" @onchange="() => ToggleSelection(currentItem)" />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" class="th-table__checkbox" checked="@IsSelected(currentItem)" @onchange="() => ToggleSelection(currentItem)" />
+                                            }
+                                        </td>
+                                    }
+                                    @foreach (var col in _columns.Where(c => c.Visible))
+                                    {
+                                        var currentCol = col;
+                                        <td @key="currentCol.Id">
+                                            @if (currentCol.ChildContent is not null)
+                                            {
+                                                @currentCol.ChildContent(currentItem)
+                                            }
+                                            else if (currentCol.Template is not null)
+                                            {
+                                                @currentCol.Template(currentItem)
+                                            }
+                                            else
+                                            {
+                                                @(currentCol.GetValue(currentItem)?.ToString() ?? "—")
+                                            }
+                                        </td>
+                                    }
+                                }
+                                else if (Row is not null)
+                                {
+                                    @Row(currentItem)
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Footer is not null)
+        {
+            @Footer
+        }
+        else if (ShowBuiltInPagination)
+        {
+            <ThPagination Page="Page!.Value" PageSize="PageSize!.Value" TotalCount="TotalCount!.Value"
+                          TotalPages="TotalPages!.Value" PageChanged="PageChanged" PageSizeChanged="PageSizeChanged"
+                          PageSizeOptions="PageSizeOptions" />
+        }
     </div>
-    @Footer
-</div>
+</CascadingValue>

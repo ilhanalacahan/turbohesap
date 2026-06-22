@@ -1,0 +1,12 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<string>
+@* Kod tarafı: ThTextArea.razor.cs *@
+
+<textarea class="@RootClass"
+          style="@Style"
+          placeholder="@Placeholder"
+          disabled="@Disabled"
+          rows="@Rows"
+          value="@CurrentValue"
+          @onchange="HandleChange"
+          @attributes="AdditionalAttributes"></textarea>

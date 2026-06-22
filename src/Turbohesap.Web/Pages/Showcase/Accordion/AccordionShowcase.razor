@@ -1,0 +1,129 @@
+@namespace Turbohesap.Web.Pages.Showcase.Accordion
+
+<ThCard Title="Akordeon (Accordion) Bileşeni Testleri" Subtitle="Tek/çoklu açılım, üç varyant, üç boyut; ikon, alt başlık ve devre dışı öğeler" Icon="fa-solid fa-bars-staggered" Class="col-span-1 lg:col-span-2">
+    <div class="flex flex-col gap-6">
+        <!-- 1. Varyantlar -->
+        <div>
+            <h4 class="text-sm font-semibold mb-3">1. Varyantlar (Variants)</h4>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Çerçeveli (Bordered — Default)</span>
+                    <ThAccordion>
+                        <ThAccordionItem Header="Genel Bilgiler" Icon="fa-solid fa-circle-info" Open="true">
+                            Müşteriye ait genel künye bilgileri burada yer alır.
+                        </ThAccordionItem>
+                        <ThAccordionItem Header="İletişim" Icon="fa-solid fa-phone">
+                            Telefon, e-posta ve yetkili kişi bilgileri.
+                        </ThAccordionItem>
+                        <ThAccordionItem Header="Notlar" Icon="fa-solid fa-note-sticky">
+                            Serbest metin notları.
+                        </ThAccordionItem>
+                    </ThAccordion>
+                </div>
+
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Ayrık Kart (Separated)</span>
+                    <ThAccordion Variant="AccordionVariant.Separated">
+                        <ThAccordionItem Header="Fatura Adresi" Subtitle="Resmi yazışmalar" Icon="fa-solid fa-file-invoice" Open="true">
+                            Fatura adresi detayları.
+                        </ThAccordionItem>
+                        <ThAccordionItem Header="Teslimat Adresi" Subtitle="Kargo için" Icon="fa-solid fa-truck">
+                            Teslimat adresi detayları.
+                        </ThAccordionItem>
+                    </ThAccordion>
+                </div>
+
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Düz / Gömülü (Flush — kart içinde)</span>
+                    <div class="th-card">
+                        <ThAccordion Variant="AccordionVariant.Flush">
+                            <ThAccordionItem Header="Özet" Icon="fa-solid fa-chart-pie" Open="true">
+                                Bir kartın içine kenarlıksız gömülen akordeon.
+                            </ThAccordionItem>
+                            <ThAccordionItem Header="Ayrıntılar" Icon="fa-solid fa-list">
+                                Ayrıntılı dökümler.
+                            </ThAccordionItem>
+                            <ThAccordionItem Header="Geçmiş" Icon="fa-solid fa-clock-rotate-left">
+                                İşlem geçmişi.
+                            </ThAccordionItem>
+                        </ThAccordion>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 2. Tek vs Çoklu açılım -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">2. Tek (Single) vs Çoklu (Multiple) Açılım</h4>
+            <p class="text-xs text-text-muted mb-3">Tekli modda bir öğe açılınca diğeri kapanır; çoklu modda hepsi aynı anda açık kalabilir.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Tekli (Default)</span>
+                    <ThAccordion>
+                        <ThAccordionItem Header="Soru 1" Icon="fa-solid fa-circle-question" Open="true">Cevap 1…</ThAccordionItem>
+                        <ThAccordionItem Header="Soru 2" Icon="fa-solid fa-circle-question">Cevap 2…</ThAccordionItem>
+                        <ThAccordionItem Header="Soru 3" Icon="fa-solid fa-circle-question">Cevap 3…</ThAccordionItem>
+                    </ThAccordion>
+                </div>
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Çoklu (Multiple)</span>
+                    <ThAccordion Multiple="true">
+                        <ThAccordionItem Header="Bölüm A" Icon="fa-solid fa-layer-group" Open="true">A içeriği…</ThAccordionItem>
+                        <ThAccordionItem Header="Bölüm B" Icon="fa-solid fa-layer-group" Open="true">B içeriği…</ThAccordionItem>
+                        <ThAccordionItem Header="Bölüm C" Icon="fa-solid fa-layer-group">C içeriği…</ThAccordionItem>
+                    </ThAccordion>
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 3. Boyutlar -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">3. Boyutlar (Sizes)</h4>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Küçük (Sm)</span>
+                    <ThAccordion Size="ComponentSize.Sm">
+                        <ThAccordionItem Header="Küçük başlık" Icon="fa-solid fa-feather" Open="true">Sıkışık boyut içeriği.</ThAccordionItem>
+                        <ThAccordionItem Header="İkinci">İkinci içerik.</ThAccordionItem>
+                    </ThAccordion>
+                </div>
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Orta (Md — Default)</span>
+                    <ThAccordion Size="ComponentSize.Md">
+                        <ThAccordionItem Header="Orta başlık" Icon="fa-solid fa-equals" Open="true">Varsayılan boyut içeriği.</ThAccordionItem>
+                        <ThAccordionItem Header="İkinci">İkinci içerik.</ThAccordionItem>
+                    </ThAccordion>
+                </div>
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Büyük (Lg)</span>
+                    <ThAccordion Size="ComponentSize.Lg">
+                        <ThAccordionItem Header="Büyük başlık" Icon="fa-solid fa-expand" Open="true">Geniş boyut içeriği.</ThAccordionItem>
+                        <ThAccordionItem Header="İkinci">İkinci içerik.</ThAccordionItem>
+                    </ThAccordion>
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 4. Alt başlık & Devre dışı -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">4. Alt Başlık (Subtitle) & Devre Dışı (Disabled)</h4>
+            <ThAccordion Variant="AccordionVariant.Separated">
+                <ThAccordionItem Header="Ödeme Yöntemleri" Subtitle="Kart, havale, kapıda ödeme" Icon="fa-solid fa-credit-card" Open="true">
+                    Desteklenen ödeme seçenekleri ve koşulları.
+                </ThAccordionItem>
+                <ThAccordionItem Header="Sözleşme" Subtitle="Yalnızca yöneticiler" Icon="fa-solid fa-lock" Disabled="true">
+                    Bu bölüm kilitlidir ve açılamaz.
+                </ThAccordionItem>
+                <ThAccordionItem Header="İade Politikası" Subtitle="14 gün içinde" Icon="fa-solid fa-rotate-left">
+                    İade koşulları ve süreçleri.
+                </ThAccordionItem>
+            </ThAccordion>
+        </div>
+    </div>
+</ThCard>

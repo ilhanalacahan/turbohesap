@@ -1,0 +1,53 @@
+@namespace Turbohesap.Web.Components.Breadcrumb
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThBreadcrumb.razor.cs *@
+
+<nav class="@RootClass" style="@Style" aria-label="Ekmek Kırıntısı" @attributes="AdditionalAttributes">
+    <ol class="flex items-center flex-wrap gap-2 list-none p-0 m-0">
+        @for (int i = 0; i < Items.Count; i++)
+        {
+            var item = Items[i];
+            var isLast = i == Items.Count - 1;
+            
+            <li class="th-breadcrumb__item">
+                @if (isLast)
+                {
+                    <span class="th-breadcrumb__item--active">
+                        @if (!string.IsNullOrEmpty(item.Icon))
+                        {
+                            <i class="@item.Icon me-1"></i>
+                        }
+                        @item.Text
+                    </span>
+                }
+                else
+                {
+                    @if (!string.IsNullOrEmpty(item.Url))
+                    {
+                        <a href="@item.Url" class="th-breadcrumb__link">
+                            @if (!string.IsNullOrEmpty(item.Icon))
+                            {
+                                <i class="@item.Icon me-1"></i>
+                            }
+                            @item.Text
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="th-breadcrumb__link">
+                            @if (!string.IsNullOrEmpty(item.Icon))
+                            {
+                                <i class="@item.Icon me-1"></i>
+                            }
+                            @item.Text
+                        </span>
+                    }
+                    
+                    <span class="th-breadcrumb__separator" aria-hidden="true">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </span>
+                }
+            </li>
+        }
+    </ol>
+</nav>

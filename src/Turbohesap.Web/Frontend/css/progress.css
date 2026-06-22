@@ -1,0 +1,42 @@
+/* İlerleme Çubuğu — th-progress. Yalnızca --th-* token'ları kullanır. */
+.th-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  font-family: var(--th-font-sans);
+}
+
+.th-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--th-text-muted);
+}
+
+.th-progress {
+  width: 100%;
+  height: 0.5rem;
+  background: var(--th-surface-3);
+  border-radius: var(--th-radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.th-progress__bar {
+  height: 100%;
+  background: var(--th-primary);
+  border-radius: var(--th-radius-full);
+  transition: width var(--th-transition) var(--th-ease);
+}
+
+/* Boyutlar */
+.th-progress--sm .th-progress { height: 0.25rem; }
+.th-progress--lg .th-progress { height: 0.75rem; }
+
+/* Renk Varyantları */
+.th-progress--success .th-progress__bar { background: var(--th-success); }
+.th-progress--warning .th-progress__bar { background: var(--th-warning); }
+.th-progress--danger .th-progress__bar { background: var(--th-danger); }
+.th-progress--info .th-progress__bar { background: var(--th-info); }

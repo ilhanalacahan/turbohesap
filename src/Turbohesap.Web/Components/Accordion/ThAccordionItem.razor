@@ -1,0 +1,31 @@
+@namespace Turbohesap.Web.Components.Accordion
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThAccordionItem.razor.cs *@
+
+<div class="@ItemClass" style="@Style" @attributes="AdditionalAttributes">
+    <button type="button" class="th-accordion__trigger" disabled="@Disabled"
+            aria-expanded="@AriaExpanded" @onclick="Toggle">
+        <span class="th-accordion__heading">
+            @if (!string.IsNullOrEmpty(Icon))
+            {
+                <i class="th-accordion__icon @Icon"></i>
+            }
+            <span class="th-accordion__titles">
+                <span class="th-accordion__title">@Header</span>
+                @if (!string.IsNullOrEmpty(Subtitle))
+                {
+                    <span class="th-accordion__subtitle">@Subtitle</span>
+                }
+            </span>
+        </span>
+        <i class="th-accordion__chevron fa-solid fa-chevron-right"></i>
+    </button>
+
+    <div class="th-accordion__panel-wrap">
+        <div class="th-accordion__panel">
+            <div class="th-accordion__panel-inner">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+</div>

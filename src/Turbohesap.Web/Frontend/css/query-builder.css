@@ -1,0 +1,151 @@
+/* QueryBuilder — th-query-builder. Özyinelemeli filtre oluşturucu. Yalnızca --th-* token. */
+.th-query-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: 100%;
+  font-family: var(--th-font-sans);
+}
+
+.th-query-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.375rem 0.5rem; /* Dikey ve yatay iç boşluklar sıkılaştırıldı */
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-lg);
+  background: var(--th-surface);
+  position: relative;
+}
+
+/* İç içe geçmiş grupların zeminini değiştirerek görsel derinlik sağla */
+.th-query-group .th-query-group {
+  background: var(--th-surface-2);
+  margin-inline-start: 1rem;
+  padding: 0.25rem 0.375rem;
+}
+
+/* İç içe geçme sol çizgisi (dendrogram benzeri ağaç çizgisi) */
+.th-query-group .th-query-group::before {
+  content: '';
+  position: absolute;
+  left: -0.5rem;
+  top: 0;
+  bottom: 50%;
+  width: 2px;
+  border-left: 2px dashed var(--th-border-strong);
+  border-bottom: 2px dashed var(--th-border-strong);
+}
+
+.th-query-group__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.th-query-group__operator-toggle {
+  display: inline-flex;
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-md);
+  overflow: hidden;
+  background: var(--th-surface-3);
+  padding: 2px;
+}
+.th-query-group__operator-toggle button {
+  border: none !important;
+  border-radius: var(--th-radius-sm) !important;
+  padding: 0.125rem 0.375rem;
+  font-family: inherit;
+  font-size: 0.75rem; /* Sistem geneli küçük yazı boyutu (0.75rem) ile uyumlu */
+  font-weight: var(--th-fw-semibold);
+  cursor: pointer;
+  background: transparent;
+  color: var(--th-text-muted);
+  transition: all var(--th-transition-fast) var(--th-ease);
+}
+.th-query-group__operator-toggle button.th-active {
+  background: var(--th-primary) !important;
+  color: var(--th-primary-fg) !important;
+  box-shadow: var(--th-shadow-sm);
+}
+
+.th-query-group__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.th-query-group__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem; /* Satırlar arası dikey boşluk 2px seviyesine çekildi */
+}
+
+.th-query-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: nowrap;
+  padding: 0.15rem 0.25rem; /* Satır dikey kalınlığı azaltıldı */
+  border-radius: var(--th-radius-md);
+  background: var(--th-surface-2);
+  border: 1px solid transparent;
+  transition: border-color var(--th-transition-fast) var(--th-ease);
+  width: 100%;
+}
+.th-query-rule:hover {
+  border-color: var(--th-border);
+}
+
+/* Giriş elemanlarının genişlik ve sistem geneli boyutlarla uyumu */
+.th-query-rule select.th-select,
+.th-query-rule input.th-input {
+  width: auto !important; /* Standart w-full kuralını ezer */
+  /* Diğer tüm özellikler (yükseklik, yazı tipi, dolgu) th-input--sm sınıfından gelir, override edilmez */
+}
+
+/* Giriş elemanlarının genişlik oranları */
+.th-query-rule select:nth-of-type(1) {
+  flex: 0 0 9rem;
+  width: 9rem !important;
+}
+.th-query-rule select:nth-of-type(2) {
+  flex: 0 0 8rem;
+  width: 8rem !important;
+}
+.th-query-rule input,
+.th-query-rule select:nth-of-type(3) {
+  flex: 1 1 auto;
+  min-width: 6rem;
+  max-width: 12rem;
+}
+
+.th-query-rule__value-placeholder {
+  flex: 1 1 auto;
+  min-width: 6rem;
+  max-width: 12rem;
+  font-size: 0.75rem;
+  color: var(--th-text-subtle);
+  font-style: italic;
+  padding: 0.125rem 0.375rem;
+  background: var(--th-surface-3);
+  border-radius: var(--th-radius-sm);
+  border: 1px dashed var(--th-border);
+  text-align: center;
+  height: var(--th-control-height-sm); /* placeholder da sm giriş yüksekliğinde olsun */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.th-query-empty {
+  padding: 0.5rem;
+  text-align: center;
+  color: var(--th-text-subtle);
+  font-size: 0.75rem;
+  border: 1px dashed var(--th-border);
+  border-radius: var(--th-radius-md);
+  background: var(--th-surface-3);
+}

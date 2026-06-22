@@ -1,27 +1,39 @@
 @inherits LayoutComponentBase
 @implements IDisposable
 @inject Turbohesap.Web.Services.LayoutState Layout
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Nav
 
-@* Uygulama kabuğu: sol sidebar + (appbar + tabbar + içerik). Overlay'ler ve toast en üstte (req 29). *@
-<div class="th-shell">
-    <Sidebar />
-    @if (Layout.SidebarOpen)
-    {
-        <div class="th-backdrop" @onclick="Layout.CloseSidebar"></div>
-    }
-    <div class="th-main">
-        <AppBar />
-        <TabBar />
-        <div class="th-content">
-            @Body
+@* Kabuk yalnızca kimliği doğrulanmış kullanıcıya gösterilir. Kontrol devre (circuit)
+   içinde yapılır; sunucu uç noktası kimlik doğrulaması zorlamaz (token istemci tarafında). *@
+@if (_ready)
+{
+    <div class="th-shell">
+        <Sidebar />
+        @if (Layout.SidebarOpen)
+        {
+            <div class="th-backdrop" @onclick="Layout.CloseSidebar"></div>
+        }
+        <div class="th-main">
+            <AppBar />
+            <TabBar />
+            <div class="th-content">
+                @Body
+            </div>
         </div>
     </div>
-</div>
 
-<AppLauncher />
-<CommandLauncher />
-<AiChat />
-<ThToastHost />
+    <AppLauncher />
+    <CommandLauncher />
+    <AiChat />
+    <ThToastHost />
+}
+else
+{
+    <div style="min-height:100dvh;display:flex;align-items:center;justify-content:center;color:var(--th-text-muted)">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem"></i>
+    </div>
+}
 
 <div id="blazor-error-ui" data-nosnippet>
     Beklenmeyen bir hata oluştu.
@@ -30,7 +42,45 @@
 </div>
 
 @code {
-    protected override void OnInitialized() => Layout.OnChange += Changed;
+    private bool _ready;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Layout.OnChange += Changed;
+        AuthProvider.AuthenticationStateChanged += OnAuthChanged;
+
+        var state = await AuthProvider.GetAuthenticationStateAsync();
+        if (state.User.Identity?.IsAuthenticated == true)
+        {
+            _ready = true;
+        }
+        else
+        {
+            RedirectToLogin();
+        }
+    }
+
+    private void RedirectToLogin()
+    {
+        var returnUrl = Uri.EscapeDataString(new Uri(Nav.Uri).PathAndQuery);
+        Nav.NavigateTo($"/login?returnUrl={returnUrl}", forceLoad: false);
+    }
+
+    private async void OnAuthChanged(Task<AuthenticationState> task)
+    {
+        var state = await task;
+        if (state.User.Identity?.IsAuthenticated != true)
+        {
+            _ready = false;
+            await InvokeAsync(RedirectToLogin);
+        }
+    }
+
     private void Changed() => InvokeAsync(StateHasChanged);
-    public void Dispose() => Layout.OnChange -= Changed;
+
+    public void Dispose()
+    {
+        Layout.OnChange -= Changed;
+        AuthProvider.AuthenticationStateChanged -= OnAuthChanged;
+    }
 }

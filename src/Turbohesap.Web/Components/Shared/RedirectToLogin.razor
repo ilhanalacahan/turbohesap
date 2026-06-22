@@ -1,11 +1,3 @@
 @namespace Turbohesap.Web.Components.Shared
 @inject NavigationManager Nav
-
-@code {
-    // Yetkisiz erişimde /login'e yönlendirir; dönüş adresini korur (req 28).
-    protected override void OnInitialized()
-    {
-        var returnUrl = Uri.EscapeDataString(new Uri(Nav.Uri).PathAndQuery);
-        Nav.NavigateTo($"/login?returnUrl={returnUrl}", forceLoad: false);
-    }
-}
+@* Markup yok; yönlendirme mantığı RedirectToLogin.razor.cs içindedir. *@

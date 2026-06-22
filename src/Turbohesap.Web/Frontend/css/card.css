@@ -6,7 +6,7 @@
   background: var(--th-surface);
   border: 1px solid var(--th-border);
   border-radius: var(--th-radius-lg);
-  box-shadow: var(--th-shadow-xs);
+  box-shadow: var(--th-card-shadow);
   overflow: hidden;
 }
 

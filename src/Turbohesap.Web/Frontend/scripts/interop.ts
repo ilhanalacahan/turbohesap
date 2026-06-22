@@ -36,6 +36,12 @@ export function registerInterop(): void {
       current: () => document.documentElement.getAttribute('data-theme') ?? 'light',
       applyTokens: theme.applyTokens,
       resetTokens: theme.resetTokens,
+      setFont: theme.setFont,
+      setDensity: theme.setDensity,
+      getDensity: theme.getDensity,
+      setShadow: theme.setShadow,
+      getShadow: theme.getShadow,
+      getTokens: theme.getTokens,
     },
     focusTrap(element: HTMLElement) {
       const release = trapFocus(element);

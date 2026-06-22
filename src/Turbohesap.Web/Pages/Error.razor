@@ -1,7 +1,7 @@
 @page "/error"
 @layout Turbohesap.Web.Components.Layout.AuthLayout
-@using System.Diagnostics
 
+<div class="th-auth-center">
 <div class="th-card" style="width:100%;max-width:26rem;text-align:center">
     <div class="th-card__body" style="padding:2rem">
         <div style="font-size:2.5rem;color:var(--th-danger)"><i class="fa-solid fa-triangle-exclamation"></i></div>
@@ -14,11 +14,4 @@
         <a href="/" class="th-btn th-btn--primary"><i class="fa-solid fa-house"></i> Ana sayfa</a>
     </div>
 </div>
-
-@code {
-    [CascadingParameter] private HttpContext? HttpContext { get; set; }
-    private string? RequestId { get; set; }
-    private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-
-    protected override void OnInitialized() => RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
-}
+</div>

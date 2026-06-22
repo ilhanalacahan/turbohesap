@@ -1,113 +1,22 @@
 @page "/settings/theme"
-@inject Turbohesap.Web.Services.ThemeInterop ThemeApi
-@inject Turbohesap.Web.Services.ToastService Toasts
-<PageTitle>Tema Ayarları · Turbohesap</PageTitle>
+@inject Turbohesap.Web.Services.LayoutState Layout
+<PageTitle>Tema Tasarımcısı · Turbohesap</PageTitle>
 
-<ThPage Title="Tema Ayarları" Subtitle="Tüm görsel parametreler token tabanlıdır; değişiklik anında uygulanır.">
-    <ChildContent>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div class="th-card">
-                <div class="th-panel-header"><div class="th-panel-title">Görünüm Modu</div></div>
-                <div class="th-card__body flex flex-wrap gap-2">
-                    <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-sun" OnClick="@(() => SetMode("light"))">Açık</ThButton>
-                    <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-moon" OnClick="@(() => SetMode("dark"))">Koyu</ThButton>
-                    <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-desktop" OnClick="@(() => SetMode("system"))">Sistem</ThButton>
-                </div>
-            </div>
-
-            <div class="th-card">
-                <div class="th-panel-header"><div class="th-panel-title">Renkler</div></div>
-                <div class="th-card__body grid grid-cols-2 gap-3">
-                    @foreach (var color in _colors)
-                    {
-                        <label class="flex items-center justify-between gap-2 text-sm">
-                            <span>@color.Label</span>
-                            <input type="color" value="@color.Default" @onchange="@(e => SetToken(color.Token, e.Value?.ToString()))" />
-                        </label>
-                    }
-                </div>
-            </div>
-
-            <div class="th-card">
-                <div class="th-panel-header"><div class="th-panel-title">Ölçü</div></div>
-                <div class="th-card__body flex flex-col gap-4">
-                    <label class="flex flex-col gap-1 text-sm">
-                        <span>Köşe yuvarlaklığı: @_radius px</span>
-                        <input type="range" min="0" max="20" step="1" value="@_radius" @oninput="OnRadius" />
-                    </label>
-                    <label class="flex flex-col gap-1 text-sm">
-                        <span>Arayüz ölçeği: @($"{_scale:0.00}")×</span>
-                        <input type="range" min="0.85" max="1.25" step="0.05" value="@_scale" @oninput="OnScale" />
-                    </label>
-                </div>
-            </div>
-
-            <div class="th-card">
-                <div class="th-panel-header"><div class="th-panel-title">Önizleme</div></div>
-                <div class="th-card__body flex flex-wrap gap-2 items-center">
-                    <ThButton Variant="ButtonVariant.Primary">Birincil</ThButton>
-                    <ThButton Variant="ButtonVariant.Secondary">İkincil</ThButton>
-                    <ThButton Variant="ButtonVariant.Subtle">Soft</ThButton>
-                    <span class="th-badge th-badge--primary">Etiket</span>
-                    <span class="th-badge th-badge--success">Aktif</span>
-                </div>
+@* Tema özelleştirme artık sağdan açılan tasarımcı drawer'ı üzerinden yapılır (tek kaynak).
+   Bu sayfa yalnızca o paneli açar. *@
+<ThPage Title="Tema Tasarımcısı" Subtitle="Görünümü gerçek zamanlı özelleştirin" TabIcon="fa-solid fa-palette">
+    <div class="th-card" style="max-width:34rem">
+        <div class="th-card__body flex flex-col gap-4">
+            <p class="text-text-muted text-sm">
+                Görünüm modu, ana renk, yazı tipi, yerleşim yoğunluğu, köşe yuvarlaklığı ve arayüz
+                ölçeğini sağdan açılan <strong>Tema Tasarımcısı</strong> panelinden ayarlayabilirsiniz.
+                Değişiklikler anında uygulanır ve cihazınızda saklanır.
+            </p>
+            <div>
+                <ThButton Variant="ButtonVariant.Primary" Icon="fa-solid fa-palette" OnClick="Layout.ToggleThemeDesigner">
+                    Tema Tasarımcısını Aç
+                </ThButton>
             </div>
         </div>
-    </ChildContent>
-    <Footer>
-        <span class="text-text-muted text-sm">Değişiklikler tarayıcınızda saklanır.</span>
-        <ThButton Variant="ButtonVariant.Ghost" Icon="fa-solid fa-rotate-left" OnClick="ResetAsync">Varsayılana Dön</ThButton>
-    </Footer>
+    </div>
 </ThPage>
-
-@code {
-    private record ColorToken(string Label, string Token, string Default);
-
-    private readonly ColorToken[] _colors =
-    [
-        new("Birincil", "--th-primary", "#2563eb"),
-        new("Vurgu", "--th-accent", "#7c3aed"),
-        new("Başarı", "--th-success", "#16a34a"),
-        new("Tehlike", "--th-danger", "#dc2626")
-    ];
-
-    private int _radius = 8;
-    private double _scale = 1.0;
-
-    private async Task SetMode(string mode) => await ThemeApi.SetModeAsync(mode);
-
-    private async Task SetToken(string token, string? value)
-    {
-        if (!string.IsNullOrEmpty(value))
-        {
-            await ThemeApi.ApplyTokensAsync(new Dictionary<string, string> { [token] = value });
-        }
-    }
-
-    private async Task OnRadius(ChangeEventArgs e)
-    {
-        if (int.TryParse(e.Value?.ToString(), out _radius))
-        {
-            await ThemeApi.ApplyTokensAsync(new Dictionary<string, string> { ["--th-radius-md"] = $"{_radius}px" });
-        }
-    }
-
-    private async Task OnScale(ChangeEventArgs e)
-    {
-        if (double.TryParse(e.Value?.ToString(), System.Globalization.CultureInfo.InvariantCulture, out _scale))
-        {
-            await ThemeApi.ApplyTokensAsync(new Dictionary<string, string>
-            {
-                ["--th-scale"] = _scale.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)
-            });
-        }
-    }
-
-    private async Task ResetAsync()
-    {
-        _radius = 8;
-        _scale = 1.0;
-        await ThemeApi.ResetTokensAsync();
-        Toasts.Info("Tema varsayılana döndürüldü.");
-    }
-}

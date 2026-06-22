@@ -1,0 +1,122 @@
+@namespace Turbohesap.Web.Components.Shell
+@implements IDisposable
+@inject Turbohesap.Web.Services.LayoutState Layout
+@inject Turbohesap.Web.Services.ThemeInterop Theme
+@inject Turbohesap.Web.Services.ToastService Toasts
+
+@* Tema/şablon tasarımcısı (sağ drawer). Tüm değişiklikler --th-* token override'ları ile
+   gerçek zamanlı uygulanır ve localStorage'da saklanır (DESIGN.md §Tema mekanizması). *@
+@if (Layout.ThemeDesignerOpen)
+{
+    <div class="th-drawer-overlay th-drawer-overlay--right" @onclick="Layout.CloseThemeDesigner">
+        <div class="th-drawer th-theme-designer" @onclick:stopPropagation="true">
+            <div class="th-panel-header">
+                <div>
+                    <div class="th-panel-title">Tema Tasarımcısı</div>
+                    <div class="th-panel-subtitle">Değişiklikler anında uygulanır ve cihazınızda saklanır.</div>
+                </div>
+                <span class="th-dialog__close" title="Kapat" @onclick="Layout.CloseThemeDesigner"><i class="fa-solid fa-xmark"></i></span>
+            </div>
+
+            <div class="th-drawer__body th-theme-designer__body">
+                <section class="th-tds-section">
+                    <div class="th-tds-label">Görünüm Modu</div>
+                    <div class="th-segment">
+                        @foreach (var (value, label, icon) in _modes)
+                        {
+                            <button type="button" class="@SegmentClass(_mode == value)" @onclick="@(() => SetModeAsync(value))">
+                                <i class="@icon"></i><span>@label</span>
+                            </button>
+                        }
+                    </div>
+                </section>
+
+                <section class="th-tds-section">
+                    <div class="th-tds-label">Ana Renk</div>
+                    <div class="th-swatches">
+                        @foreach (var preset in _primaryPresets)
+                        {
+                            <button type="button" class="@SwatchClass(_primary == preset.Base)" title="@preset.Name"
+                                    style="--sw:@preset.Base" @onclick="@(() => SetPrimaryAsync(preset))">
+                                @if (_primary == preset.Base)
+                                {
+                                    <i class="fa-solid fa-check"></i>
+                                }
+                            </button>
+                        }
+                        <label class="th-swatch th-swatch--custom" title="Özel renk">
+                            <i class="fa-solid fa-eye-dropper"></i>
+                            <input type="color" value="@_primary" @onchange="@(e => SetCustomPrimaryAsync(e.Value?.ToString()))" />
+                        </label>
+                    </div>
+                </section>
+
+                <section class="th-tds-section">
+                    <div class="th-tds-label">Diğer Renkler</div>
+                    <div class="th-tds-colors">
+                        @foreach (var color in _colors)
+                        {
+                            <label class="th-tds-color">
+                                <span>@color.Label</span>
+                                <input type="color" value="@color.Default" @onchange="@(e => SetTokenAsync(color.Token, e.Value?.ToString()))" />
+                            </label>
+                        }
+                    </div>
+                </section>
+
+                <section class="th-tds-section">
+                    <div class="th-tds-label">Yazı Tipi</div>
+                    <div class="th-tds-fonts">
+                        @foreach (var font in _fonts)
+                        {
+                            <button type="button" class="@FontClass(_font == font.Value)" style="font-family:@font.Value"
+                                    @onclick="@(() => SetFontAsync(font.Value))">
+                                <span class="th-tds-font__name">@font.Label</span>
+                                <span class="th-tds-font__sample">AaBbCc 0123</span>
+                            </button>
+                        }
+                    </div>
+                </section>
+
+                <section class="th-tds-section">
+                    <div class="th-tds-label">Yerleşim Yoğunluğu</div>
+                    <div class="th-segment">
+                        @foreach (var (value, label) in _densities)
+                        {
+                            <button type="button" class="@SegmentClass(_density == value)" @onclick="@(() => SetDensityAsync(value))">
+                                <span>@label</span>
+                            </button>
+                        }
+                    </div>
+                </section>
+
+                <section class="th-tds-section">
+                    <div class="th-tds-label">Gölge</div>
+                    <div class="th-segment">
+                        @foreach (var (value, label) in _shadows)
+                        {
+                            <button type="button" class="@SegmentClass(_shadow == value)" @onclick="@(() => SetShadowAsync(value))">
+                                <span>@label</span>
+                            </button>
+                        }
+                    </div>
+                </section>
+
+                <section class="th-tds-section">
+                    <div class="th-tds-label">Köşe Yuvarlaklığı · @_radius px</div>
+                    <input type="range" class="th-range" min="0" max="20" step="1" value="@_radius" @oninput="OnRadius" />
+                </section>
+
+                <section class="th-tds-section">
+                    <div class="th-tds-label">Arayüz Ölçeği · @($"{_scale:0.00}")×</div>
+                    <input type="range" class="th-range" min="0.85" max="1.25" step="0.05" value="@_scale" @oninput="OnScale" />
+                </section>
+            </div>
+
+            <div class="th-drawer__footer">
+                <ThButton Variant="ButtonVariant.Ghost" Icon="fa-solid fa-rotate-left" OnClick="ResetAsync">Varsayılana Dön</ThButton>
+                <ThButton Variant="ButtonVariant.Primary" Icon="fa-solid fa-check" OnClick="Layout.CloseThemeDesigner">Bitti</ThButton>
+            </div>
+        </div>
+    </div>
+}

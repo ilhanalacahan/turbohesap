@@ -11,6 +11,17 @@
 @source '../Components/**/*.razor';
 @source '../Pages/**/*.razor';
 
+/* Çevrimdışı paketlenmiş font aileleri (tema tasarımcısından seçilebilir). Yalnızca ağırlık
+   ekseni (wght) içe aktarılır; webfont'lar wwwroot/fonts altına ayrı derlenir (DESIGN.md §Tipografi). */
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/manrope/wght.css';
+@import '@fontsource-variable/plus-jakarta-sans/wght.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/700.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+
 /* Koyu mod, Tailwind'in varsayılan .dark sınıfı yerine <html data-theme="dark">
    özniteliğiyle çalışır. Böylece dark: utility'leri de bizim sistemimize uyar. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
@@ -105,6 +116,8 @@
 @import './css/command-launcher.css' layer(components);
 @import './css/app-launcher.css' layer(components);
 @import './css/ai-chat.css' layer(components);
+@import './css/theme-designer.css' layer(components);
+@import './css/auth.css' layer(components);
 
 /* Font Awesome (ikon webfont'ları fonts/ altına ayrı derlenir). */
 @import '@fortawesome/fontawesome-free/css/all.css';

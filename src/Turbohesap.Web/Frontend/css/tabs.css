@@ -39,6 +39,15 @@
 
 .th-tab__icon { font-size: 0.8rem; }
 .th-tab__label { overflow: hidden; text-overflow: ellipsis; }
+
+/* Kaydedilmemiş değişiklik göstergesi (kirli sekme) */
+.th-tab__dirty {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--th-radius-full);
+  background: var(--th-warning);
+  flex: 0 0 auto;
+}
 .th-tab__close {
   display: inline-flex;
   align-items: center;

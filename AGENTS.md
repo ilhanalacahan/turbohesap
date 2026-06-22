@@ -10,8 +10,10 @@ Bu belge, Turbohesap çözümünün mimarisini, kurallarını ve yeni özellikle
 2. **Mimari yok, dizin var**: API ve Web katmanlı mimari (Clean/Onion) kullanmaz; sorumluluklar **dizinlerle** ayrılır.
 3. **Sözleşmeler Shared'de**: DTO, CQRS mesajı, servis arayüzü ve doğrulama kuralı yalnızca `Turbohesap.Shared`'dedir. Böylece API ve Web aynı tipleri ve aynı doğrulamayı paylaşır.
 4. **İş mantığı servis katmanında ve transactional**: Tüm yazma işlemleri servis içinde açık transaction ile yapılır; okuma işlemleri `AsNoTracking` kullanır.
-5. **Token tabanlı arayüz**: Hiçbir bileşen sabit renk/ölçü içermez; her şey `--th-*` token'larına bağlıdır (DESIGN.md).
+5. **Token tabanlı arayüz**: Hiçbir bileşen sabit renk/ölçü içermez; her şey `--th-*` token'larına bağlıdır (renk, gölge, **yazı tipi**, **yoğunluk** dahil — DESIGN.md). Tema/şablon tasarımcısı bir **drawer**'dır ve değişiklikleri gerçek zamanlı uygular.
 6. **Mobile-first**: Arayüz önce mobil için tasarlanır, sonra büyük ekranlara genişler.
+7. **Kod tarafı ayrı (code-behind)**: Her bileşen/sayfa `Component.razor` (işaretleme) + `Component.razor.cs` (`partial class`, iş mantığı) olarak ayrılır. Yalnızca görsel/özyinelemeli `RenderFragment` yardımcıları `.razor`'da küçük bir `@code`'da kalabilir (DESIGN.md §11).
+8. **Tailwind interpolasyon yasağı**: `class="@($"px-{x}")"` gibi string ile **Tailwind utility üretmek yasaktır**; sınıf adları tam yazılır (`px-1`). Bileşenlerin içinde tam yazılmış utility'leri serbestçe kullanabilirsin.
 
 ---
 
@@ -35,8 +37,8 @@ turbohesap/
 |-------|--------|
 | `Common/` | `PagedRequest`, `PagedResult<T>`, `ProblemDetail`, `SortDirection` |
 | `Cqrs/` | `ICommand<T>`, `IQuery<T>` işaret arayüzleri |
-| `Contracts/{Alan}/` | DTO + Command + Query + Validator (her özellik kendi klasöründe) |
-| `Services/` | Servis arayüzleri (`ICustomerService`, `IAuthService`) |
+| `Contracts/{Alan}/` | DTO + Command + Query + Validator (her özellik kendi klasöründe; ör. `Diagnostics/WebErrorReport` + `LogWebErrorCommand`) |
+| `Services/` | Servis arayüzleri (`ICustomerService`, `IAuthService`, `IWebErrorLogService`) |
 | `Security/` | `Roles` (rol adları), `ApiVersions` (sürüm sabitleri) |
 
 ### Turbohesap.Api
@@ -45,8 +47,8 @@ turbohesap/
 | `Entities/` | EF varlıkları (`BaseEntity`, `Customer`, `User`, `AuditLog`, `ErrorLog`) |
 | `Persistence/` | `AppDbContext`, `Configurations/` (entity başına yapılandırma), `Migrations/`, `DbSeeder` |
 | `Mapping/` | `MappingRegistry` (giriş noktası) + entity başına `IRegister` dosyaları |
-| `Services/` | Servis uygulamaları (transactional iş mantığı) |
-| `Features/{Alan}/` | Wolverine handler'ları + olaylar (events) |
+| `Services/` | Servis uygulamaları (transactional iş mantığı; `WebErrorLogService` web hatalarını `error_logs`'a yazar) |
+| `Features/{Alan}/` | Wolverine handler'ları + olaylar (events); ör. `Features/Diagnostics/DiagnosticsHandlers` |
 | `Controllers/V{n}/` | Sürümlenmiş controller'lar |
 | `Middleware/` | `GlobalExceptionMiddleware` |
 | `Authentication/` | `JwtOptions`, `JwtTokenService` |
@@ -57,12 +59,12 @@ turbohesap/
 | Dizin | İçerik |
 |-------|--------|
 | `Components/Base/` | `TurboComponentBase` (req: tüm bileşenlerin temeli) |
-| `Components/{Ad}/` | Yeniden kullanılan bileşenler (Button, Input, Feedback, Data) |
-| `Components/Shell/` | Sidebar, AppBar, TabBar, CommandLauncher, AppLauncher, AiChat |
-| `Components/Layout/` | `MainLayout`, `AuthLayout`, `ThPage` |
-| `Pages/{Sayfa}/` | Sayfalar (`Index.razor`, `Detail.razor` …) |
-| `Services/` | HttpClient fabrikası, kimlik, tema, toast, sekme, navigasyon |
-| `Models/` | Arayüz modelleri (NavItem, AppItem, ToastMessage, TabItem) |
+| `Components/{Ad}/` | Yeniden kullanılan bileşenler (Button, Input, Feedback `ThDialog`/`ThToastHost`/`ThErrorBoundary`, Data). Her bileşen **`.razor` + `.razor.cs` + `Th<Ad>.md` (döküman)**; indeks `Components/Components.md` |
+| `Components/Shell/` | Sidebar, AppBar, **PageTabs**, CommandLauncher, AppLauncher, **ThemeDesigner**, AiChat |
+| `Components/Layout/` | `MainLayout`, `AuthLayout`, `ThPage` (sayfayı PageTabs'a kaydeder, kirli tutamacı cascade eder) |
+| `Pages/{Sayfa}/` | Sayfalar (`Index.razor` + `Index.razor.cs` …) |
+| `Services/` | HttpClient fabrikası, kimlik, tema, toast, **PageTabService**, navigasyon, **WebErrorReporter** |
+| `Models/` | Arayüz modelleri (NavItem, AppItem, ToastMessage, **PageTab**) |
 | `Frontend/` | Vite + Tailwind v4 + TypeScript kaynakları (DESIGN.md) |
 
 ---
@@ -114,7 +116,8 @@ HTTP → Controller → IMessageBus.InvokeAsync(command/query)
 
 | Konu | Nerede | Davranış |
 |------|--------|----------|
-| **Hata yakalama** | `Middleware/GlobalExceptionMiddleware` | Alan istisnaları uygun HTTP koduna çevrilir; 500'ler `error_logs`'a (url, ip, tarih, user-agent, header, satır/dosya, hash, tekrar sayısı) yazılır. Yanıt **daima** `{"detail":"…"}`. |
+| **Hata yakalama (API)** | `Middleware/GlobalExceptionMiddleware` | Alan istisnaları uygun HTTP koduna çevrilir; 500'ler `error_logs`'a (url, ip, tarih, user-agent, header, satır/dosya, hash, tekrar sayısı) yazılır. Yanıt **daima** `{"detail":"…"}`. |
+| **Hata yakalama (Web)** | `ThErrorBoundary` + `WebErrorReporter` + `Controllers/V1/DiagnosticsController` | Blazor'da yakalanan istemci hataları **anonim** `POST api/v1/diagnostics/client-errors` ile aynı `error_logs` tablosuna `Source = "Web"` olarak (hash + tekrar mantığı) yazılır. `WebErrorLogService` kalıcılaştırır; raporlama uygulamayı düşürmez. |
 | **Denetim (audit)** | `Configuration/AuditConfiguration` | Audit.NET, EF seviyesinde her değişikliği `audit_logs`'a jsonb olarak ve **aynı transaction içinde** yazar. `AuditLog`/`ErrorLog` `[AuditIgnore]` ile denetlenmez. |
 | **Doğrulama** | Shared validator + Wolverine middleware + Blazor | Aynı kural iki tarafta. API'de handler öncesi otomatik çalışır; geçersizse 400 + `{"detail"}`. |
 | **Eşleme** | `Mapping/` | Entity başına `IRegister`; `MappingRegistry.AddApplicationMapping()` hepsini tarar. Okumada `ProjectToType<TDto>()` (SQL'e iner). |
@@ -151,8 +154,8 @@ HTTP → Controller → IMessageBus.InvokeAsync(command/query)
 
 ### 6.3 Web — arayüz
 15. **API servisi** → `Web/Services/SupplierApiService.cs` (`ApiClient` üzerinden, sorgu string'i kurar) + Program.cs'te `AddScoped`
-16. **Sayfa** → `Web/Pages/Suppliers/Index.razor` (`@page "/suppliers"`, `[Authorize]`, `ThPage` + `ThDataTable` + `ThPagination` + `ThDialog` form)
-17. **Menü** → `Web/Services/AppNavigation.cs`'e `NavItem { Label="Tedarikçiler", Href="/suppliers", Roles=[...] }`
+16. **Sayfa** → `Web/Pages/Suppliers/Index.razor` **+ `Index.razor.cs`** (`@page "/suppliers"`, `[Authorize]`, `ThPage` + `ThDataTable` + `ThPagination` + `ThDialog` form). `ThPage`'e `TabIcon` ver; sayfa render olunca **kendini PageTabs'a kaydeder** (ekstra kod gerekmez). Düzenleme formunda `EditContext.OnFieldChanged` → `[CascadingParameter] PageTabHandle.MarkDirty()`, kaydet/iptal sonrası `MarkClean()` (kirli sekme kapatma uyarısı için).
+17. **Menü** → `Web/Services/AppNavigation.cs`'e `NavItem { Label="Tedarikçiler", Href="/suppliers", Roles=[...] }`. Menü tıklaması yalnızca gezinir; sekme açmaz (bulunamayan sayfalar sekme oluşturmaz).
 
 Referans uygulama: **Customer** (yukarıdaki her adım `Customer*` dosyalarında mevcuttur).
 
@@ -186,3 +189,25 @@ make front-watch # frontend'i izleyerek derle
 ```
 
 Yerel: API `:5080`, Web `:5180`, PostgreSQL `turbohesap`. Demo: `admin@turbohesap.local / Admin123!`.
+
+---
+
+## 9. Bileşen dökümantasyonu & üretim becerileri (skills)
+
+Her arayüz bileşeni **kendi dizininde** bir `Th<Ad>.md` dökümanı taşır (amaç, parametre tablosu,
+varyant/boyutlar, kullanılan `--th-*` token'ları, kullanım örneği, tema/uyum notları). Tüm
+bileşenlerin indeksi `src/Turbohesap.Web/Components/Components.md`'dedir (`create-component` /
+`update-component` tarafından güncel tutulur).
+
+**Beceriler** (`.claude/skills/`) — yeni/var olan bileşenleri sistemle %100 tutarlı üretir/günceller:
+
+| Beceri | Ne zaman | Ne yapar |
+|--------|----------|----------|
+| **create-component** | Sıfırdan yeni bir `Th<Ad>` bileşeni | `.razor` + `.razor.cs` + `Frontend/css/<ad>.css` (+ `main.css` import) + gerekirse TS interop (`scripts/<ad>.ts` + `interop.ts` + `Services/<Ad>Interop.cs` + DI) + `Th<Ad>.md` + `Components.md` satırı; sonunda `dotnet build` + `npm run build` ile doğrular. Yeni klasörse `_Imports.razor`'a `@using` ekler. |
+| **update-component** | Var olan bir bileşeni değiştirmek **veya dökümanını ilk kez yazmak** | İlgili dosyaları kuralları bozmadan günceller; imza değişirse tüm kullanım yerlerini düzeltir; `Th<Ad>.md`'yi yazar/günceller; `Components.md`'yi tazeler; derleyerek doğrular. |
+
+**Bileşen değişmezleri** (her iki beceri ve elle yazımda geçerli):
+1. **Code-behind ayrımı** zorunlu (§1.7). Mantık asla `.razor`'da değil.
+2. **Token-first CSS**: yalnız `--th-*`; sabit renk/gölge/yarıçap yok. Renk→`--th-*`, köşe→`--th-radius-*`, gölge→`--th-card-shadow`/`--th-shadow-*`, ritim→`--th-nav-pad-y`/`--th-row-pad-y`/`--th-density-gap`, hareket→`--th-transition*`/`--th-ease`, katman→`--th-z-*`. Yazı tipi gövdeden miras (mono hariç). Böylece bileşen renk/tema/yoğunluk/yarıçap/gölge/font değişimine **otomatik** uyar.
+3. **Tailwind serbest, interpolasyon yasak** (§1.8). Varyant/boyut C# `switch` → sabit `th-<ad>--*` (`TurboComponentBase.SizeClass`/`Cx`).
+4. **Yüksek performans / yoğun DOM** gereken bileşenlerde TypeScript yazılıp `window.turbohesap` + bir `*Interop` servisiyle C#'a bağlanır; aksi halde TS yazılmaz.

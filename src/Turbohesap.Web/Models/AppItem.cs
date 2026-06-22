@@ -7,4 +7,10 @@ public sealed class AppItem
     public string Icon { get; init; } = "fa-solid fa-cube";
     public string Href { get; init; } = "#";
     public string? Description { get; init; }
+
+    /// <summary>Kutucuk ikonu için vurgu rengi (CSS rengi). Boşsa birincil renk kullanılır.</summary>
+    public string Accent { get; init; } = "var(--th-primary)";
+
+    /// <summary>Henüz aktif değil ("Yakında" rozeti gösterilir).</summary>
+    public bool ComingSoon => Href == "#";
 }

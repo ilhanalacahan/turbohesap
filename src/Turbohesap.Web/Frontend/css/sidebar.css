@@ -46,7 +46,7 @@
   font-size: 1rem;
   cursor: pointer;
 }
-.th-sidebar__brand { font-weight: var(--th-fw-semibold); font-size: 0.95rem; white-space: nowrap; overflow: hidden; }
+.th-sidebar__brand { font-weight: var(--th-fw-semibold); font-size: 1.05rem; white-space: nowrap; overflow: hidden; }
 .th-sidebar__hamburger {
   margin-inline-start: auto;
   display: inline-flex;
@@ -70,7 +70,7 @@
   border: 1px solid var(--th-sidebar-border);
   border-radius: var(--th-radius-md);
   color: var(--th-sidebar-fg);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 .th-sidebar__search-input::placeholder { color: var(--th-sidebar-muted); }
 .th-sidebar__search-input:focus { outline: none; border-color: var(--th-primary); }
@@ -80,7 +80,7 @@
 .th-nav-group { margin-bottom: 0.25rem; }
 .th-nav-group__label {
   padding: 0.5rem 0.625rem 0.25rem;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: var(--th-fw-semibold);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -92,23 +92,73 @@
   align-items: center;
   gap: 0.625rem;
   width: 100%;
-  padding: 0.5rem 0.625rem;
+  padding: var(--th-nav-pad-y) 0.625rem;
   border-radius: var(--th-radius-md);
   color: var(--th-sidebar-fg);
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   cursor: pointer;
   transition: background-color var(--th-transition-fast) var(--th-ease);
 }
 .th-nav-item:hover { background: var(--th-sidebar-active); }
 .th-nav-item--active { background: var(--th-primary); color: var(--th-primary-fg); }
 .th-nav-item--active:hover { background: var(--th-primary-hover); }
-.th-nav-item__icon { width: 1.1rem; text-align: center; flex: 0 0 auto; }
+/* Açık sidebar'da ikonlar ölçülü; daraltılmış rayda biraz büyür (aşağıda). */
+.th-nav-item__icon { width: 1.25rem; font-size: 0.9rem; text-align: center; flex: 0 0 auto; }
 .th-nav-item__label { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .th-nav-item__chevron { font-size: 0.7rem; color: var(--th-sidebar-muted); transition: transform var(--th-transition) var(--th-ease); }
 .th-nav-item--expanded > .th-nav-item__chevron { transform: rotate(90deg); }
 
 /* Ağaç alt öğeleri (girintili) */
 .th-nav-children { margin-inline-start: 0.85rem; padding-inline-start: 0.4rem; border-inline-start: 1px solid var(--th-sidebar-border); }
+
+/* Flyout — daraltılmış sidebar'da ikon üzerine gelince açılan alt menü/etiket (Radix tarzı popover).
+   Varsayılan gizli; yalnızca masaüstü + daraltılmış durumda hover/focus ile görünür. */
+.th-nav-item-wrap { position: relative; }
+.th-nav-flyout {
+  display: none;
+  position: absolute;
+  inset-inline-start: calc(100% + 0.4rem);
+  top: 0;
+  min-width: 12rem;
+  padding: 0.35rem;
+  background: var(--th-surface);
+  color: var(--th-text);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-md);
+  box-shadow: var(--th-shadow-lg);
+  z-index: var(--th-z-dropdown);
+}
+/* Öğe ile flyout arasındaki boşlukta hover'ın kopmaması için görünmez köprü. */
+.th-nav-flyout::before {
+  content: '';
+  position: absolute;
+  inset-inline-end: 100%;
+  top: 0;
+  width: 0.5rem;
+  height: 100%;
+}
+.th-nav-flyout__title {
+  padding: 0.4rem 0.6rem 0.3rem;
+  font-size: 0.75rem;
+  font-weight: var(--th-fw-semibold);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--th-text-muted);
+}
+.th-nav-flyout__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--th-radius-sm);
+  font-size: 0.9375rem;
+  color: var(--th-text);
+  cursor: pointer;
+}
+.th-nav-flyout__item:hover { background: var(--th-primary-subtle); color: var(--th-primary); }
+/* Flyout içi ikonlar biraz daha büyük; chevron (>) gösterilmez. */
+.th-nav-flyout__item .th-nav-item__icon { width: 1.5rem; font-size: 1.15rem; }
+.th-nav-flyout .th-nav-item__chevron { display: none; }
 
 /* Footer: yardım + geri bildirim (req 29) */
 .th-sidebar__footer {
@@ -129,7 +179,7 @@
   height: 1.9rem;
   border-radius: var(--th-radius-md);
   color: var(--th-sidebar-muted);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   cursor: pointer;
 }
 .th-sidebar__footer-btn:hover { background: var(--th-sidebar-active); color: var(--th-sidebar-fg); }
@@ -142,3 +192,15 @@
 .th-sidebar--collapsed .th-sidebar__search,
 .th-sidebar--collapsed .th-sidebar__footer-btn span { display: none; }
 .th-sidebar--collapsed .th-nav-item { justify-content: center; }
+/* Daraltılmışken alt menü oku (>) asla görünmez; rayda ikonlar biraz büyür. */
+.th-sidebar--collapsed .th-nav-item__chevron { display: none !important; }
+.th-sidebar--collapsed .th-nav-item__icon { width: auto; font-size: 1.1rem; }
+
+/* Daraltılmış durumda inline alt menü gizlenir; yerine flyout kullanılır.
+   nav overflow'u görünür yapılır ki flyout panel sidebar dışına taşabilsin. */
+@media (min-width: 768px) {
+  .th-sidebar--collapsed .th-sidebar__nav { overflow: visible; }
+  .th-sidebar--collapsed .th-nav-children { display: none; }
+  .th-sidebar--collapsed .th-nav-item-wrap:hover > .th-nav-flyout,
+  .th-sidebar--collapsed .th-nav-item-wrap:focus-within > .th-nav-flyout { display: block; }
+}

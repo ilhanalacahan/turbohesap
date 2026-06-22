@@ -26,11 +26,12 @@ builder.Services.AddCascadingAuthenticationState();
 
 // Uygulama servisleri.
 builder.Services.AddScoped<ApiClient>();
+builder.Services.AddScoped<WebErrorReporter>();
 builder.Services.AddScoped<AuthClientService>();
 builder.Services.AddScoped<CustomerApiService>();
 builder.Services.AddScoped<ThemeInterop>();
 builder.Services.AddScoped<ToastService>();
-builder.Services.AddScoped<TabService>();
+builder.Services.AddScoped<PageTabService>();
 builder.Services.AddScoped<LayoutState>();
 builder.Services.AddSingleton<AppNavigation>();
 

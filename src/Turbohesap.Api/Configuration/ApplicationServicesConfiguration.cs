@@ -24,6 +24,7 @@ public static class ApplicationServicesConfiguration
         // İş servisleri (transactional mantık — req 10)
         builder.Services.AddScoped<ICustomerService, CustomerService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IWebErrorLogService, WebErrorLogService>();
         builder.Services.AddSingleton<JwtTokenService>();
 
         // Mapster eşleme sistemi (req 8)

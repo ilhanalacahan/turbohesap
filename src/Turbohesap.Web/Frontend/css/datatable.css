@@ -6,6 +6,7 @@
   background: var(--th-surface);
   border: 1px solid var(--th-border);
   border-radius: var(--th-radius-lg);
+  box-shadow: var(--th-card-shadow);
   overflow: hidden;
 }
 
@@ -30,7 +31,7 @@
   position: sticky;
   top: 0;
   text-align: left;
-  padding: 0.625rem 1rem;
+  padding: var(--th-row-pad-y) 1rem;
   background: var(--th-surface-2);
   color: var(--th-text-muted);
   font-weight: var(--th-fw-semibold);
@@ -41,7 +42,7 @@
 .th-table thead th.th-th--sortable { cursor: pointer; }
 .th-table thead th.th-th--sortable:hover { color: var(--th-text); }
 .th-table tbody td {
-  padding: 0.625rem 1rem;
+  padding: var(--th-row-pad-y) 1rem;
   border-bottom: 1px solid var(--th-border);
   color: var(--th-text);
   vertical-align: middle;

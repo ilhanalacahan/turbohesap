@@ -8,12 +8,3 @@
     <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;color:var(--th-primary)"></i>
     <p style="margin-top:0.75rem;color:var(--th-text-muted)">Yönlendiriliyor…</p>
 </div>
-
-@code {
-    protected override async Task OnInitializedAsync()
-    {
-        var state = await AuthProvider.GetAuthenticationStateAsync();
-        var authenticated = state.User.Identity?.IsAuthenticated == true;
-        Nav.NavigateTo(authenticated ? "/dashboard" : "/login", forceLoad: false);
-    }
-}

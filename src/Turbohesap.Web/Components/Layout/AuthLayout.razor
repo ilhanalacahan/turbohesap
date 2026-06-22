@@ -1,21 +1,9 @@
 @inherits LayoutComponentBase
 
-@* Kimlik doğrulama sayfaları için sade, ortalanmış yerleşim (kabuk yok). *@
-<div class="th-auth-shell">
+@* Kimlik doğrulama sayfaları için nötr tam-yükseklik kabuk. Sayfa kendi yerleşimini kurar:
+   Login kurumsal split, not-found/hata ortalanır (auth.css). *@
+<div class="th-auth-root">
     @Body
 </div>
 
 <ThToastHost />
-
-<style>
-    .th-auth-shell {
-        min-height: 100dvh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        background:
-            radial-gradient(1200px 600px at 100% 0%, var(--th-primary-subtle), transparent 60%),
-            var(--th-bg);
-    }
-</style>

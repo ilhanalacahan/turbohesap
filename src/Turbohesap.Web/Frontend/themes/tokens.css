@@ -34,7 +34,7 @@
   --th-radius-base: 8px;
   --th-radius-xs: calc(var(--th-radius-base) * 0.5);
   --th-radius-sm: calc(var(--th-radius-base) * 0.75);
-  --th-radius-md: var(--th-radius-base);
+  --th-radius-md: calc(var(--th-radius-base) * 1);
   --th-radius-lg: calc(var(--th-radius-base) * 1.5);
   --th-radius-xl: calc(var(--th-radius-base) * 2);
   --th-radius-2xl: calc(var(--th-radius-base) * 3);

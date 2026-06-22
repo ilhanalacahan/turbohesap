@@ -1,0 +1,130 @@
+/* Reusable Dropdown & Context Menu — th-dropdown / th-contextmenu.
+   Compliant with DESIGN.md & AGENTS.md, using th-shadow-lg and --th-* tokens. */
+
+/* Container menu container */
+.th-dropdown-menu {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-md);
+  box-shadow: var(--th-shadow-lg);
+  padding: 0.375rem;
+  min-width: 12rem;
+  max-width: 20rem;
+  z-index: var(--th-z-dropdown);
+  animation: th-menu-fade-in var(--th-transition-fast) var(--th-ease);
+}
+
+/* Menu Items */
+.th-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: var(--th-fw-normal);
+  color: var(--th-text);
+  border-radius: var(--th-radius-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--th-transition-fast) var(--th-ease), 
+              color var(--th-transition-fast) var(--th-ease);
+}
+
+.th-dropdown-item:hover:not(.th-dropdown-item--disabled) {
+  background: var(--th-surface-3);
+  color: var(--th-text);
+}
+
+.th-dropdown-item--disabled {
+  color: var(--th-text-subtle);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icons and indicators inside items */
+.th-dropdown-item__icon {
+  width: 1rem;
+  font-size: 0.875rem;
+  color: var(--th-text-muted);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.th-dropdown-item:hover:not(.th-dropdown-item--disabled) .th-dropdown-item__icon {
+  color: var(--th-text);
+}
+
+.th-dropdown-item__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.th-dropdown-item__shortcut {
+  font-size: 0.75rem;
+  color: var(--th-text-subtle);
+  margin-inline-start: 1rem;
+}
+
+/* Submenu Arrow Indicator */
+.th-dropdown-item__submenu-arrow {
+  font-size: 0.7rem;
+  color: var(--th-text-subtle);
+  margin-inline-start: auto;
+  transition: transform var(--th-transition-fast) var(--th-ease);
+}
+
+.th-dropdown-item:hover .th-dropdown-item__submenu-arrow {
+  color: var(--th-text);
+}
+
+/* Divider */
+.th-dropdown-divider {
+  height: 1px;
+  background-color: var(--th-border);
+  margin: 0.25rem 0.375rem;
+}
+
+/* Headers */
+.th-dropdown-header {
+  font-size: 0.75rem;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text-subtle);
+  padding: 0.375rem 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+/* Inline Trigger wrapper */
+.th-dropdown-trigger {
+  display: inline-flex;
+}
+
+/* Variant styles for specific items (like Delete) */
+.th-dropdown-item--danger {
+  color: var(--th-danger);
+}
+.th-dropdown-item--danger .th-dropdown-item__icon {
+  color: var(--th-danger);
+}
+.th-dropdown-item--danger:hover:not(.th-dropdown-item--disabled) {
+  background: var(--th-danger-subtle);
+  color: var(--th-danger);
+}
+.th-dropdown-item--danger:hover:not(.th-dropdown-item--disabled) .th-dropdown-item__icon {
+  color: var(--th-danger);
+}
+
+/* Animation */
+@keyframes th-menu-fade-in {
+  from { opacity: 0; transform: translateY(-0.25rem); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,19 +1,65 @@
 @namespace Turbohesap.Web.Components.Feedback
 @inject Turbohesap.Web.Services.ToastService Toasts
+@using Turbohesap.Web.Models
 
-<div class="th-toast-region" aria-live="polite">
-    @foreach (var toast in Toasts.Toasts)
+@foreach (var group in Toasts.Toasts.GroupBy(t => t.Position))
+{
+    var positionClass = group.Key switch
     {
-        <div class="@($"th-toast {toast.CssClass}")" @key="toast.Id">
-            <i class="@($"th-toast__icon {toast.IconClass}")"></i>
-            <div class="th-toast__content">
-                @if (!string.IsNullOrEmpty(toast.Title))
+        ToastPosition.TopLeft => "th-toast-region--top-left",
+        ToastPosition.BottomRight => "th-toast-region--bottom-right",
+        ToastPosition.BottomLeft => "th-toast-region--bottom-left",
+        ToastPosition.TopCenter => "th-toast-region--top-center",
+        ToastPosition.BottomCenter => "th-toast-region--bottom-center",
+        _ => "th-toast-region--top-right"
+    };
+
+    <div class="@($"th-toast-region {positionClass}")" @key="group.Key" aria-live="polite">
+        @foreach (var toast in group)
+        {
+            <div class="@($"th-toast {toast.CssClass}")" @key="toast.Id">
+                @if (!string.IsNullOrEmpty(toast.IconClass))
                 {
-                    <div class="th-toast__title">@toast.Title</div>
+                    <i class="@($"th-toast__icon {toast.IconClass}")"></i>
                 }
-                <div class="th-toast__message">@toast.Message</div>
+                <div class="th-toast__content">
+                    @if (!string.IsNullOrEmpty(toast.Title))
+                    {
+                        <div class="th-toast__title">@toast.Title</div>
+                    }
+                    <div class="th-toast__message">@toast.Message</div>
+                    
+                    @if (toast.Actions != null && toast.Actions.Any())
+                    {
+                        <div class="th-toast__actions flex flex-wrap gap-2 mt-2">
+                            @foreach (var action in toast.Actions)
+                            {
+                                <button type="button" class="@($"th-btn th-btn--sm {action.VariantClass}")" @onclick="() => ExecuteAction(toast, action)">
+                                    @if (!string.IsNullOrEmpty(action.Icon))
+                                    {
+                                        <i class="@action.Icon"></i>
+                                    }
+                                    <span>@action.Text</span>
+                                </button>
+                            }
+                        </div>
+                    }
+                </div>
+                <i class="th-toast__close fa-solid fa-xmark" @onclick="() => Toasts.Remove(toast.Id)"></i>
+                
+                @if (toast.Progress.HasValue)
+                {
+                    <div class="th-toast__progress-wrap">
+                        <div class="th-toast__progress-bar" style="width: @(toast.Progress.Value)%;"></div>
+                    </div>
+                }
+                else if (toast.ShowProgress && toast.DurationMs > 0 && !toast.Fixed)
+                {
+                    <div class="th-toast__progress-wrap">
+                        <div class="th-toast__progress-bar" style="animation: th-toast-progress-shrink @(toast.DurationMs)ms linear forwards;"></div>
+                    </div>
+                }
             </div>
-            <i class="th-toast__close fa-solid fa-xmark" @onclick="() => Toasts.Remove(toast.Id)"></i>
-        </div>
-    }
-</div>
+        }
+    </div>
+}

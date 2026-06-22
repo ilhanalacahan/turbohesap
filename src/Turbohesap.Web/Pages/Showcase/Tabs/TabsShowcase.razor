@@ -1,0 +1,115 @@
+@namespace Turbohesap.Web.Pages.Showcase.Tabs
+
+<!-- ThTabs Test Kartı -->
+<div class="th-card col-span-1 lg:col-span-2">
+    <div class="th-panel-header">
+        <div class="th-panel-title"><i class="fa-solid fa-folder-minus me-2"></i>Sekme (Tabs) Bileşeni Testleri</div>
+        <div class="th-panel-subtitle">Çoklu stil, carousel kaydırmalı, kapatılabilir ve onay olaylı dinamik sekmeler</div>
+    </div>
+    <div class="th-card__body flex flex-col gap-6">
+        <!-- 1. Varyantlar (Styles) -->
+        <div>
+            <h4 class="text-sm font-semibold mb-3">1. Sekme Stilleri (Variants)</h4>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Çizgi Stil (Line - Default)</span>
+                    <ThTabs Variant="TabVariant.Line">
+                        <ThTabPanel Header="Giriş" Icon="fa-solid fa-home">Line stilinde ilk sekme içeriği...</ThTabPanel>
+                        <ThTabPanel Header="Hesaplar" Icon="fa-solid fa-wallet">Hesaplar sekmesi içeriği...</ThTabPanel>
+                        <ThTabPanel Header="Profil" Icon="fa-solid fa-user">Profil detayları...</ThTabPanel>
+                    </ThTabs>
+                </div>
+
+                <hr class="border-border" />
+
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Hap Stil (Pills)</span>
+                    <ThTabs Variant="TabVariant.Pills">
+                        <ThTabPanel Header="Genel" Icon="fa-solid fa-chart-pie">Pills stilinde genel bakış içeriği...</ThTabPanel>
+                        <ThTabPanel Header="Faturalar" Icon="fa-solid fa-file-invoice">Faturalar listesi...</ThTabPanel>
+                        <ThTabPanel Header="Ayarlar" Icon="fa-solid fa-sliders">Genel ayarlar...</ThTabPanel>
+                    </ThTabs>
+                </div>
+
+                <hr class="border-border" />
+
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Çerçeveli Stil (Bordered)</span>
+                    <ThTabs Variant="TabVariant.Bordered">
+                        <ThTabPanel Header="Müşteriler" Icon="fa-solid fa-users">Bordered stilinde müşteri tablosu...</ThTabPanel>
+                        <ThTabPanel Header="Tedarikçiler" Icon="fa-solid fa-truck">Tedarikçi listesi...</ThTabPanel>
+                        <ThTabPanel Header="Raporlar" Icon="fa-solid fa-chart-line">Finansal raporlar...</ThTabPanel>
+                    </ThTabs>
+                </div>
+
+                <hr class="border-border" />
+
+                <div>
+                    <span class="text-xs text-text-muted mb-1 block">Düz Yumuşak Stil (Flat)</span>
+                    <ThTabs Variant="TabVariant.Flat">
+                        <ThTabPanel Header="Veriler" Icon="fa-solid fa-database">Flat stilinde veri tabanları...</ThTabPanel>
+                        <ThTabPanel Header="Loglar" Icon="fa-solid fa-list-ul">Sistem logları...</ThTabPanel>
+                        <ThTabPanel Header="Güvenlik" Icon="fa-solid fa-shield-halved">Güvenlik denetimleri...</ThTabPanel>
+                    </ThTabs>
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 2. Carousel / Overflow Scroll -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">2. Carousel Kaydırma & Çoklu Sekme</h4>
+            <p class="text-xs text-text-muted mb-3">Sağa ve sola taşma durumunda yönlendirme okları belirir ve mouse tekerleğiyle yatay kaydırma desteklenir.</p>
+            <ThTabs Variant="TabVariant.Line">
+                @for (int i = 1; i <= 15; i++)
+                {
+                    var index = i;
+                    <ThTabPanel Header="@($"Sekme {index}")" Icon="fa-solid fa-folder">
+                        Sekme @index içerik alanı. Carousel kaydırmayı test etmek için çoklu sekmeler oluşturulmuştur.
+                    </ThTabPanel>
+                }
+            </ThTabs>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 3. Kapatılabilir ve Onay Olaylı Sekmeler -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">3. Kapatılabilir & İptal Edilebilir Onay Olaylı Sekmeler</h4>
+            <p class="text-xs text-text-muted mb-3">İlk sekme doğrudan kapatılabilir; ikinci sekme kapatılmaya çalışıldığında onay diyaloğu çıkar ve onaylanmazsa kapatma iptal edilir.</p>
+            <ThTabs Variant="TabVariant.Bordered">
+                @foreach (var tab in _closableTabs)
+                {
+                    var currentTab = tab;
+                    <ThTabPanel @key="currentTab.Id" Header="@currentTab.Name" Icon="@currentTab.Icon" Closable="true" OnClose="args => HandleTabClose(currentTab, args)">
+                        @currentTab.Content
+                    </ThTabPanel>
+                }
+            </ThTabs>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 4. Pasif Sekmeler & Lazy Loading -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <h4 class="text-sm font-semibold mb-2">4. Pasif Sekmeler (Disabled)</h4>
+                <ThTabs Variant="TabVariant.Flat">
+                    <ThTabPanel Header="Aktif Sekme" Icon="fa-solid fa-check">Aktif sekme seçili durumda.</ThTabPanel>
+                    <ThTabPanel Header="Pasif Sekme 1" Icon="fa-solid fa-ban" Disabled="true">Bu içerik gösterilemez.</ThTabPanel>
+                    <ThTabPanel Header="Pasif Sekme 2" Icon="fa-solid fa-lock" Disabled="true">Bu içerik kilitlidir.</ThTabPanel>
+                </ThTabs>
+            </div>
+            
+            <div>
+                <h4 class="text-sm font-semibold mb-2">5. Gecikmeli Yükleme (Lazy Loading)</h4>
+                <p class="text-xs text-text-muted mb-2">Lazy Loading aktif olduğunda, sekmelerin içeriği DOM'a ancak sekme tıklandığında yüklenir.</p>
+                <ThTabs Variant="TabVariant.Pills" Lazy="true">
+                    <ThTabPanel Header="Ana Sayfa">Lazy yükleme yapılmayan ilk sekme...</ThTabPanel>
+                    <ThTabPanel Header="Rapor">Lazy yüklenen Rapor sekmesi içeriği (tıklanmadan önce DOM'da yer almaz)...</ThTabPanel>
+                </ThTabs>
+            </div>
+        </div>
+    </div>
+</div>

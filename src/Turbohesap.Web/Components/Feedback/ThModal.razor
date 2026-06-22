@@ -1,0 +1,39 @@
+@namespace Turbohesap.Web.Components.Feedback
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+
+@if (Visible)
+{
+    <div class="th-modal-overlay" @onclick="OnOverlayClick">
+        <div @ref="_dialogRef" class="@RootClass" role="dialog" aria-modal="true" @onclick:stopPropagation="true">
+            <div @ref="_headerRef" class="th-panel-header">
+                <div class="th-modal__header-title-area">
+                    <div class="th-panel-title">@Title</div>
+                    @if (!string.IsNullOrEmpty(Subtitle))
+                    {
+                        <div class="th-panel-subtitle">@Subtitle</div>
+                    }
+                </div>
+                <div class="th-modal__header-actions">
+                    @if (Maximizable && !Fullscreen)
+                    {
+                        <span class="th-modal__maximize" @onclick="ToggleMaximize" title="@(_maximized ? "Küçült" : "Tam Ekran")">
+                            <i class="@(_maximized ? "fa-solid fa-compress" : "fa-solid fa-expand")"></i>
+                        </span>
+                    }
+                    <span class="th-modal__close" @onclick="CloseAsync" title="Kapat">
+                        <i class="fa-solid fa-xmark"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="th-modal__body">
+                @ChildContent
+            </div>
+            @if (Footer is not null)
+            {
+                <div class="th-modal__footer">
+                    @Footer
+                </div>
+            }
+        </div>
+    </div>
+}

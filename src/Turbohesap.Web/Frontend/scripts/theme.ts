@@ -43,12 +43,44 @@ export function toggle(): 'light' | 'dark' {
   return next;
 }
 
+function applyDerivedRadius(value: string): void {
+  const root = document.documentElement;
+  const pxVal = parseFloat(value);
+  if (!isNaN(pxVal)) {
+    root.style.setProperty('--th-radius-xs', `${pxVal * 0.5}px`);
+    root.style.setProperty('--th-radius-sm', `${pxVal * 0.75}px`);
+    root.style.setProperty('--th-radius-md', `${pxVal * 1.0}px`);
+    root.style.setProperty('--th-radius-lg', `${pxVal * 1.5}px`);
+    root.style.setProperty('--th-radius-xl', `${pxVal * 2.0}px`);
+    root.style.setProperty('--th-radius-2xl', `${pxVal * 3.0}px`);
+  }
+}
+
+function removeDerivedRadius(): void {
+  const root = document.documentElement;
+  const radiusTokens = [
+    '--th-radius-base',
+    '--th-radius-xs',
+    '--th-radius-sm',
+    '--th-radius-md',
+    '--th-radius-lg',
+    '--th-radius-xl',
+    '--th-radius-2xl'
+  ];
+  for (const token of radiusTokens) {
+    root.style.removeProperty(token);
+  }
+}
+
 /** Özelleştirilmiş token değerlerini (örn. {'--th-primary':'#...'}) uygular ve saklar. */
 export function applyTokens(tokens: Record<string, string>): void {
   const root = document.documentElement;
   for (const [key, value] of Object.entries(tokens)) {
     const name = key.startsWith('--') ? key : `--th-${key}`;
     root.style.setProperty(name, value);
+    if (name === '--th-radius-base') {
+      applyDerivedRadius(value);
+    }
   }
   localStorage.setItem(TOKENS_KEY, JSON.stringify(readStoredTokens(tokens)));
 }
@@ -99,6 +131,7 @@ export function resetTokens(): void {
   for (const key of Object.keys(stored)) {
     document.documentElement.style.removeProperty(key);
   }
+  removeDerivedRadius();
   localStorage.removeItem(TOKENS_KEY);
   localStorage.removeItem(DENSITY_KEY);
   localStorage.removeItem(SHADOW_KEY);
@@ -128,6 +161,9 @@ export function initTheme(): void {
   const stored = readStoredTokens();
   for (const [key, value] of Object.entries(stored)) {
     document.documentElement.style.setProperty(key, value);
+    if (key === '--th-radius-base') {
+      applyDerivedRadius(value);
+    }
   }
 
   media().addEventListener('change', () => {

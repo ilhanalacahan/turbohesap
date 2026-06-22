@@ -104,6 +104,7 @@
 @import './css/card.css' layer(components);
 @import './css/badge.css' layer(components);
 @import './css/dialog.css' layer(components);
+@import './css/modal.css' layer(components);
 @import './css/drawer.css' layer(components);
 @import './css/toast.css' layer(components);
 @import './css/datatable.css' layer(components);
@@ -113,6 +114,7 @@
 @import './css/appbar.css' layer(components);
 @import './css/layout.css' layer(components);
 @import './css/tabs.css' layer(components);
+@import './css/dropdown.css' layer(components);
 @import './css/command-launcher.css' layer(components);
 @import './css/app-launcher.css' layer(components);
 @import './css/ai-chat.css' layer(components);

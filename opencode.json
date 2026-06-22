@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS.md",
+    "DESIGN.md"
+  ],
+  "skills": {
+    "paths": [
+      ".agents/skills"
+    ]
+  },
+  "logLevel": "INFO",
+  "permission": {
+    "edit": "allow",
+    "bash": {
+      "git *": "allow",
+      "*": "ask"
+    },
+    "external_directory": {
+      "*": "ask"
+    }
+  }
+}

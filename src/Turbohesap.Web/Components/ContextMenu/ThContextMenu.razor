@@ -1,0 +1,16 @@
+@namespace Turbohesap.Web.Components.ContextMenu
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThContextMenu.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes" @oncontextmenu="OnContextMenu" @oncontextmenu:preventDefault="true">
+    @TargetZone
+</div>
+
+@if (_isOpen)
+{
+    <CascadingValue Value="this" IsFixed="true">
+        <div @ref="_menuRef" class="th-dropdown-menu">
+            @Menu
+        </div>
+    </CascadingValue>
+}

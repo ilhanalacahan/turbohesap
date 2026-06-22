@@ -1,0 +1,43 @@
+@namespace Turbohesap.Web.Pages.Showcase.Dialog
+
+<!-- ThDialog Test Kartı -->
+<div class="th-card">
+    <div class="th-panel-header">
+        <div class="th-panel-title"><i class="fa-solid fa-message me-2"></i>Dinamik Dialog Testleri (TS-Interop)</div>
+        <div class="th-panel-subtitle">Sıfır server gecikmeli ve zengin bildirim pencereleri</div>
+    </div>
+    <div class="th-card__body flex flex-col gap-4">
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Hızlı Mesaj Kutuları (Alerts)</h4>
+            <div class="flex flex-wrap gap-2">
+                <ThButton Variant="ButtonVariant.Ghost" OnClick="ShowNormalAlert">Normal</ThButton>
+                <ThButton Variant="ButtonVariant.Primary" OnClick="ShowPrimaryAlert">Primary</ThButton>
+                <ThButton Variant="ButtonVariant.Success" OnClick="ShowSuccessAlert">Success</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" OnClick="ShowWarningAlert">Warning</ThButton>
+                <ThButton Variant="ButtonVariant.Danger" OnClick="ShowDangerAlert">Danger</ThButton>
+            </div>
+        </div>
+
+        <hr class="border-border my-2" />
+
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Kullanıcı Etkileşimi (Prompts & Confirms)</h4>
+            <div class="flex flex-wrap gap-2">
+                <ThButton Variant="ButtonVariant.Outline" OnClick="ShowConfirm">Onay Kutusu (Confirm)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" OnClick="ShowDangerConfirm">Tehlikeli İşlem Onayı</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" OnClick="ShowPrompt">Metin Girişi (Prompt)</ThButton>
+            </div>
+        </div>
+
+        <hr class="border-border my-2" />
+
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Süreç ve Durum Takibi (Events & Progress)</h4>
+            <div class="flex flex-wrap gap-2">
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-spinner" OnClick="ShowLoading">Yükleniyor (Loading)</ThButton>
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-chart-line" OnClick="ShowProgress">İlerleme Çubuğu (Progress)</ThButton>
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-hourglass-half" OnClick="ShowCountdown">Geri Sayım (Countdown)</ThButton>
+            </div>
+        </div>
+    </div>
+</div>

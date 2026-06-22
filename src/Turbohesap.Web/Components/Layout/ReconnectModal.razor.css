@@ -1,157 +1,247 @@
+/* ReconnectModal — th-reconnect. Blazor bağlantı kesilme diyaloğu. */
+
+/* Varsayılan olarak tüm durumsal öğeleri gizle */
 .components-reconnect-first-attempt-visible,
 .components-reconnect-repeated-attempt-visible,
 .components-reconnect-failed-visible,
 .components-pause-visible,
 .components-resume-failed-visible,
 .components-rejoining-animation {
-    display: none;
+    display: none !important;
 }
 
-#components-reconnect-modal.components-reconnect-show .components-reconnect-first-attempt-visible,
-#components-reconnect-modal.components-reconnect-show .components-rejoining-animation,
-#components-reconnect-modal.components-reconnect-paused .components-pause-visible,
-#components-reconnect-modal.components-reconnect-resume-failed .components-resume-failed-visible,
-#components-reconnect-modal.components-reconnect-retrying,
-#components-reconnect-modal.components-reconnect-retrying .components-reconnect-repeated-attempt-visible,
-#components-reconnect-modal.components-reconnect-retrying .components-rejoining-animation,
-#components-reconnect-modal.components-reconnect-failed,
-#components-reconnect-modal.components-reconnect-failed .components-reconnect-failed-visible {
-    display: block;
+/* Blazor durum sınıflarına göre görünürlük kuralları */
+#components-reconnect-modal.components-reconnect-show .components-reconnect-first-attempt-visible {
+    display: block !important;
+}
+#components-reconnect-modal.components-reconnect-show .components-rejoining-animation {
+    display: flex !important;
 }
 
+#components-reconnect-modal.components-reconnect-retrying .components-reconnect-repeated-attempt-visible {
+    display: block !important;
+}
+#components-reconnect-modal.components-reconnect-retrying .components-rejoining-animation {
+    display: flex !important;
+}
 
+#components-reconnect-modal.components-reconnect-failed p.components-reconnect-failed-visible {
+    display: block !important;
+}
+#components-reconnect-modal.components-reconnect-failed button.components-reconnect-failed-visible {
+    display: inline-flex !important;
+}
+
+#components-reconnect-modal.components-reconnect-paused p.components-pause-visible {
+    display: block !important;
+}
+#components-reconnect-modal.components-reconnect-paused button.components-pause-visible {
+    display: inline-flex !important;
+}
+
+#components-reconnect-modal.components-reconnect-resume-failed p.components-resume-failed-visible {
+    display: block !important;
+}
+#components-reconnect-modal.components-reconnect-resume-failed button.components-resume-failed-visible {
+    display: inline-flex !important;
+}
+
+/* Dialog Temel Yapısı */
 #components-reconnect-modal {
-    background-color: white;
-    width: 20rem;
-    margin: 20vh auto;
-    padding: 2rem;
-    border: 0;
-    border-radius: 0.5rem;
-    box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    inset: 0;
+    z-index: var(--th-z-modal);
+    background-color: var(--th-surface);
+    color: var(--th-text);
+    border: 1px solid var(--th-border);
+    border-radius: var(--th-radius-xl);
+    box-shadow: var(--th-shadow-xl);
+    width: calc(100% - 2.5rem);
+    max-width: 22rem;
+    margin: auto;
+    padding: 1.75rem;
+    overflow: hidden;
     opacity: 0;
-    transition: display 0.5s allow-discrete, overlay 0.5s allow-discrete;
-    animation: components-reconnect-modal-fadeOutOpacity 0.5s both;
-    &[open]
-
-{
-    animation: components-reconnect-modal-slideUp 1.5s cubic-bezier(.05, .89, .25, 1.02) 0.3s, components-reconnect-modal-fadeInOpacity 0.5s ease-in-out 0.3s;
-    animation-fill-mode: both;
+    transition: opacity 0.3s var(--th-ease);
 }
 
+#components-reconnect-modal[open] {
+    opacity: 1;
+    animation: th-reconnect-modal-slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 #components-reconnect-modal::backdrop {
-    background-color: rgba(0, 0, 0, 0.4);
-    animation: components-reconnect-modal-fadeInOpacity 0.5s ease-in-out;
+    background-color: var(--th-overlay);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.3s var(--th-ease);
+}
+
+#components-reconnect-modal[open]::backdrop {
     opacity: 1;
 }
 
-@keyframes components-reconnect-modal-slideUp {
-    0% {
-        transform: translateY(30px) scale(0.95);
-    }
-
-    100% {
-        transform: translateY(0);
-    }
-}
-
-@keyframes components-reconnect-modal-fadeInOpacity {
+@keyframes th-reconnect-modal-slideUp {
     0% {
         opacity: 0;
+        transform: translateY(20px) scale(0.96);
     }
-
     100% {
         opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 
-@keyframes components-reconnect-modal-fadeOutOpacity {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-.components-reconnect-container {
+/* İçerik Düzeni */
+.th-reconnect-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-}
-
-#components-reconnect-modal p {
-    margin: 0;
     text-align: center;
+    gap: 1.25rem;
 }
 
-#components-reconnect-modal button {
-    border: 0;
-    background-color: #6b9ed2;
-    color: white;
-    padding: 4px 24px;
-    border-radius: 4px;
-}
-
-    #components-reconnect-modal button:hover {
-        background-color: #3b6ea2;
-    }
-
-    #components-reconnect-modal button:active {
-        background-color: #6b9ed2;
-    }
-
-.components-rejoining-animation {
+/* İllüstrasyon ve İkon Alanı */
+.th-reconnect-illustration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 6rem;
+    height: 6rem;
     position: relative;
-    width: 80px;
-    height: 80px;
 }
 
-    .components-rejoining-animation div {
-        position: absolute;
-        border: 3px solid #0087ff;
-        opacity: 1;
-        border-radius: 50%;
-        animation: components-rejoining-animation 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-    }
+/* Yeniden bağlanma dalgalanma efekti */
+.th-reconnect-pulse {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .components-rejoining-animation div:nth-child(2) {
-            animation-delay: -0.5s;
-        }
+.th-reconnect-pulse__ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--th-primary);
+    border-radius: var(--th-radius-full);
+    opacity: 0;
+    animation: th-reconnect-pulse-wave 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
 
-@keyframes components-rejoining-animation {
+.th-reconnect-pulse__ring:nth-child(2) {
+    animation-delay: 0.6s;
+}
+
+.th-reconnect-pulse__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: var(--th-primary-subtle);
+    color: var(--th-primary);
+    border-radius: var(--th-radius-full);
+    font-size: 1.5rem;
+    z-index: 2;
+    animation: th-reconnect-pulse-icon 2s ease-in-out infinite;
+}
+
+@keyframes th-reconnect-pulse-wave {
     0% {
-        top: 40px;
-        left: 40px;
-        width: 0;
-        height: 0;
-        opacity: 0;
+        transform: scale(0.4);
+        opacity: 0.9;
     }
-
-    4.9% {
-        top: 40px;
-        left: 40px;
-        width: 0;
-        height: 0;
-        opacity: 0;
-    }
-
-    5% {
-        top: 40px;
-        left: 40px;
-        width: 0;
-        height: 0;
-        opacity: 1;
-    }
-
     100% {
-        top: 0px;
-        left: 0px;
-        width: 80px;
-        height: 80px;
+        transform: scale(1.15);
         opacity: 0;
     }
+}
+
+@keyframes th-reconnect-pulse-icon {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+/* Hata/Askı Durum İkonu */
+.th-reconnect-status-icon {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.th-reconnect-status-icon__bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    background: color-mix(in srgb, var(--th-danger) 12%, transparent);
+    color: var(--th-danger);
+    border-radius: var(--th-radius-full);
+    font-size: 2rem;
+    animation: th-reconnect-shake 0.5s ease-in-out;
+}
+
+#components-reconnect-modal.components-reconnect-paused .th-reconnect-status-icon__bg {
+    background: color-mix(in srgb, var(--th-warning) 12%, transparent);
+    color: var(--th-warning);
+}
+
+@keyframes th-reconnect-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+}
+
+/* Metin Düzeni */
+.th-reconnect-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.th-reconnect-title {
+    font-family: var(--th-font-sans);
+    font-size: 1.125rem;
+    font-weight: var(--th-fw-semibold);
+    color: var(--th-text);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.th-reconnect-title.text-danger {
+    color: var(--th-danger);
+}
+
+.th-reconnect-desc {
+    font-family: var(--th-font-sans);
+    font-size: 0.875rem;
+    color: var(--th-text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.th-reconnect-countdown {
+    color: var(--th-primary);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--th-fw-bold);
+}
+
+/* Aksiyon Düğmeleri */
+.th-reconnect-actions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
 }

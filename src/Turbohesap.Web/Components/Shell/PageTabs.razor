@@ -28,7 +28,7 @@
     </div>
 }
 
-<ThDialog @bind-Visible="_confirmOpen" Title="Kaydedilmemiş değişiklikler" Size="DialogSize.Sm">
+<ThModal @bind-Visible="_confirmOpen" Title="Kaydedilmemiş değişiklikler" Size="ModalSize.Sm">
     <ChildContent>
         <p>“<strong>@_pending?.Title</strong>” sekmesinde kaydedilmemiş değişiklikler var. Yine de kapatmak istiyor musunuz?</p>
     </ChildContent>
@@ -36,4 +36,4 @@
         <ThButton Variant="ButtonVariant.Ghost" OnClick="@(() => _confirmOpen = false)">Vazgeç</ThButton>
         <ThButton Variant="ButtonVariant.Danger" Icon="fa-solid fa-xmark" OnClick="ConfirmClose">Yine de kapat</ThButton>
     </Footer>
-</ThDialog>
+</ThModal>

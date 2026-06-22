@@ -1,0 +1,34 @@
+@namespace Turbohesap.Web.Pages.Showcase.Toast
+
+<!-- ThToast Test Kartı -->
+<div class="th-card">
+    <div class="th-panel-header">
+        <div class="th-panel-title"><i class="fa-solid fa-bell me-2"></i>Gelişmiş Toast Testleri</div>
+        <div class="th-panel-subtitle">Konumlandırma, butonlar, progress ve sabit bildirimler</div>
+    </div>
+    <div class="th-card__body flex flex-col gap-4">
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Gelişmiş Özellikler</h4>
+            <div class="flex flex-wrap gap-2">
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-rectangle-list" OnClick="ShowToastWithActions">Eylem Butonları (Undo)</ThButton>
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-circle-pause" OnClick="ShowStickyToast">Sabit Bildirim (Fixed)</ThButton>
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-spinner" OnClick="ShowToastWithProgress">Otomatik Progress</ThButton>
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-chart-line" OnClick="ShowToastDynamicProgress">Dinamik C# Progress</ThButton>
+            </div>
+        </div>
+
+        <hr class="border-border my-2" />
+
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Konumlandırma (Positions)</h4>
+            <div class="grid grid-cols-2 gap-2">
+                <ThButton Variant="ButtonVariant.Outline" Size="ComponentSize.Sm" OnClick="@(() => ShowToastPosition(ToastPosition.TopLeft))">Sol Üst (TopLeft)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" Size="ComponentSize.Sm" OnClick="@(() => ShowToastPosition(ToastPosition.TopRight))">Sağ Üst (TopRight)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" Size="ComponentSize.Sm" OnClick="@(() => ShowToastPosition(ToastPosition.TopCenter))">Orta Üst (TopCenter)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" Size="ComponentSize.Sm" OnClick="@(() => ShowToastPosition(ToastPosition.BottomLeft))">Sol Alt (BottomLeft)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" Size="ComponentSize.Sm" OnClick="@(() => ShowToastPosition(ToastPosition.BottomRight))">Sağ Alt (BottomRight)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" Size="ComponentSize.Sm" OnClick="@(() => ShowToastPosition(ToastPosition.BottomCenter))">Orta Alt (BottomCenter)</ThButton>
+            </div>
+        </div>
+    </div>
+</div>

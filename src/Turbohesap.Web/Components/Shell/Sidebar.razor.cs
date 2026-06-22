@@ -119,6 +119,8 @@ public partial class Sidebar : IDisposable
 
     private void OnSearch(ChangeEventArgs e) => _search = e.Value?.ToString() ?? string.Empty;
 
+    private void ClearSearch() => _search = string.Empty;
+
     private void StateChanged() => InvokeAsync(StateHasChanged);
     private void LocationChanged(object? sender, LocationChangedEventArgs e) => InvokeAsync(StateHasChanged);
 

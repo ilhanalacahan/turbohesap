@@ -1,0 +1,53 @@
+@namespace Turbohesap.Web.Pages.Showcase.Modal
+
+<!-- ThModal Test Kartı -->
+<div class="th-card">
+    <div class="th-panel-header">
+        <div class="th-panel-title"><i class="fa-solid fa-window-restore me-2"></i>Modal Bileşeni Testleri (Blazor-Markup)</div>
+        <div class="th-panel-subtitle">Taşınabilir, genişletilebilir ve çok amaçlı modal yapısı</div>
+    </div>
+    <div class="th-card__body flex flex-col gap-4">
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Satır İçi Modal Testleri</h4>
+            <div class="flex flex-wrap gap-2">
+                <ThButton Variant="ButtonVariant.Primary" OnClick="@(() => _inlineModalOpen = true)">Normal Modal Aç</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" OnClick="@(() => _draggableModalOpen = true)">Sürüklenebilir Modal Aç</ThButton>
+            </div>
+        </div>
+
+        <hr class="border-border my-2" />
+
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Servis Tabanlı Form Modalı</h4>
+            <div class="flex flex-wrap gap-2">
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-square-poll-horizontal" OnClick="OpenServiceModal">Parametreli Form Modalı Aç</ThButton>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inline Modal Tanımlamaları -->
+<ThModal @bind-Visible="_inlineModalOpen" Title="Satır İçi Modal" Subtitle="Bu modal satır içi tanımlanmıştır" Maximizable="true">
+    <ChildContent>
+        <div class="p-2">
+            <p class="mb-4">Bu modal bileşeni <strong>Maximizable</strong> özelliğine sahiptir. Başlıktaki buton ile tam ekran yapılabilir.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sit amet finibus sapien. Suspendisse pulvinar erat a leo scelerisque tincidunt.</p>
+        </div>
+    </ChildContent>
+    <Footer>
+        <ThButton Variant="ButtonVariant.Ghost" OnClick="@(() => _inlineModalOpen = false)">Vazgeç</ThButton>
+        <ThButton Variant="ButtonVariant.Primary" OnClick="@(() => _inlineModalOpen = false)">Tamam</ThButton>
+    </Footer>
+</ThModal>
+
+<ThModal @bind-Visible="_draggableModalOpen" Title="Taşınabilir Modal" Subtitle="Başlığından tutarak sürükleyebilirsiniz" Draggable="true" Variant="ModalVariant.Success">
+    <ChildContent>
+        <div class="p-2">
+            <p class="mb-4">Bu modal <strong>Draggable</strong> özelliğine sahiptir. Başlık alanından sürükleyerek sayfada taşıyabilirsiniz.</p>
+            <p>Ayrıca varyantı <strong>Success</strong> olarak ayarlandığı için soft yeşil bir başlık rengine sahiptir.</p>
+        </div>
+    </ChildContent>
+    <Footer>
+        <ThButton Variant="ButtonVariant.Ghost" OnClick="@(() => _draggableModalOpen = false)">Kapat</ThButton>
+    </Footer>
+</ThModal>

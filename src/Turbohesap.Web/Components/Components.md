@@ -12,8 +12,13 @@ dökümanı kendi dizinindeki `Th<Ad>.md` dosyasındadır. Bu liste `create-comp
 |---------|-------|------|-------|
 | ThButton | [Button/ThButton.md](Button/ThButton.md) | Birincil/ikincil/ghost… varyantlı buton (`th-btn`) | ⏳ |
 | ThField | [Input/ThField.md](Input/ThField.md) | Etiket + içerik + FluentValidation mesajı form alanı | ⏳ |
-| ThDialog | [Feedback/ThDialog.md](Feedback/ThDialog.md) | Modal/diyalog (`th-dialog`, sm/md/lg/xl) | ⏳ |
-| ThToastHost | [Feedback/ThToastHost.md](Feedback/ThToastHost.md) | Toast bölgesi (otomatik kapanır) | ⏳ |
+| ThModal | [Feedback/ThModal.md](Feedback/ThModal.md) | Taşınabilir, tam ekran, genişletilebilir ve form davranışlı modal pencere | ✅ |
+| ThDialog | [Feedback/ThDialog.md](Feedback/ThDialog.md) | Sıfır gecikmeli, TS-interop tabanlı dinamik diyalog ve bildirim servisi | ✅ |
+| ThToastHost | [Feedback/ThToastHost.md](Feedback/ThToastHost.md) | Toast bölgesi (otomatik kapanır) | ✅ |
+| ThDrawer | [Feedback/ThDrawer.md](Feedback/ThDrawer.md) | Dört yönden açılabilen, genişletilebilir ve form davranışlı yan panel | ✅ |
+| ThTabs | [Tabs/ThTabs.md](Tabs/ThTabs.md) | Çok stilli, carousel kaydırmalı ve onay olaylı sekme bileşeni | ✅ |
+| ThDropdown | [Dropdown/ThDropdown.md](Dropdown/ThDropdown.md) | Alt menülü, taşma korumalı ve portal-benzeri açılır menü bileşeni | ✅ |
+| ThContextMenu | [Dropdown/ThDropdown.md](Dropdown/ThDropdown.md) | Sağ tık ile tetiklenen bağlam menüsü bileşeni | ✅ |
 | ThErrorBoundary | [Feedback/ThErrorBoundary.md](Feedback/ThErrorBoundary.md) | Hata sınırı; hatayı API'ye loglar | ⏳ |
 | ThDataTable | [Data/ThDataTable.md](Data/ThDataTable.md) | Generic veri tablosu (yuvalar + yükleniyor/boş) | ⏳ |
 | ThPagination | [Data/ThPagination.md](Data/ThPagination.md) | Sayfalama çubuğu (parametrik sayfa boyutu) | ⏳ |

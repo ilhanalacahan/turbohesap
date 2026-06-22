@@ -1,0 +1,16 @@
+@namespace Turbohesap.Web.Components.Dropdown
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThDropdown.razor.cs *@
+
+<div @ref="_triggerRef" class="@RootClass" style="@Style" @attributes="AdditionalAttributes" @onclick="ToggleAsync" @onclick:stopPropagation="true">
+    @Trigger
+</div>
+
+@if (_isOpen)
+{
+    <CascadingValue Value="this" IsFixed="true">
+        <div @ref="_menuRef" class="th-dropdown-menu">
+            @ChildContent
+        </div>
+    </CascadingValue>
+}

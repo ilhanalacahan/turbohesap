@@ -17,10 +17,17 @@ public sealed class ToastService
         OnChange?.Invoke();
     }
 
-    public void Info(string message, string? title = null) => Show(new ToastMessage { Message = message, Title = title, Level = ToastLevel.Info });
-    public void Success(string message, string? title = null) => Show(new ToastMessage { Message = message, Title = title, Level = ToastLevel.Success });
-    public void Warning(string message, string? title = null) => Show(new ToastMessage { Message = message, Title = title, Level = ToastLevel.Warning });
-    public void Error(string message, string? title = null) => Show(new ToastMessage { Message = message, Title = title, Level = ToastLevel.Danger });
+    public void Info(string message, string? title = null, int durationMs = 4000, bool isFixed = false, ToastPosition position = ToastPosition.BottomRight, string? icon = null, bool showProgress = false, double? progress = null, List<ToastAction>? actions = null)
+        => Show(new ToastMessage { Message = message, Title = title, Level = ToastLevel.Info, DurationMs = durationMs, Fixed = isFixed, Position = position, Icon = icon, ShowProgress = showProgress, Progress = progress, Actions = actions });
+
+    public void Success(string message, string? title = null, int durationMs = 4000, bool isFixed = false, ToastPosition position = ToastPosition.BottomRight, string? icon = null, bool showProgress = false, double? progress = null, List<ToastAction>? actions = null)
+        => Show(new ToastMessage { Message = message, Title = title, Level = ToastLevel.Success, DurationMs = durationMs, Fixed = isFixed, Position = position, Icon = icon, ShowProgress = showProgress, Progress = progress, Actions = actions });
+
+    public void Warning(string message, string? title = null, int durationMs = 4000, bool isFixed = false, ToastPosition position = ToastPosition.BottomRight, string? icon = null, bool showProgress = false, double? progress = null, List<ToastAction>? actions = null)
+        => Show(new ToastMessage { Message = message, Title = title, Level = ToastLevel.Warning, DurationMs = durationMs, Fixed = isFixed, Position = position, Icon = icon, ShowProgress = showProgress, Progress = progress, Actions = actions });
+
+    public void Error(string message, string? title = null, int durationMs = 4000, bool isFixed = false, ToastPosition position = ToastPosition.BottomRight, string? icon = null, bool showProgress = false, double? progress = null, List<ToastAction>? actions = null)
+        => Show(new ToastMessage { Message = message, Title = title, Level = ToastLevel.Danger, DurationMs = durationMs, Fixed = isFixed, Position = position, Icon = icon, ShowProgress = showProgress, Progress = progress, Actions = actions });
 
     public void Remove(Guid id)
     {
@@ -31,4 +38,6 @@ public sealed class ToastService
             OnChange?.Invoke();
         }
     }
+
+    public void NotifyChanged() => OnChange?.Invoke();
 }

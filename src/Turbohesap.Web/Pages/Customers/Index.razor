@@ -62,7 +62,7 @@
 </ThPage>
 
 @* Oluştur / Düzenle *@
-<ThDialog @bind-Visible="_formOpen" Title="@(_editId is null ? "Yeni Müşteri" : "Müşteriyi Düzenle")" Size="DialogSize.Md">
+<ThModal @bind-Visible="_formOpen" Title="@(_editId is null ? "Yeni Müşteri" : "Müşteriyi Düzenle")" Size="ModalSize.Md">
     <ChildContent>
     @if (_editContext is not null)
     {
@@ -100,10 +100,10 @@
             Kaydet
         </ThButton>
     </Footer>
-</ThDialog>
+</ThModal>
 
 @* Silme onayı *@
-<ThDialog @bind-Visible="_deleteOpen" Title="Müşteriyi Sil" Size="DialogSize.Sm">
+<ThModal @bind-Visible="_deleteOpen" Title="Müşteriyi Sil" Size="ModalSize.Sm">
     <ChildContent>
         <p>“<strong>@_deleteTarget?.Name</strong>” adlı müşteriyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</p>
     </ChildContent>
@@ -111,4 +111,4 @@
         <ThButton Variant="ButtonVariant.Ghost" OnClick="@(() => _deleteOpen = false)">Vazgeç</ThButton>
         <ThButton Variant="ButtonVariant.Danger" Loading="_saving" Icon="fa-solid fa-trash" OnClick="ConfirmDeleteAsync">Sil</ThButton>
     </Footer>
-</ThDialog>
+</ThModal>

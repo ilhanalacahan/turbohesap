@@ -13,8 +13,17 @@
     </div>
 
     <div class="th-sidebar__search">
-        <input class="th-sidebar__search-input" type="search" placeholder="Menüde ara…"
-               value="@_search" @oninput="OnSearch" />
+        <div class="th-sidebar__search-wrap">
+            <i class="th-sidebar__search-icon fa-solid fa-magnifying-glass"></i>
+            <input class="th-sidebar__search-input" type="text" placeholder="Menüde ara…"
+                   value="@_search" @oninput="OnSearch" />
+            @if (!string.IsNullOrEmpty(_search))
+            {
+                <span class="th-sidebar__search-clear" title="Temizle" @onclick="ClearSearch">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            }
+        </div>
     </div>
 
     <nav class="th-sidebar__nav">

@@ -52,6 +52,7 @@ public sealed class AppNavigation
             [
                 new NavItem { Label = "Denetim Kayıtları", Icon = "fa-solid fa-clipboard-list", Href = "/audit-logs", Roles = [Roles.Administrator] },
                 new NavItem { Label = "Hata Kayıtları", Icon = "fa-solid fa-bug", Href = "/error-logs", Roles = [Roles.Administrator] },
+                new NavItem { Label = "Bileşen Vitrini", Icon = "fa-solid fa-flask", Href = "/showcase" },
                 new NavItem { Label = "Ayarlar", Icon = "fa-solid fa-gear", Href = "/settings" }
             ]
         }

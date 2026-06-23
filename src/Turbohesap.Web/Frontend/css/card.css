@@ -6,7 +6,7 @@
   background: var(--th-surface);
   border: 1px solid var(--th-border);
   border-radius: var(--th-radius-lg);
-  box-shadow: var(--th-shadow-xs);
+  box-shadow: var(--th-card-shadow);
   overflow: hidden;
 }
 
@@ -41,23 +41,4 @@
   background: var(--th-surface-2);
 }
 
-/* Accordion — ortak başlık stilini kullanır */
-.th-accordion { border: 1px solid var(--th-border); border-radius: var(--th-radius-lg); overflow: hidden; }
-.th-accordion__item + .th-accordion__item { border-top: 1px solid var(--th-border); }
-.th-accordion__trigger {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.875rem 1.25rem;
-  background: var(--th-surface);
-  color: var(--th-text);
-  font-weight: var(--th-fw-medium);
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-.th-accordion__trigger:hover { background: var(--th-surface-2); }
-.th-accordion__chevron { transition: transform var(--th-transition) var(--th-ease); color: var(--th-text-subtle); }
-.th-accordion__item--open .th-accordion__chevron { transform: rotate(90deg); }
-.th-accordion__panel { padding: 1rem 1.25rem; background: var(--th-surface-2); font-size: 0.875rem; color: var(--th-text-muted); }
+/* Accordion stilleri ayrı dosyada: Frontend/css/accordion.css */

@@ -1,0 +1,144 @@
+/* HeatmapCalendar — th-heatmap-calendar. Yalnızca --th-* token'ları kullanır. */
+.th-heatmap-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: var(--th-content-padding);
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-lg);
+  box-shadow: var(--th-card-shadow);
+  width: 100%;
+}
+
+.th-heatmap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.th-heatmap-title {
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.th-heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.th-heatmap-container {
+  display: flex;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
+.th-heatmap-weekdays {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem 0 0.25rem 0; /* Ay başlığı yüksekliğiyle hizalı */
+  font-size: 0.625rem;
+  color: var(--th-text-subtle);
+  height: calc(7 * 11px + 6 * 3px + 1.25rem); /* 7 satır + gap + ay yüksekliği */
+  flex-shrink: 0;
+}
+
+.th-heatmap-weekdays span {
+  height: 11px;
+  line-height: 11px;
+}
+
+.th-heatmap-matrix-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.th-heatmap-months {
+  display: flex;
+  gap: 3.5rem; /* Kolon genişliğine göre yaklaşık aralık */
+  font-size: 0.625rem;
+  color: var(--th-text-subtle);
+  height: 1rem;
+  line-height: 1rem;
+  padding-left: 2px;
+}
+
+.th-heatmap-month-label {
+  white-space: nowrap;
+}
+
+.th-heatmap-grid {
+  display: grid;
+  gap: 3px;
+  height: calc(7 * 11px + 6 * 3px);
+  padding: 2px;
+  width: max-content;
+}
+
+.th-heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: var(--th-surface-3);
+  transition: all var(--th-transition-fast) var(--th-ease);
+  cursor: pointer;
+}
+
+.th-heatmap-cell:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 4px var(--th-primary);
+  z-index: 10;
+}
+
+.th-heatmap-cell--today {
+  outline: 1.5px solid var(--th-text);
+  outline-offset: 1px;
+}
+
+/* Renk Seviyeleri (Primary) */
+.th-heatmap-calendar--primary {
+  --th-heatmap-color-1: var(--th-primary-subtle);
+  --th-heatmap-color-2: color-mix(in srgb, var(--th-primary) 40%, var(--th-surface));
+  --th-heatmap-color-3: color-mix(in srgb, var(--th-primary) 70%, var(--th-surface));
+  --th-heatmap-color-4: var(--th-primary);
+}
+
+/* Renk Seviyeleri (Success) */
+.th-heatmap-calendar--success {
+  --th-heatmap-color-1: var(--th-success-subtle);
+  --th-heatmap-color-2: color-mix(in srgb, var(--th-success) 40%, var(--th-surface));
+  --th-heatmap-color-3: color-mix(in srgb, var(--th-success) 70%, var(--th-surface));
+  --th-heatmap-color-4: var(--th-success);
+}
+
+/* Renk Seviyeleri (Warning) */
+.th-heatmap-calendar--warning {
+  --th-heatmap-color-1: var(--th-warning-subtle);
+  --th-heatmap-color-2: color-mix(in srgb, var(--th-warning) 40%, var(--th-surface));
+  --th-heatmap-color-3: color-mix(in srgb, var(--th-warning) 70%, var(--th-surface));
+  --th-heatmap-color-4: var(--th-warning);
+}
+
+/* Renk Seviyeleri (Danger) */
+.th-heatmap-calendar--danger {
+  --th-heatmap-color-1: var(--th-danger-subtle);
+  --th-heatmap-color-2: color-mix(in srgb, var(--th-danger) 40%, var(--th-surface));
+  --th-heatmap-color-3: color-mix(in srgb, var(--th-danger) 70%, var(--th-surface));
+  --th-heatmap-color-4: var(--th-danger);
+}
+
+/* Seviyelere Göre Boyama */
+.th-heatmap-cell--level-0 { background: var(--th-surface-3); }
+.th-heatmap-cell--level-1 { background: var(--th-heatmap-color-1); }
+.th-heatmap-cell--level-2 { background: var(--th-heatmap-color-2); }
+.th-heatmap-cell--level-3 { background: var(--th-heatmap-color-3); }
+.th-heatmap-cell--level-4 { background: var(--th-heatmap-color-4); }

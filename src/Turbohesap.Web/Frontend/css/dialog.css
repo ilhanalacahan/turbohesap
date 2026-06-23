@@ -24,7 +24,7 @@
   border-top-right-radius: var(--th-radius-xl);
   box-shadow: var(--th-shadow-xl);
   overflow: hidden;
-  animation: th-slide-up var(--th-transition) var(--th-ease);
+  animation: th-fade-in var(--th-transition) var(--th-ease);
 }
 
 @media (min-width: 640px) {
@@ -60,4 +60,54 @@
 .th-dialog__close:hover { background: var(--th-surface-3); color: var(--th-text); }
 
 @keyframes th-fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes th-slide-up { from { transform: translateY(2rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* TS-driven Dialog specific styles */
+.th-overlay-js {
+  transition: opacity var(--th-transition) var(--th-ease);
+}
+
+.th-overlay--fade-out {
+  opacity: 0 !important;
+}
+
+.th-dialog--js {
+  max-width: 28rem;
+  margin: auto;
+  border-radius: var(--th-radius-xl);
+  box-shadow: var(--th-shadow-xl);
+  border: 1px solid var(--th-border);
+  transition: transform var(--th-transition) var(--th-ease), opacity var(--th-transition) var(--th-ease);
+}
+
+.th-dialog--fade-out {
+  opacity: 0 !important;
+}
+
+.th-dialog__header-title-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.th-dialog__message-text {
+  font-family: var(--th-font-sans);
+  color: var(--th-text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Variant header fills */
+.th-dialog--variant-primary .th-panel-header { background: var(--th-primary-subtle); color: var(--th-primary); border-bottom: 1px solid color-mix(in srgb, var(--th-primary) 12%, transparent); }
+.th-dialog--variant-success .th-panel-header { background: var(--th-success-subtle); color: var(--th-success); border-bottom: 1px solid color-mix(in srgb, var(--th-success) 12%, transparent); }
+.th-dialog--variant-danger .th-panel-header { background: var(--th-danger-subtle); color: var(--th-danger); border-bottom: 1px solid color-mix(in srgb, var(--th-danger) 12%, transparent); }
+.th-dialog--variant-warning .th-panel-header { background: var(--th-warning-subtle); color: var(--th-warning); border-bottom: 1px solid color-mix(in srgb, var(--th-warning) 12%, transparent); }
+.th-dialog--variant-info .th-panel-header { background: var(--th-info-subtle); color: var(--th-info); border-bottom: 1px solid color-mix(in srgb, var(--th-info) 12%, transparent); }
+
+.th-dialog--variant-primary .th-dialog__close:hover,
+.th-dialog--variant-success .th-dialog__close:hover,
+.th-dialog--variant-danger .th-dialog__close:hover,
+.th-dialog--variant-warning .th-dialog__close:hover,
+.th-dialog--variant-info .th-dialog__close:hover {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  color: currentColor;
+}

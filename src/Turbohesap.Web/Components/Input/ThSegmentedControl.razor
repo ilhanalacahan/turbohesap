@@ -1,0 +1,28 @@
+@typeparam TValue
+@namespace Turbohesap.Web.Components.Input
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<TValue>
+@* Kod tarafı: ThSegmentedControl.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (Options != null && Options.Count > 0)
+    {
+        <!-- Kayan Arka Plan Sürgüsü -->
+        <div class="th-segmented-control-slider" 
+             style="width: calc(100% / @Options.Count); left: calc(@SelectedIndex * 100% / @Options.Count);">
+        </div>
+
+        <!-- Seçenek Düğmeleri -->
+        @foreach (var opt in Options)
+        {
+            var currentKey = opt.Key;
+            var isSelected = EqualityComparer<TValue>.Default.Equals(currentKey, Value);
+            
+            <button type="button" 
+                    class="th-segmented-control-option @(isSelected ? "th-segmented-control-option--active" : "")"
+                    disabled="@Disabled"
+                    @onclick="() => SelectOption(currentKey)">
+                @opt.Value
+            </button>
+        }
+    }
+</div>

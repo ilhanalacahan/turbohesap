@@ -1,0 +1,8 @@
+@namespace Turbohesap.Web.Components.Tooltip
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThTooltip.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @ChildContent
+    <span class="@TooltipClass">@Text</span>
+</div>

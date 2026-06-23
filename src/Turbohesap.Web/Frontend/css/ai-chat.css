@@ -3,7 +3,7 @@
 .th-ai-fab {
   position: fixed;
   right: 1.25rem;
-  bottom: 1.25rem;
+  bottom: calc(1.25rem + var(--th-footer-height));
   z-index: var(--th-z-sticky);
   display: inline-flex;
   align-items: center;
@@ -24,7 +24,7 @@
 .th-ai-panel {
   position: fixed;
   right: 1.25rem;
-  bottom: 5rem;
+  bottom: calc(5rem + var(--th-footer-height));
   z-index: var(--th-z-modal);
   display: flex;
   flex-direction: column;

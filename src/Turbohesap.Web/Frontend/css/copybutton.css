@@ -1,0 +1,74 @@
+/* CopyButton — th-copy-button. Yalnızca --th-* token'ları kullanır. */
+
+.th-copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--th-text-muted);
+  cursor: pointer;
+  border-radius: var(--th-radius-sm);
+  transition: all var(--th-transition-fast) var(--th-ease);
+  box-sizing: border-box;
+}
+
+.th-copy-button:hover {
+  background: var(--th-surface-3);
+  color: var(--th-primary);
+  border-color: var(--th-border);
+}
+
+.th-copy-button--copied {
+  color: var(--th-success) !important;
+}
+
+.th-copy-button--copied:hover {
+  background: var(--th-success-subtle);
+  border-color: var(--th-success);
+}
+
+/* Boyutlar (sm / md / lg) */
+.th-copy-button--sm {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.75rem;
+}
+
+.th-copy-button--md {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 0.875rem;
+}
+
+.th-copy-button--lg {
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1rem;
+}
+
+/* İkon Animasyonları */
+.th-copy-button-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.th-copy-button-icon {
+  animation: th-copy-icon-in var(--th-transition-fast) var(--th-ease);
+}
+
+.th-copy-button-icon--check {
+  color: var(--th-success);
+}
+
+@keyframes th-copy-icon-in {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,53 @@
+@namespace Turbohesap.Web.Components.Data
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThProcessFlow.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @for (int i = 0; i < Steps.Count; i++)
+    {
+        var step = Steps[i];
+        var stepIndex = i;
+        
+        <div class="@GetStepClass(step)" @onclick="() => HandleStepClick(step)">
+            <!-- Çizgi (Son adım hariç) -->
+            @if (stepIndex < Steps.Count - 1)
+            {
+                <div class="th-process-line"></div>
+            }
+
+            <!-- İkon / Düğüm -->
+            <div class="th-process-node">
+                @if (step.Status == StepStatus.Completed)
+                {
+                    <i class="fa-solid fa-check th-process-node-check-icon"></i>
+                }
+                else if (step.Status == StepStatus.Failed)
+                {
+                    <i class="fa-solid fa-xmark th-process-node-fail-icon"></i>
+                }
+                else if (!string.IsNullOrEmpty(step.Icon))
+                {
+                    <i class="@step.Icon"></i>
+                }
+                else
+                {
+                    <span>@(stepIndex + 1)</span>
+                }
+                
+                @if (step.Status == StepStatus.Active)
+                {
+                    <span class="th-process-pulse"></span>
+                }
+            </div>
+
+            <!-- Metin İçeriği -->
+            <div class="th-process-content">
+                <div class="th-process-label">@step.Label</div>
+                @if (!string.IsNullOrEmpty(step.Description))
+                {
+                    <div class="th-process-description">@step.Description</div>
+                }
+            </div>
+        </div>
+    }
+</div>

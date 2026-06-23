@@ -1,0 +1,58 @@
+@namespace Turbohesap.Web.Components.Input
+@typeparam TItem
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<TItem>
+@* Kod tarafı: ThAutocomplete.razor.cs *@
+
+<div class="@RootClass" style="@Style">
+    <!-- Giriş Kutusu -->
+    <div class="@InputWrapperClass">
+        <div class="th-input-inner-wrapper">
+            <input @ref="_inputElement"
+                   type="text"
+                   class="th-input-field"
+                   placeholder="@Placeholder"
+                   disabled="@Disabled"
+                   value="@_searchText"
+                   @oninput="HandleInput"
+                   @onfocus="HandleFocus"
+                   @onblur="HandleBlur"
+                   @onkeydown="HandleKeyDown"
+                   @onkeydown:preventDefault="_preventDefault"
+                   @attributes="AdditionalAttributes" />
+            
+            @if (_isLoading)
+            {
+                <i class="fa-solid fa-circle-notch fa-spin text-text-muted text-sm flex-shrink-0"></i>
+            }
+            else
+            {
+                <i class="fa-solid fa-chevron-down text-text-subtle text-xs flex-shrink-0"></i>
+            }
+        </div>
+    </div>
+
+    <!-- Açılır Kutu (Dropdown Önerileri) -->
+    @if (_isOpen && _suggestions.Any())
+    {
+        <div @ref="_dropdownElement" class="th-autocomplete-dropdown @(_openUpward ? "th-autocomplete-dropdown--up" : "")">
+            <ul class="th-autocomplete-list">
+                @for (int i = 0; i < _suggestions.Count; i++)
+                {
+                    var item = _suggestions[i];
+                    var index = i;
+                    <li class="th-autocomplete-item @(index == _selectedIndex ? "th-autocomplete-item--active" : "")" 
+                        @onmousedown="() => SelectItem(item)">
+                        @if (ItemTemplate is not null)
+                        {
+                            @ItemTemplate(item)
+                        }
+                        else
+                        {
+                            @GetItemText(item)
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>

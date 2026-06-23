@@ -1,0 +1,39 @@
+@namespace Turbohesap.Web.Components.Shell
+@implements IDisposable
+@inject Turbohesap.Web.Services.PageTabService Tabs
+@inject NavigationManager Nav
+
+@* PageTabs — ana içerik sekme şeridi. Sayfalar ThPage ile kendilerini kaydeder; kirli
+   (kaydedilmemiş değişiklik) bir sekme kapatılırken onay sorulur. *@
+@if (Tabs.Tabs.Count > 0)
+{
+    <div class="th-tabbar">
+        @foreach (var tab in Tabs.Tabs)
+        {
+            <div class="@(IsActive(tab) ? "th-tab th-tab--active" : "th-tab")" @key="tab.Href" @onclick="() => Activate(tab)">
+                <i class="@($"th-tab__icon {tab.Icon}")"></i>
+                <span class="th-tab__label">@tab.Title</span>
+                @if (tab.IsDirty)
+                {
+                    <span class="th-tab__dirty" title="Kaydedilmemiş değişiklik"></span>
+                }
+                @if (tab.Closable)
+                {
+                    <span class="th-tab__close" @onclick:stopPropagation="true" @onclick="() => RequestClose(tab)">
+                        <i class="fa-solid fa-xmark"></i>
+                    </span>
+                }
+            </div>
+        }
+    </div>
+}
+
+<ThModal @bind-Visible="_confirmOpen" Title="Kaydedilmemiş değişiklikler" Size="ModalSize.Sm">
+    <ChildContent>
+        <p>“<strong>@_pending?.Title</strong>” sekmesinde kaydedilmemiş değişiklikler var. Yine de kapatmak istiyor musunuz?</p>
+    </ChildContent>
+    <Footer>
+        <ThButton Variant="ButtonVariant.Ghost" OnClick="@(() => _confirmOpen = false)">Vazgeç</ThButton>
+        <ThButton Variant="ButtonVariant.Danger" Icon="fa-solid fa-xmark" OnClick="ConfirmClose">Yine de kapat</ThButton>
+    </Footer>
+</ThModal>

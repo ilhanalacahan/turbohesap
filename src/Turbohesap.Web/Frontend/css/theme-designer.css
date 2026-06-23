@@ -1,0 +1,126 @@
+/* Tema tasarımcısı drawer'ı — th-theme-designer. Yalnızca --th-* tokenları kullanır. */
+
+.th-theme-designer { max-width: 22rem; }
+.th-theme-designer__body { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.th-tds-section { display: flex; flex-direction: column; gap: 0.5rem; }
+.th-tds-label {
+  font-size: 0.75rem;
+  font-weight: var(--th-fw-semibold);
+  letter-spacing: 0.02em;
+  color: var(--th-text-muted);
+}
+
+/* Segmented control (mod + yoğunluk) */
+.th-segment {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--th-surface-3);
+  border-radius: var(--th-radius-md);
+}
+.th-segment__btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  height: 2.1rem;
+  border: none;
+  border-radius: var(--th-radius-sm);
+  background: transparent;
+  color: var(--th-text-muted);
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-medium);
+  cursor: pointer;
+  transition: background-color var(--th-transition-fast) var(--th-ease),
+    color var(--th-transition-fast) var(--th-ease);
+}
+.th-segment__btn:hover { color: var(--th-text); }
+.th-segment__btn--active {
+  background: var(--th-surface);
+  color: var(--th-text);
+  box-shadow: var(--th-shadow-xs);
+}
+
+/* Ana renk swatch'leri */
+.th-swatches { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.th-swatch {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--th-radius-full);
+  border: 2px solid transparent;
+  background: var(--sw, var(--th-primary));
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  transition: transform var(--th-transition-fast) var(--th-ease);
+}
+.th-swatch:hover { transform: scale(1.08); }
+.th-swatch--active { border-color: var(--th-text); }
+.th-swatch--custom {
+  background: var(--th-surface-3);
+  color: var(--th-text-muted);
+  border: 1px dashed var(--th-border-strong);
+  overflow: hidden;
+}
+.th-swatch--custom input[type='color'] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Diğer renkler satırı */
+.th-tds-colors { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.th-tds-color {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.625rem;
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-md);
+  font-size: 0.8125rem;
+  color: var(--th-text);
+}
+.th-tds-color input[type='color'] {
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Font seçenekleri */
+.th-tds-fonts { display: flex; flex-direction: column; gap: 0.5rem; }
+.th-tds-font {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-md);
+  background: var(--th-surface);
+  color: var(--th-text);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--th-transition-fast) var(--th-ease);
+}
+.th-tds-font:hover { border-color: var(--th-border-strong); }
+.th-tds-font--active { border-color: var(--th-primary); box-shadow: 0 0 0 1px var(--th-primary); }
+.th-tds-font__name { font-size: 0.875rem; font-weight: var(--th-fw-semibold); }
+.th-tds-font__sample { font-size: 0.9375rem; color: var(--th-text-muted); }
+
+/* Aralık (range) girişi */
+.th-range {
+  width: 100%;
+  accent-color: var(--th-primary);
+  cursor: pointer;
+}

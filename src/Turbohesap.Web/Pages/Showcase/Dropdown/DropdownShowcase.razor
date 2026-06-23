@@ -1,0 +1,104 @@
+@namespace Turbohesap.Web.Pages.Showcase.Dropdown
+
+<ThCard Title="Açılır Menü (Dropdown & Context Menu) Bileşen Testleri" Subtitle="React Portal mantığıyla fixed konumlandırılan, taşma korumalı, alt menü destekli ve sağ tık bağlam menüleri" Icon="fa-solid fa-list-ul" Class="col-span-1 lg:col-span-2">
+    <div class="flex flex-col gap-6">
+        <!-- 1. Standart ve Varyantlı Dropdownlar -->
+        <div>
+            <h4 class="text-sm font-semibold mb-3">1. Temel ve İkonlu Menüler (Dropdowns)</h4>
+            <div class="flex flex-wrap gap-4 items-center">
+                <!-- Basit Dropdown -->
+                <ThDropdown>
+                    <Trigger>
+                        <ThButton Variant="ButtonVariant.Outline" Icon="fa-solid fa-ellipsis-vertical">Eylemler</ThButton>
+                    </Trigger>
+                    <ChildContent>
+                        <ThDropdownItem OnClick="@(() => OnItemClick("Düzenle"))">Düzenle</ThDropdownItem>
+                        <ThDropdownItem OnClick="@(() => OnItemClick("Kopyala"))">Kopyala</ThDropdownItem>
+                        <ThDropdownDivider />
+                        <ThDropdownItem Danger="true" OnClick="@(() => OnItemClick("Sil"))">Sil</ThDropdownItem>
+                    </ChildContent>
+                </ThDropdown>
+
+                <!-- İkonlu ve Kısayollu Dropdown -->
+                <ThDropdown>
+                    <Trigger>
+                        <ThButton Variant="ButtonVariant.Primary" Icon="fa-solid fa-gear">Ayarlar</ThButton>
+                    </Trigger>
+                    <ChildContent>
+                        <div class="th-dropdown-header">Hesap Ayarları</div>
+                        <ThDropdownItem Icon="fa-solid fa-user" Shortcut="Ctrl+P" OnClick="@(() => OnItemClick("Profil"))">Profil</ThDropdownItem>
+                        <ThDropdownItem Icon="fa-solid fa-envelope" OnClick="@(() => OnItemClick("Mesajlar"))">Mesajlar</ThDropdownItem>
+                        <ThDropdownItem Icon="fa-solid fa-bell" Shortcut="Ctrl+N" OnClick="@(() => OnItemClick("Bildirimler"))">Bildirimler</ThDropdownItem>
+                        <ThDropdownDivider />
+                        <ThDropdownItem Icon="fa-solid fa-ban" Disabled="true">Engellenmiş Seçenek</ThDropdownItem>
+                        <ThDropdownItem Icon="fa-solid fa-arrow-right-from-bracket" Danger="true" OnClick="@(() => OnItemClick("Çıkış"))">Güvenli Çıkış</ThDropdownItem>
+                    </ChildContent>
+                </ThDropdown>
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 2. Alt Menü (Submenu) Destekli Dropdown -->
+        <div>
+            <h4 class="text-sm font-semibold mb-3">2. Alt Menülü Dropdown (Submenus)</h4>
+            <div class="flex flex-wrap gap-4 items-center">
+                <ThDropdown>
+                    <Trigger>
+                        <ThButton Variant="ButtonVariant.Subtle" Icon="fa-solid fa-share-nodes">Paylaş & Dışa Aktar</ThButton>
+                    </Trigger>
+                    <ChildContent>
+                        <ThDropdownItem Icon="fa-solid fa-link" OnClick="@(() => OnItemClick("Bağlantıyı Kopyala"))">Bağlantıyı Kopyala</ThDropdownItem>
+                        <ThDropdownDivider />
+                        <ThDropdownSubmenu Header="Sosyal Medyada Paylaş" Icon="fa-solid fa-share-nodes">
+                            <ThDropdownItem Icon="fa-brands fa-twitter" OnClick="@(() => OnItemClick("Twitter"))">Twitter</ThDropdownItem>
+                            <ThDropdownItem Icon="fa-brands fa-facebook" OnClick="@(() => OnItemClick("Facebook"))">Facebook</ThDropdownItem>
+                            <ThDropdownItem Icon="fa-brands fa-linkedin" OnClick="@(() => OnItemClick("LinkedIn"))">LinkedIn</ThDropdownItem>
+                        </ThDropdownSubmenu>
+                        <ThDropdownSubmenu Header="Dışa Aktar (Export)" Icon="fa-solid fa-file-export">
+                            <ThDropdownItem Icon="fa-solid fa-file-pdf" OnClick="@(() => OnItemClick("PDF"))">PDF Belgesi (.pdf)</ThDropdownItem>
+                            <ThDropdownItem Icon="fa-solid fa-file-excel" OnClick="@(() => OnItemClick("Excel"))">Excel Tablosu (.xlsx)</ThDropdownItem>
+                            <ThDropdownItem Icon="fa-solid fa-file-csv" OnClick="@(() => OnItemClick("CSV"))">CSV Belgesi (.csv)</ThDropdownItem>
+                        </ThDropdownSubmenu>
+                        <ThDropdownDivider />
+                        <ThDropdownItem Icon="fa-solid fa-print" OnClick="@(() => OnItemClick("Yazdır"))">Yazdır</ThDropdownItem>
+                    </ChildContent>
+                </ThDropdown>
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- 3. Sağ Tık Bağlam Menüsü (Context Menu) -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">3. Sağ Tık Bağlam Menüsü (Context Menu)</h4>
+            <p class="text-xs text-text-muted mb-3">Aşağıdaki kesikli çizgili alanın üzerine sağ tıklayarak bağlam menüsünü test edebilirsiniz.</p>
+            
+            <ThContextMenu>
+                <TargetZone>
+                    <div class="p-12 border-2 border-dashed border-border rounded-lg bg-surface-2 hover:bg-surface-3 transition-colors duration-200 text-center cursor-context-menu flex flex-col items-center justify-center gap-2 select-none">
+                        <i class="fa-solid fa-mouse text-3xl text-text-muted"></i>
+                        <span class="text-sm font-medium text-text">Bu alan içerisine sağ tıklayın</span>
+                        <span class="text-xs text-text-subtle">Farklı konum ve alt menüler otomatik test edilir</span>
+                    </div>
+                </TargetZone>
+                <Menu>
+                    <div class="th-dropdown-header">İşlemler</div>
+                    <ThDropdownItem Icon="fa-solid fa-rotate" OnClick="@(() => OnItemClick("Yenile"))">Yenile</ThDropdownItem>
+                    <ThDropdownItem Icon="fa-solid fa-paste" OnClick="@(() => OnItemClick("Yapıştır"))">Yapıştır</ThDropdownItem>
+                    <ThDropdownDivider />
+                    <ThDropdownSubmenu Header="Yeni Oluştur" Icon="fa-solid fa-plus">
+                        <ThDropdownItem Icon="fa-solid fa-file" OnClick="@(() => OnItemClick("Yeni Dosya"))">Yeni Dosya</ThDropdownItem>
+                        <ThDropdownItem Icon="fa-solid fa-folder" OnClick="@(() => OnItemClick("Yeni Klasör"))">Yeni Klasör</ThDropdownItem>
+                    </ThDropdownSubmenu>
+                    <ThDropdownSubmenu Header="Görünüm Ayarları" Icon="fa-solid fa-eye">
+                        <ThDropdownItem Icon="fa-solid fa-table-cells" OnClick="@(() => OnItemClick("Izgara Görünümü"))">Izgara Görünümü</ThDropdownItem>
+                        <ThDropdownItem Icon="fa-solid fa-list" OnClick="@(() => OnItemClick("Liste Görünümü"))">Liste Görünümü</ThDropdownItem>
+                    </ThDropdownSubmenu>
+                    <ThDropdownDivider />
+                    <ThDropdownItem Icon="fa-solid fa-trash" Danger="true" OnClick="@(() => OnItemClick("Klasörü Sil"))">Klasörü Sil</ThDropdownItem>
+                </Menu>
+            </ThContextMenu>
+        </div>
+    </div>
+</ThCard>

@@ -1,0 +1,32 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<List<string>>
+@* Kod tarafı: ThTagsInput.razor.cs *@
+
+<div class="@RootClass" style="@Style">
+    <div class="th-tags-input__container">
+        @foreach (var tag in DisplayTags)
+        {
+            <span class="th-tags-input__tag" @key="tag">
+                <span class="th-tags-input__tag-text">@tag</span>
+                @if (!Disabled)
+                {
+                    <button type="button" class="th-tags-input__tag-remove" @onclick="() => RemoveTag(tag)" @onclick:stopPropagation="true">
+                        <i class="fa-solid fa-xmark text-[10px]"></i>
+                    </button>
+                }
+            </span>
+        }
+
+        <input type="text"
+               class="th-tags-input__input"
+               placeholder="@(DisplayTags.Any() ? "" : Placeholder)"
+               disabled="@Disabled"
+               @bind="_inputValue"
+               @bind:event="oninput"
+               @onfocus="OnFocus"
+               @onblur="OnBlur"
+               @onkeydown="HandleKeyDown"
+               @onkeydown:preventDefault="_preventDefault"
+               @attributes="AdditionalAttributes" />
+    </div>
+</div>

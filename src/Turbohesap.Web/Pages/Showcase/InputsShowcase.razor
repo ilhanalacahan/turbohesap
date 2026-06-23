@@ -1,0 +1,405 @@
+@namespace Turbohesap.Web.Pages.Showcase
+
+<ThCard Title="Yeni Giriş Bileşenleri" Subtitle="Switch, Checkbox ve TextArea form kontrol bileşenleri" Icon="fa-solid fa-square-check">
+    <div class="flex flex-col gap-4">
+        
+        <!-- Switch (Anahtar) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Seçenek Anahtarları (Switches)</h4>
+            <div class="flex flex-wrap gap-4 items-center py-1">
+                <ThSwitch @bind-Value="_switch1" Label="Sm" Size="ComponentSize.Sm" />
+                <ThSwitch @bind-Value="_switch2" Label="Md" Size="ComponentSize.Md" />
+                <ThSwitch @bind-Value="_switch3" Label="Lg" Size="ComponentSize.Lg" />
+                <ThSwitch @bind-Value="_switchDisabled" Label="Pasif" Disabled="true" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Checkbox (Seçim Kutusu) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Seçim Kutuları (Checkboxes)</h4>
+            <div class="flex flex-wrap gap-4 items-center py-1">
+                <ThCheckbox @bind-Value="_check1" Label="Sm" Size="ComponentSize.Sm" />
+                <ThCheckbox @bind-Value="_check2" Label="Md" Size="ComponentSize.Md" />
+                <ThCheckbox @bind-Value="_check3" Label="Lg" Size="ComponentSize.Lg" />
+                <ThCheckbox @bind-Value="_checkDisabled" Label="Pasif" Disabled="true" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- TextArea (Çok Satırlı Metin) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Çok Satırlı Girişler (Text Areas)</h4>
+            <div class="flex flex-col gap-3 py-1">
+                <ThTextArea @bind-Value="_text1" Placeholder="Küçük metin alanı (Sm, 2 satır)..." Size="ComponentSize.Sm" Rows="2" />
+                <ThTextArea @bind-Value="_text2" Placeholder="Normal metin alanı (Md, 3 satır)..." Size="ComponentSize.Md" Rows="3" />
+                <ThTextArea @bind-Value="_textDisabled" Placeholder="Pasif metin alanı..." Disabled="true" Rows="2" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Metin Girişleri (ThInput) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Metin Girişleri (ThInput) - İkonlu ve Butonlu</h4>
+            <div class="flex flex-col gap-4 py-1">
+                <!-- Normal / Standart -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ThField TValue="string" Label="Standart Metin" Required="true">
+                        <ThInput @bind-Value="_inputNormal" Placeholder="Adınızı yazınız..." />
+                    </ThField>
+                    <ThField TValue="string" Label="İkonlu Metin (Sol İkon)">
+                        <ThInput @bind-Value="_inputEmail" Placeholder="E-posta adresi..." LeadingIcon="fa-solid fa-envelope" Type="email" />
+                    </ThField>
+                </div>
+
+                <!-- Şifre (Göz İkon Butonlu) & Arama (Temizle + Ara Butonlu) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ThField TValue="string" Label="Şifre Alanı (İkon Butonlu)">
+                        <ThInput @bind-Value="_inputPassword" Placeholder="Şifre giriniz..." Type="@_passwordType" LeadingIcon="fa-solid fa-lock">
+                            <Append>
+                                <ThButton Variant="ButtonVariant.Ghost" OnClick="TogglePassword">
+                                    <i class="@_passwordIcon"></i>
+                                </ThButton>
+                            </Append>
+                        </ThInput>
+                    </ThField>
+                    <ThField TValue="string" Label="Arama Alanı (Çoklu Butonlu)">
+                        <ThInput @bind-Value="_inputSearch" Placeholder="Kelime girip aratın..." LeadingIcon="fa-solid fa-magnifying-glass">
+                            <Append>
+                                @if (!string.IsNullOrEmpty(_inputSearch))
+                                {
+                                    <ThButton Variant="ButtonVariant.Ghost" OnClick="HandleClearSearch" Class="text-text-muted hover:text-text">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </ThButton>
+                                }
+                                <ThButton Variant="ButtonVariant.Primary" OnClick="HandleSearch">
+                                    Ara
+                                </ThButton>
+                            </Append>
+                        </ThInput>
+                    </ThField>
+                </div>
+
+                <!-- Prepend Butonlu ve Boyut Varyasyonları -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ThField TValue="string" Label="Sol Butonlu Giriş (Prepend)">
+                        <ThInput @bind-Value="_inputMultiBtn" Placeholder="Veri girin...">
+                            <Prepend>
+                                <ThButton Variant="ButtonVariant.Subtle" OnClick="HandleRefresh">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </ThButton>
+                            </Prepend>
+                            <Append>
+                                <ThButton Variant="ButtonVariant.Success" OnClick="HandleSave">
+                                    Kaydet
+                                </ThButton>
+                            </Append>
+                        </ThInput>
+                    </ThField>
+                    <ThField TValue="string" Label="Küçük Boyut (Sm)">
+                        <ThInput @bind-Value="_inputNormal" Placeholder="Küçük input..." Size="ComponentSize.Sm" LeadingIcon="fa-solid fa-keyboard" />
+                    </ThField>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segmentli Seçim Grubu (ThSegmentedControl) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Segmentli Seçim Kontrolleri (Segmented Controls)</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-1 items-center">
+                <ThField TValue="string" Label="Kayıt Tipi Seçim Şeridi (Dinamik Efektli)">
+                    <ThSegmentedControl TValue="string" 
+                                        Value="@_segmentedValue" 
+                                        ValueChanged="val => { _segmentedValue = val; OnSegmentedChanged(val); }"
+                                        ValueExpression="() => _segmentedValue"
+                                        Options="@_segmentedOptions" />
+                </ThField>
+                <div class="bg-surface-2 p-4 rounded border border-border text-xs leading-relaxed">
+                    <span class="text-text-muted font-semibold block mb-1">Seçim Veri Çıktısı:</span>
+                    Seçilen Segment Anahtarı: <span class="font-mono text-primary font-bold text-sm">@_segmentedValue</span>
+                    <p class="text-text-subtle mt-2">
+                        Pill-shaped tasarım içindeki arka plan sürgüsü, tıklanan seçeneğe pürüzsüz kayma animasyonuyla yerleşir.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Radyo Grubu (ThRadioGroup) Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Radyo Seçenek Grupları (Radio Groups)</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-1">
+                <ThField TValue="string" Label="Yatay Hizalama (Horizontal)">
+                    <ThRadioGroup @bind-Value="_radioHorizontal" Layout="RadioLayout.Horizontal">
+                        <ThRadio Value="@("A")" Label="Seçenek A" />
+                        <ThRadio Value="@("B")" Label="Seçenek B" />
+                        <ThRadio Value="@("C")" Label="Seçenek C (Pasif)" Disabled="true" />
+                    </ThRadioGroup>
+                </ThField>
+
+                <ThField TValue="string" Label="Dikey Hizalama (Vertical)">
+                    <ThRadioGroup @bind-Value="_radioVertical" Layout="RadioLayout.Vertical">
+                        <ThRadio Value="@("1")" Label="Düşük Yoğunluk" />
+                        <ThRadio Value="@("2")" Label="Orta Yoğunluk" />
+                        <ThRadio Value="@("3")" Label="Yüksek Yoğunluk" />
+                    </ThRadioGroup>
+                </ThField>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Tarih/Saat Seçiciler Bölümü -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Tarih & Saat Seçiciler (Date & Time Pickers)</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-1">
+                <ThField TValue="DateTime?" Label="Tarih Seçici (Date)">
+                    <ThDatePicker TValue="DateTime?" @bind-Value="_dateValue" Type="DatePickerType.Date" />
+                </ThField>
+
+                <ThField TValue="TimeOnly?" Label="Saat Seçici (Time)">
+                    <ThDatePicker TValue="TimeOnly?" @bind-Value="_timeValue" Type="DatePickerType.Time" />
+                </ThField>
+
+                <ThField TValue="DateTime?" Label="Tarih ve Saat Seçici (DateTime)">
+                    <ThDatePicker TValue="DateTime?" @bind-Value="_dateTimeValue" Type="DatePickerType.DateTime" />
+                </ThField>
+
+                <ThField TValue="string" Label="Tarih Aralığı Seçici (Çift Takvim & Kısayollar)" Class="md:col-span-3">
+                    <ThDateRangePicker StartDate="_rangeStart"
+                                       StartDateChanged="val => { _rangeStart = val; OnRangeChanged(); }"
+                                       EndDate="_rangeEnd"
+                                       EndDateChanged="val => { _rangeEnd = val; OnRangeChanged(); }" />
+                </ThField>
+            </div>
+        </div>
+ 
+        <hr class="border-border my-1" />
+ 
+        <!-- Finansal Giriş Elemanları (Para Girişi & Hesap Makinesi) -->
+        <div>
+            <h4 class="text-sm font-semibold mb-3">Finansal Giriş Elemanları (ThCurrencyInput & ThCalculator)</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 py-1 items-start">
+                
+                <!-- Para Girişi (TL) -->
+                <div class="flex flex-col gap-4">
+                    <h5 class="text-xs font-semibold text-text-muted uppercase tracking-wider">Para Girişi (Türk Lirası)</h5>
+                    
+                    <ThField TValue="decimal?" Label="Fatura Tutarı (Entegre Hesap Makineli)">
+                        <ThCurrencyInput Value="_currencyValue1" 
+                                         ValueChanged="val => { _currencyValue1 = val; OnCurrencyChanged(val); }"
+                                         CurrencySymbol="₺" 
+                                         Placeholder="0,00" />
+                    </ThField>
+                    
+                    <div class="text-xs text-text-subtle bg-surface-2 p-2.5 rounded border border-border flex justify-between">
+                        <span>TL Sonuç Değeri:</span>
+                        <span class="font-mono font-semibold text-primary">@(_currencyValue1?.ToString("N2", TrCulture) ?? "Boş")</span>
+                    </div>
+                </div>
+
+                <!-- Para Girişi (USD) -->
+                <div class="flex flex-col gap-4">
+                    <h5 class="text-xs font-semibold text-text-muted uppercase tracking-wider">Para Girişi (Döviz - USD)</h5>
+                    
+                    <ThField TValue="decimal?" Label="Yurt Dışı Alacak Tutarı">
+                        <ThCurrencyInput Value="_currencyValue2" 
+                                         ValueChanged="val => { _currencyValue2 = val; OnCurrencyChanged(val); }"
+                                         CurrencySymbol="$" 
+                                         Placeholder="0.00" />
+                    </ThField>
+                    
+                    <div class="text-xs text-text-subtle bg-surface-2 p-2.5 rounded border border-border flex justify-between">
+                        <span>USD Sonuç Değeri:</span>
+                        <span class="font-mono font-semibold text-primary">@(_currencyValue2?.ToString("N2", TrCulture) ?? "Boş")</span>
+                    </div>
+                </div>
+ 
+                <!-- Bağımsız Hesap Makinesi (ThCalculator) -->
+                <div class="flex flex-col gap-4">
+                    <h5 class="text-xs font-semibold text-text-muted uppercase tracking-wider">Bağımsız Hesap Makinesi</h5>
+                    <div class="flex flex-col gap-3">
+                        <div class="bg-surface-2 p-2.5 rounded border border-border flex justify-between items-center text-xs">
+                            <span class="text-text-muted font-semibold">Seçilen Sonuç:</span>
+                            <span class="text-base font-mono font-bold text-primary">@_standaloneCalcValue.ToString("N2", TrCulture)</span>
+                        </div>
+                        <div class="flex justify-center">
+                            <ThCalculator InitialValue="@_standaloneCalcValue" 
+                                          OnValueSelected="OnStandaloneCalcSelected" />
+                        </div>
+                    </div>
+                </div>
+ 
+            </div>
+        </div>
+ 
+        <hr class="border-border my-1" />
+ 
+        <!-- Maskeli & Gelişmiş Giriş Elemanları -->
+        <div>
+            <h4 class="text-sm font-semibold mb-3">Maskeli ve Gelişmiş Giriş Elemanları</h4>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 py-1 items-start">
+                
+                <!-- Maskeli Girişler (ThMaskInput) -->
+                <div class="flex flex-col gap-4">
+                    <h5 class="text-xs font-semibold text-text-muted uppercase tracking-wider">Maskeli Giriş (ThMaskInput)</h5>
+                    
+                    <ThField TValue="string" Label="Telefon Numarası (Ham Değer)">
+                        <ThMaskInput Value="@_phoneValueRaw" 
+                                     ValueChanged="val => { _phoneValueRaw = val; OnPhoneRawChanged(val); }"
+                                     Mask="0(###) ### ## ##" 
+                                     ReturnRawValue="true" 
+                                     Placeholder="0(555) 555 55 55" />
+                    </ThField>
+ 
+                    <ThField TValue="string" Label="Telefon Numarası (Formatlı Değer)">
+                        <ThMaskInput Value="@_phoneValueFormatted" 
+                                     ValueChanged="val => { _phoneValueFormatted = val; OnPhoneFormattedChanged(val); }"
+                                     Mask="0(###) ### ## ##" 
+                                     ReturnRawValue="false" 
+                                     Placeholder="0(555) 555 55 55" />
+                    </ThField>
+ 
+                    <ThField TValue="string" Label="IBAN Numarası">
+                        <ThMaskInput Value="@_ibanValueRaw2" 
+                                     ValueChanged="val => { _ibanValueRaw2 = val; OnIban2RawChanged(val); }"
+                                     Mask="#### #### #### #### #### #### ##" 
+                                     ReturnRawValue="true" 
+                                     Placeholder="2600 0100 0000 0000 0000 0000 00">
+                            <Prepend>
+                                <ThButton Variant="ButtonVariant.Subtle" OnClick="HandleIbanPrefixClick">
+                                    TR
+                                </ThButton>
+                            </Prepend>
+                        </ThMaskInput>
+                    </ThField>
+ 
+                    <ThField TValue="string" Label="Plaka Girişi">
+                        <ThMaskInput @bind-Value="_plateValue" 
+                                     Mask="PLAKA" 
+                                     ReturnRawValue="false" 
+                                     Placeholder="34 ABC 123 veya 58 AH 312" />
+                    </ThField>
+ 
+                    <ThField TValue="string" Label="Dosya Adı Girişi">
+                        <ThMaskInput @bind-Value="_fileName" 
+                                     Mask="********************" 
+                                     ReturnRawValue="true" 
+                                     Placeholder="dosya_adi">
+                            <Append>
+                                <ThButton Variant="ButtonVariant.Subtle" OnClick="HandleFileExtensionClick">
+                                    .jpeg
+                                </ThButton>
+                            </Append>
+                        </ThMaskInput>
+                    </ThField>
+ 
+                    <div class="text-xs text-text-subtle bg-surface-2 p-2.5 rounded border border-border">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <span class="text-text-muted">Telefon Ham:</span>
+                                <span class="font-mono font-semibold flex items-center gap-1.5">
+                                    @_phoneValueRaw
+                                    <ThCopyButton Text="@_phoneValueRaw" Size="ComponentSize.Sm" TooltipText="Telefonu Kopyala" />
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-text-muted">Telefon Formatlı:</span>
+                                <span class="font-mono font-semibold flex items-center gap-1.5">
+                                    @_phoneValueFormatted
+                                    <ThCopyButton Text="@_phoneValueFormatted" Size="ComponentSize.Sm" TooltipText="Formatlı No Kopyala" />
+                                </span>
+                            </div>
+                            <div class="sm:col-span-2 pt-1 border-t border-border">
+                                <span class="text-text-muted">IBAN Ham (TR hariç):</span>
+                                <span class="font-mono font-semibold text-[11px] flex items-center gap-1.5">
+                                    @_ibanValueRaw2
+                                    <ThCopyButton Text="@_ibanValueRaw2" Size="ComponentSize.Sm" TooltipText="IBAN Kopyala" />
+                                </span>
+                            </div>
+                            <div class="pt-1 border-t border-border sm:border-t-0 sm:pt-0">
+                                <span class="text-text-muted">Plaka:</span>
+                                <span class="font-mono font-semibold flex items-center gap-1.5">
+                                    @_plateValue
+                                    <ThCopyButton Text="@_plateValue" Size="ComponentSize.Sm" TooltipText="Plaka Kopyala" />
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-text-muted">Dosya Adı:</span>
+                                <span class="font-mono font-semibold flex items-center gap-1.5 text-ellipsis overflow-hidden">
+                                    @_fileName
+                                    <ThCopyButton Text="@_fileName" Size="ComponentSize.Sm" TooltipText="Dosya Adı Kopyala" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- Çoklu Etiket Giriş Kutusu (ThTagsInput) -->
+                <div class="flex flex-col gap-4">
+                    <h5 class="text-xs font-semibold text-text-muted uppercase tracking-wider">Çoklu Etiket Girişi (ThTagsInput)</h5>
+                    
+                    <ThField TValue="List<string>" Label="Etiketler (Maksimum 5 Adet, Enter veya Virgül)">
+                        <ThTagsInput @bind-Value="_tags" MaxTags="5" Placeholder="Yeni etiket..." />
+                    </ThField>
+ 
+                    <ThField TValue="List<string>" Label="Pasif Etiket Girişi">
+                        <ThTagsInput @bind-Value="_readonlyTags" Disabled="true" />
+                    </ThField>
+ 
+                    <div class="bg-surface-2 p-2.5 rounded border border-border text-xs leading-relaxed">
+                        <span class="text-text-muted font-semibold block mb-1">Dinamik Etiket Çıktısı:</span>
+                        <div class="flex flex-wrap gap-1.5 mt-1.5">
+                            @if (_tags != null && _tags.Any())
+                            {
+                                @foreach (var tag in _tags)
+                                {
+                                    <span class="bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded text-xs font-mono font-medium">@tag</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-text-subtle italic">Etiket bulunmamaktadır.</span>
+                            }
+                        </div>
+                        <p class="text-text-subtle mt-3 text-[11px]">
+                            Giriş kutusuna kelime yazdıktan sonra <strong>Enter</strong> veya <strong>virgül (,)</strong> ile ekleyebilirsiniz. Boşken <strong>Backspace</strong> tuşuyla en son eklenen etiketi silebilirsiniz.
+                        </p>
+                    </div>
+                </div>
+ 
+                <!-- Depo Adresi Seçici (Tam Genişlik) -->
+                <div class="lg:col-span-2 pt-4 border-t border-border flex flex-col gap-3">
+                    <h5 class="text-xs font-semibold text-text-muted uppercase tracking-wider">Depo Raf Adres Seçici (ThAddressPicker - Görsel Matrisli)</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                        <ThField TValue="string" Label="Raf Konum Belirteci (Bölge-Koridor-Raf-Kat)">
+                            <ThAddressPicker Value="@_addressValue" 
+                                             ValueChanged="val => { _addressValue = val; OnAddressChanged(val); }"
+                                             ValueExpression="() => _addressValue"
+                                             Areas="@(new() { "A", "B", "C", "D" })"
+                                             MaxRows="9"
+                                             MaxLevels="5" />
+                        </ThField>
+                        <div class="bg-surface-2 p-4 rounded border border-border text-xs leading-relaxed">
+                            <span class="text-text-muted font-semibold block mb-1">Görsel Seçici Veri Çıktısı:</span>
+                            Seçilen Raf Adresi: <span class="font-mono text-primary font-bold text-sm">@_addressValue</span>
+                            <p class="text-text-subtle mt-2">
+                                Depo adresi standardı <strong>Alan-Koridor-Raf-Kat</strong> (Örn: A-03-B-04) formatındadır. Görsel matris üzerinden raf hücresine tıklandığında değer otomatik güncellenir.
+                            </p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <ThButton Variant="ButtonVariant.Outline" Size="ComponentSize.Sm" OnClick='() => SetAddress("A-03-B-04")'>Standart Sınırlar (A-03-B-04)</ThButton>
+                                <ThButton Variant="ButtonVariant.Primary" Size="ComponentSize.Sm" OnClick='() => SetAddress("E-12-H-08")'>Sınırları Genişlet (E-12-H-08)</ThButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ 
+            </div>
+        </div>
+
+    </div>
+</ThCard>

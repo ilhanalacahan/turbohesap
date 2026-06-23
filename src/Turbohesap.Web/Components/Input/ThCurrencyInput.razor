@@ -1,0 +1,66 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThCurrencyInput.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="th-input-label">@Label</label>
+    }
+    
+    <div class="th-input-wrapper-outer @(Disabled ? "th-input-wrapper-outer--disabled" : "")">
+        <!-- Para Birimi Sembolü (Sol Bölüm - Sıfıra Sıfır Entegre) -->
+        <span class="th-currency-symbol select-none">
+            @CurrencySymbol
+        </span>
+
+        <!-- Input İç Sarmalayıcı (İç boşluğu azaltılmış) -->
+        <div class="th-input-inner-wrapper !px-2">
+            <!-- Giriş Kutusu -->
+            <input type="text"
+                   class="th-input-field th-currency-field text-right"
+                   placeholder="@Placeholder"
+                   disabled="@Disabled"
+                   value="@_displayText"
+                   @ref="_inputRef" />
+        </div>
+
+        <!-- Hesap Makinesi Butonu (Sağ Bölüm - Sıfıra Sıfır Entegre) -->
+        @if (ShowCalculator && !Disabled)
+        {
+            <button type="button" 
+                    class="th-currency-calc-btn" 
+                    @onclick="OpenCalculator"
+                    title="Hesap Makinesini Aç"
+                    tabindex="-1">
+                <i class="fa-solid fa-calculator"></i>
+            </button>
+        }
+    </div>
+
+    <!-- Kompakt Hesap Makinesi Dialog'u -->
+    @if (_isCalculatorOpen)
+    {
+        <div class="th-calc-dialog-overlay" @onclick="CloseCalculator">
+            <div class="th-calc-dialog" @onclick:stopPropagation="true">
+                <!-- Kompakt Başlık Çubuğu -->
+                <div class="th-calc-dialog-header">
+                    <span class="th-calc-dialog-title">
+                        <i class="fa-solid fa-calculator text-primary"></i>
+                        <span>Hesap Makinesi</span>
+                    </span>
+                    <button type="button" class="th-calc-dialog-close-btn" @onclick="CloseCalculator" title="Kapat">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <!-- Gövde -->
+                <div class="th-calc-dialog-body">
+                    <ThCalculator InitialValue="@(Value ?? 0)"
+                                  OnValueSelected="HandleCalculatorValue"
+                                  OnCancel="CloseCalculator"
+                                  Autofocus="true" />
+                </div>
+            </div>
+        </div>
+    }
+</div>

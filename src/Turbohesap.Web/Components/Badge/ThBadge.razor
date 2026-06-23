@@ -1,0 +1,11 @@
+@namespace Turbohesap.Web.Components.Badge
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThBadge.razor.cs *@
+
+<span class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (ShowDot)
+    {
+        <span class="th-badge__dot"></span>
+    }
+    @ChildContent
+</span>

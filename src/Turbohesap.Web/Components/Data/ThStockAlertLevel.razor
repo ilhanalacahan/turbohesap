@@ -1,0 +1,43 @@
+@namespace Turbohesap.Web.Components.Data
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThStockAlertLevel.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (ShowLabels)
+    {
+        <div class="th-stock-alert-header">
+            <span class="th-stock-alert-title">@Label</span>
+            <span class="th-stock-alert-badge">
+                <span class="th-stock-alert-badge-dot"></span>
+                @AlertStatusLabel (@Value.ToString("N0") @Unit)
+            </span>
+        </div>
+    }
+
+    <div class="th-stock-alert-track-container">
+        <div class="th-stock-alert-track">
+            <!-- Kritik Limit Bölgesi (0 - MinLimit) -->
+            <div class="th-stock-alert-zone th-stock-alert-zone--critical" style="width: @(MinPercent.ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%;"></div>
+            
+            <!-- Normal Bölge (MinLimit - MaxLimit) -->
+            <div class="th-stock-alert-zone th-stock-alert-zone--normal" style="left: @(MinPercent.ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%; width: @((MaxPercent - MinPercent).ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%;"></div>
+            
+            <!-- Fazla Stok Bölgesi (MaxLimit - Ucu Açık) -->
+            <div class="th-stock-alert-zone th-stock-alert-zone--excess" style="left: @(MaxPercent.ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%; width: @((100 - MaxPercent).ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%;"></div>
+
+            <!-- Limit İndikatörleri (Çizgiler) -->
+            <div class="th-stock-alert-limit-line" style="left: @(MinPercent.ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%;" title="Min Limit: @MinLimit">
+                <span class="th-stock-alert-limit-label">Min: @MinLimit.ToString("N0")</span>
+            </div>
+            <div class="th-stock-alert-limit-line" style="left: @(MaxPercent.ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%;" title="Max Limit: @MaxLimit">
+                <span class="th-stock-alert-limit-label">Max: @MaxLimit.ToString("N0")</span>
+            </div>
+
+            <!-- Mevcut Değer Göstergesi (Needle / Pin) -->
+            <div class="th-stock-alert-needle" style="left: @(ValuePercent.ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%;" title="Mevcut Stok: @Value">
+                <div class="th-stock-alert-needle-pin"></div>
+                <div class="th-stock-alert-needle-tooltip">@Value.ToString("N0") @Unit</div>
+            </div>
+        </div>
+    </div>
+</div>

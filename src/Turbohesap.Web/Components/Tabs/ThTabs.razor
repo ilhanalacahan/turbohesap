@@ -1,0 +1,72 @@
+@namespace Turbohesap.Web.Components.Tabs
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThTabs.razor.cs *@
+
+<CascadingValue Value="this" IsFixed="true">
+    <div style="display: none;">@ChildContent</div>
+</CascadingValue>
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <div class="th-tabs__nav-wrapper">
+        <button @ref="_leftArrowRef" type="button" class="th-tabs__arrow th-tabs__arrow--left" style="display: none;">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        
+        <div @ref="_viewportRef" class="th-tabs__viewport">
+            <div class="th-tabs__nav">
+                @foreach (var tab in _tabs)
+                {
+                    var currentTab = tab;
+                    var isActive = currentTab == _activeTab;
+                    var isDisabled = currentTab.Disabled;
+                    
+                    <div class="th-tabs__tab @(isActive ? "th-tabs__tab--active" : "") @(isDisabled ? "th-tabs__tab--disabled" : "")"
+                         @onclick="() => SelectTab(currentTab)">
+                        @if (!string.IsNullOrEmpty(currentTab.Icon))
+                        {
+                            <i class="th-tabs__tab-icon @currentTab.Icon"></i>
+                        }
+                        <span class="th-tabs__tab-label">@currentTab.Header</span>
+                        
+                        @if (currentTab.Closable)
+                        {
+                            <span class="th-tabs__close-btn" @onclick:stopPropagation="true" @onclick="() => HandleCloseTab(currentTab)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <button @ref="_rightArrowRef" type="button" class="th-tabs__arrow th-tabs__arrow--right" style="display: none;">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+    
+    <div class="th-tabs__content">
+        @if (Lazy)
+        {
+            @foreach (var tab in _tabs)
+            {
+                var currentTab = tab;
+                if (currentTab == _activeTab)
+                {
+                    <div @key="currentTab.Id" class="th-tabs__pane th-tabs__pane--active">
+                        @currentTab.ChildContent
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            @foreach (var tab in _tabs)
+            {
+                var currentTab = tab;
+                <div @key="currentTab.Id" class="th-tabs__pane @(currentTab == _activeTab ? "th-tabs__pane--active" : "th-tabs__pane--hidden")">
+                    @currentTab.ChildContent
+                </div>
+            }
+        }
+    </div>
+</div>

@@ -4,59 +4,67 @@
 @inject Turbohesap.Web.Services.ToastService Toasts
 @inject NavigationManager Nav
 
-<div class="th-card" style="width:100%;max-width:24rem">
-    <div class="th-card__body" style="padding:1.75rem">
-        <div style="text-align:center;margin-bottom:1.25rem">
-            <span class="th-sidebar__appicon" style="margin:0 auto 0.75rem;width:3rem;height:3rem;font-size:1.25rem">
-                <i class="fa-solid fa-calculator"></i>
-            </span>
-            <h1 class="th-page-title">Turbohesap</h1>
-            <p style="color:var(--th-text-muted);font-size:0.875rem;margin-top:0.25rem">Hesabınıza giriş yapın</p>
+<div class="th-login">
+    <aside class="th-login__brand">
+        <div class="th-login__brand-top">
+            <span class="th-login__logo"><i class="fa-solid fa-calculator"></i></span>
+            <span class="th-login__brand-name">Turbohesap</span>
         </div>
 
-        <EditForm Model="_model" OnValidSubmit="SubmitAsync">
-            <FluentValidationValidator />
-            <div style="display:flex;flex-direction:column;gap:1rem">
-                <ThField TValue="string" Label="E-posta" Required For="() => _model.Email">
-                    <InputText class="th-input" @bind-Value="_model.Email" placeholder="ornek@firma.com" autocomplete="username" />
-                </ThField>
-                <ThField TValue="string" Label="Parola" Required For="() => _model.Password">
-                    <InputText type="password" class="th-input" @bind-Value="_model.Password" placeholder="••••••••" autocomplete="current-password" />
-                </ThField>
-                <ThButton Type="submit" Variant="ButtonVariant.Primary" Block Loading="_busy" Icon="fa-solid fa-right-to-bracket">
-                    Giriş Yap
-                </ThButton>
+        <div class="th-login__brand-body">
+            <h1 class="th-login__headline">İşletmenizin finansını tek yerden yönetin.</h1>
+            <p class="th-login__subhead">Cari, fatura, stok ve raporlama — hızlı, güvenli ve modern ön muhasebe deneyimi.</p>
+
+            <div class="th-login__slides">
+                <div class="th-login__slide" @key="_slide">
+                    <span class="th-login__slide-icon"><i class="@_slides[_slide].Icon"></i></span>
+                    <div>
+                        <div class="th-login__slide-title">@_slides[_slide].Title</div>
+                        <div class="th-login__slide-text">@_slides[_slide].Text</div>
+                    </div>
+                </div>
+                <div class="th-login__dots">
+                    @for (var i = 0; i < _slides.Length; i++)
+                    {
+                        var index = i;
+                        <button type="button" class="@(index == _slide ? "th-login__dot th-login__dot--active" : "th-login__dot")"
+                                @onclick="@(() => ShowSlide(index))" aria-label="Slayt"></button>
+                    }
+                </div>
             </div>
-        </EditForm>
+        </div>
 
-        <p style="margin-top:1rem;font-size:0.75rem;color:var(--th-text-subtle);text-align:center">
-            Demo: admin@turbohesap.local / Admin123!
-        </p>
-    </div>
+        <div class="text-sm" style="position:relative;z-index:1;color:rgba(255,255,255,0.7)">
+            © @DateTime.Now.Year Turbohesap · Tüm hakları saklıdır.
+        </div>
+    </aside>
+
+    <main class="th-login__form-side">
+        <div class="th-login__form">
+            <div class="th-login__form-head">
+                <span class="th-login__form-logo"><i class="fa-solid fa-calculator"></i></span>
+                <h2 class="th-login__title">Tekrar hoş geldiniz</h2>
+                <p class="th-login__hint">Devam etmek için hesabınıza giriş yapın.</p>
+            </div>
+
+            <EditForm Model="_model" OnValidSubmit="SubmitAsync">
+                <FluentValidationValidator />
+                <div style="display:flex;flex-direction:column;gap:1rem">
+                    <ThField TValue="string" Label="E-posta" Required For="() => _model.Email">
+                        <InputText class="th-input" @bind-Value="_model.Email" placeholder="ornek@firma.com" autocomplete="username" />
+                    </ThField>
+                    <ThField TValue="string" Label="Parola" Required For="() => _model.Password">
+                        <InputText type="password" class="th-input" @bind-Value="_model.Password" placeholder="••••••••" autocomplete="current-password" />
+                    </ThField>
+                    <ThButton Type="submit" Variant="ButtonVariant.Primary" Block Loading="_busy" Icon="fa-solid fa-right-to-bracket">
+                        Giriş Yap
+                    </ThButton>
+                </div>
+            </EditForm>
+
+            <div class="th-login__demo">
+                Demo: <strong>admin@turbohesap.local</strong> / <strong>Admin123!</strong>
+            </div>
+        </div>
+    </main>
 </div>
-
-@code {
-    [SupplyParameterFromQuery] public string? ReturnUrl { get; set; }
-
-    private readonly LoginRequest _model = new();
-    private bool _busy;
-
-    private async Task SubmitAsync()
-    {
-        _busy = true;
-        try
-        {
-            await Auth.LoginAsync(_model);
-            var target = string.IsNullOrEmpty(ReturnUrl) ? "/dashboard" : Uri.UnescapeDataString(ReturnUrl);
-            Nav.NavigateTo(target, forceLoad: false);
-        }
-        catch (ApiException ex)
-        {
-            Toasts.Error(ex.Message, "Giriş başarısız");
-        }
-        finally
-        {
-            _busy = false;
-        }
-    }
-}

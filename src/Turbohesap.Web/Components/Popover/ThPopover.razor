@@ -1,0 +1,31 @@
+@namespace Turbohesap.Web.Components.Popover
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThPopover.razor.cs *@
+
+<div class="th-popover-wrap" style="@Style" @attributes="AdditionalAttributes">
+    <div class="th-popover-trigger" @onclick="Toggle" @onclick:stopPropagation="true">
+        @Trigger
+    </div>
+
+    @if (_isOpen)
+    {
+        <div class="th-popover-backdrop" @onclick="Close" @onclick:stopPropagation="true"></div>
+        <div class="@PopoverClass">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <div class="th-popover-header">
+                    <span class="th-popover-title">@Title</span>
+                    @if (ShowCloseButton)
+                    {
+                        <button type="button" class="th-popover-close" @onclick="Close" @onclick:stopPropagation="true">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    }
+                </div>
+            }
+            <div class="th-popover-body">
+                @ChildContent
+            </div>
+        </div>
+    }
+</div>

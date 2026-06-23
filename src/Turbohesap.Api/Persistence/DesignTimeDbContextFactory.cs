@@ -20,7 +20,7 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<App
             .Build();
 
         var connectionString = configuration.GetConnectionString("Default")
-            ?? "Host=localhost;Port=5432;Database=turbohesap;Username=postgres;Password=NETHESAP";
+            ?? "Host=localhost;Port=5432;Database=turbohesap;Username=postgres;Password=postgres";
 
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(connectionString)

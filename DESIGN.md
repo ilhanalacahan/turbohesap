@@ -26,7 +26,8 @@ Frontend/
 │  └─ base.css             # reset, gövde, scrollbar, odak halkası, ölçek
 ├─ css/                    # bileşen başına bir dosya
 │  ├─ button.css input.css card.css badge.css dialog.css drawer.css toast.css datatable.css
-│  └─ sidebar.css appbar.css layout.css tabs.css command-launcher.css app-launcher.css ai-chat.css
+│  ├─ sidebar.css appbar.css layout.css tabs.css command-launcher.css app-launcher.css ai-chat.css
+│  └─ theme-designer.css auth.css
 └─ scripts/
    ├─ theme.ts             # tema modu + token override
    └─ interop.ts           # window.turbohesap API (Blazor JS interop)
@@ -75,15 +76,18 @@ Tokenlar `:root` (açık) ve `[data-theme="dark"]` (koyu) altında tanımlıdır
 `--th-sidebar-bg`, `--th-sidebar-fg`, `--th-sidebar-muted`, `--th-sidebar-active`, `--th-sidebar-border`, `--th-appbar-bg`, `--th-appbar-fg`, `--th-appbar-border`. (Kenar çubuğu açık temada da koyu/premium kalır.)
 
 ### 2.2 Yarıçap (radius)
-`--th-radius-xs 4px` · `sm 6px` · `md 8px` · `lg 12px` · `xl 16px` · `2xl 24px` · `full 9999px`
+**Tek tabandan türer**: `--th-radius-base 8px`; `xs = base·0.5`, `sm = base·0.75`, `md = base`, `lg = base·1.5`, `xl = base·2`, `2xl = base·3`, `full 9999px`. Tema tasarımcısı yalnızca `--th-radius-base`'i değiştirir → **tüm bileşenlerin köşeleri birlikte** ölçeklenir (kart, tablo, dialog, buton…).
 
 ### 2.3 Gölge (shadow)
-`--th-shadow-xs/sm/md/lg/xl` — açık temada nötr; koyu temada daha derin (rgba siyah). Kartlar `xs`, açılır menüler `lg`, modal/drawer `xl` kullanır.
+`--th-shadow-xs/sm/md/lg/xl` — açık temada nötr; koyu temada daha derin (rgba siyah). Açılır menüler/kullanıcı menüsü `lg`, modal/drawer `xl`, **AppBar** `sm` kullanır.
+**`--th-card-shadow`** (varsayılan `var(--th-shadow-sm)`): kart ve veri tablosunun yükseltisi; tema tasarımcısındaki **Gölge** denetimiyle (Yok/Hafif/Orta/Belirgin) çalışma zamanında değişir (`theme.setShadow`).
 
 ### 2.4 Tipografi
-- `--th-font-sans`: Inter → system-ui zinciri · `--th-font-mono`: JetBrains Mono → ui-monospace
+- `--th-font-sans`: varsayılan **Inter Variable** → system-ui zinciri · `--th-font-mono`: **JetBrains Mono Variable** → ui-monospace
+- **Çevrimdışı paketlenmiş aileler** (tema tasarımcısından seçilebilir, hepsi `@fontsource` ile `wwwroot/fonts`'a derlenir): **Inter**, **Manrope**, **Plus Jakarta Sans**, **IBM Plex Sans**, ayrıca **Sistem** (webfont yok). Seçim `theme.setFont(family)` → `--th-font-sans` override eder.
 - Ağırlık: `--th-fw-normal 400`, `-medium 500`, `-semibold 600`, `-bold 700`
 - Boyutlar Tailwind `text-*` ölçeğinden (xs … 2xl) gelir.
+- Font dosyaları `main.css`'te `@import '@fontsource…/wght.css'` ile gelir; yalnızca ağırlık ekseni alınır (italic/opsz hariç) — paket küçük kalır.
 
 ### 2.5 Yerleşim ölçüleri
 | Token | Değer | Anlam |
@@ -103,13 +107,18 @@ Tokenlar `:root` (açık) ve `[data-theme="dark"]` (koyu) altında tanımlıdır
 ### 2.7 Global ölçek
 `--th-scale` (vrsayılan `1`). `html { font-size: calc(var(--th-font-size-base) * var(--th-scale)) }`. Ölçek değişince rem tabanlı her boyut orantılı büyür/küçülür.
 
+### 2.8 Yerleşim yoğunluğu (density)
+Renkten bağımsız **yapısal** tokenlar `<html data-density="compact|comfortable">` ile çalışma zamanında değişir; öznitelik yoksa `:root`'taki **normal** değerler geçerlidir. Yoğunluk şu tokenları override eder: `--th-content-padding(-lg)`, `--th-control-height(-sm/-lg)`, `--th-appbar-height`, `--th-tabbar-height`, `--th-footer-height`, ve dikey ritim tokenları **`--th-nav-pad-y`** (sidebar/liste öğesi), **`--th-row-pad-y`** (tablo hücresi), **`--th-density-gap`**. Bileşenler bu tokenları kullanır; yoğunluk değişince düzen anında sıkışır/genişler. JS API: `theme.setDensity('compact'|'normal'|'comfortable')` (tercih `localStorage`'da).
+
 ---
 
 ## 3. Tema mekanizması
 
 - **Mod**: `<html data-theme="light|dark">`. `theme.ts` modu `localStorage`'da saklar; `system` modu `prefers-color-scheme`'i izler.
-- **Çalışma zamanı özelleştirme**: `theme.applyTokens({ '--th-primary': '#…' })` ilgili CSS değişkenini `documentElement` üzerinde geçersiz kılar ve saklar; `resetTokens()` geri alır. `Settings/Theme.razor` sayfası bunu kullanır (renk, yarıçap, ölçek).
-- **JS API** (`window.turbohesap.theme`): `setMode`, `toggle`, `getMode`, `current`, `applyTokens`, `resetTokens`. Blazor'dan `ThemeInterop` ile çağrılır.
+- **Çalışma zamanı özelleştirme**: `theme.applyTokens({ '--th-primary': '#…' })` ilgili CSS değişkenini `documentElement` üzerinde geçersiz kılar ve saklar; `resetTokens()` geri alır (token + yoğunluk).
+- **Tema/şablon tasarımcısı** artık **sağdan açılan drawer**'dır (`Components/Shell/ThemeDesigner`), tam-sayfa değil. AppBar'daki palet ikonu `LayoutState.ToggleThemeDesigner()` ile açar. Panel; görünüm modu, **ana renk** (hazır paletler + özel seçici), diğer renkler (vurgu/başarı/uyarı/tehlike), **yazı tipi**, **yerleşim yoğunluğu**, köşe yuvarlaklığı ve ölçeği **gerçek zamanlı** uygular. Tercihler `localStorage`'da; API/DB persistans yoktur. `Settings/Theme.razor` yalnızca bu drawer'ı açan ince bir sayfadır.
+- **Drawer açılırken durum eşitleme**: panel açıldığında geçerli ayarlar (`getMode`/`getDensity`/`getShadow` + `getTokens` ile renk/font/yarıçap/ölçek) bir kez okunur; böylece yeniden açınca **sıfırlanmaz**, kaydedilmiş değerleri gösterir.
+- **JS API** (`window.turbohesap.theme`): `setMode`, `toggle`, `getMode`, `current`, `applyTokens`, `resetTokens`, **`setFont`**, **`setDensity`**, **`getDensity`**, **`setShadow`**, **`getShadow`**, **`getTokens`**. Blazor'dan `ThemeInterop` ile çağrılır.
 
 ---
 
@@ -151,9 +160,9 @@ Tokenlar `:root` (açık) ve `[data-theme="dark"]` (koyu) altında tanımlıdır
 └───────────────────────────────────────────────────────────────┘
 ```
 
-- **Sidebar** (`th-shell` içinde): masaüstünde `sticky`, mobilde off-canvas (`th-sidebar--open` + `th-backdrop`). Daraltılabilir (`th-sidebar--collapsed` → yalnız ikonlar). Başlıkta solda **app ikonu** (tıklayınca AppLauncher), ortada marka, sağda hamburger. Altta **Yardım + Geri Bildirim**.
-- **AppBar** (`sticky`): solda hamburger (mobil) + **breadcrumb**, ortada **arama** (tıklayınca CommandLauncher), sağda tema (🎨), bildirim (🔔), gece/gündüz (◐), kullanıcı (👤 → çıkış).
-- **TabBar**: açık sekmeler. Menüden bir sayfa açıldığında sekme yoksa açılır, varsa odaklanır (`TabService`). Sekmesiz bağımsız sayfalar da olabilir.
+- **Sidebar** (`th-shell` içinde): masaüstünde `sticky`, mobilde off-canvas (`th-sidebar--open` + `th-backdrop`). Daraltılabilir (`th-sidebar--collapsed` → yalnız ikonlar). **Daraltılmış durumda** alt menülü öğeler **flyout/popover** ile açılır (`th-nav-flyout`, Radix tarzı; hover/focus, görünmez köprü ile hover kopmaz). Daraltılmışken inline alt menü gizlenir ve `th-sidebar__nav` overflow'u görünür yapılır ki flyout taşabilsin. Başlıkta solda **app ikonu** (AppLauncher), yanında marka. Daraltma/genişletme **AppBar'daki hamburger**'le yapılır (sidebar başlığında hamburger yoktur). Altta **Yardım + Geri Bildirim**. Menü tıklaması yalnızca **gezinir**; sekme açmaz.
+- **AppBar** (`sticky`, `shadow-sm`): solda **hamburger** — mobilde off-canvas sidebar'ı açar (`th-appbar__menu`, <768px), masaüstünde sidebar'ı **daraltır/genişletir** (`th-appbar__collapse`, ≥768px) — + **breadcrumb**, ortada **arama** (CommandLauncher), sağda tema-tasarımcısı (🎨 → drawer), bildirim (🔔), gece/gündüz (◐), kullanıcı (👤 → menü `shadow-lg`, çıkış). Mobilde kalabalığı azaltmak için ikincil öğeler `th-appbar__hide-mobile` ile gizlenir (≥768px görünür).
+- **PageTabs** (`th-tabbar`): ana içerik sekme şeridi — normal UI sekmelerinden farklıdır, yalnızca bu kabuğa özeldir. **Sekmeler sayfanın kendisi tarafından açılır** (`ThPage` → `PageTabService.Register`); böylece bulunamayan/serbest sayfalar (login, not-found, hata) **sekme oluşturmaz**. Her sekme **kirli** (kaydedilmemiş değişiklik) durumu taşır; sayfa `PageTabHandle.MarkDirty()/MarkClean()` ile bildirir (kirli sekmede uyarı noktası). Kirli bir sekme kapatılırken **onay diyaloğu** çıkar ("…kaydedilmemiş değişiklikler var, yine de kapatılsın mı?").
 - **İçerik**: `th-content` (kaydırma) → her sayfa `ThPage` ile sarılır. Normalde kenar boşluğu; harita gibi tam-ekran için `Flush`.
 - **Footer**: `ThPage`'in opsiyonel `Footer` yuvası; `FooterFixed` ile sabitlenir; yükseklik sidebar footer ile aynıdır.
 - **AI**: sağ altta sabit `th-ai-fab`; tıklayınca `th-ai-panel`.
@@ -195,7 +204,10 @@ Her bileşenin temel sınıfı `th-<ad>`; varyant `th-<ad>--<varyant>`; boyut `t
 ### 7.9 Pagination — `th-pagination` (bilgi + sayfa boyutu seçimi + ileri/geri). `<ThPagination Page PageSize TotalCount TotalPages PageChanged PageSizeChanged />`. Sayfa boyutu parametrik (10/20/50/100).
 
 ### 7.10 Kabuk bileşenleri
-`Sidebar`, `AppBar`, `TabBar`, `CommandLauncher` (`th-command`), `AppLauncher` (`th-applauncher` + `th-app-tile`), `AiChat` (`th-ai-fab` + `th-ai-panel`). Durum koordinasyonu `LayoutState` servisidir.
+`Sidebar` (+ `th-nav-flyout`), `AppBar`, `PageTabs` (`th-tabbar` + `th-tab__dirty` + kapatma onayı), `CommandLauncher` (`th-command`), `AppLauncher` (ortalanmış modal `th-applauncher` + renkli `th-app-tile` ızgarası, "Yakında" rozeti), `ThemeDesigner` (sağ drawer `th-theme-designer` + `th-segment`/`th-swatch`/`th-tds-*`), `AiChat` (`th-ai-fab` + `th-ai-panel`). Durum koordinasyonu `LayoutState` servisidir (`SidebarOpen/Collapsed`, `CommandOpen`, `AppLauncherOpen`, `ThemeDesignerOpen`, `AiOpen`). Sekme durumu `PageTabService`'tedir.
+
+### 7.11 Hata sınırı — `ThErrorBoundary`
+Standart `ErrorBoundary`'yi genişletir; alt bileşenlerin yakalanan istisnalarını **API'ye raporlar** (web hata loglama, bkz. §12) ve dostane bir yedek arayüz gösterir. `MainLayout` içeriği bununla sarılır; gezinince sınır sıfırlanır (`Recover`).
 
 ---
 
@@ -218,6 +230,30 @@ Her bileşenin temel sınıfı `th-<ad>`; varyant `th-<ad>--<varyant>`; boyut `t
 
 1. Stil → `Frontend/css/<ad>.css`; yalnızca `--th-*` token'ları kullan, sabit değer yazma.
 2. `main.css`'e `@import './css/<ad>.css' layer(components);` ekle.
-3. Blazor sarmalayıcı → `Components/<Ad>/Th<Ad>.razor`, `TurboComponentBase`'den türet; boyut/varyantı **sabit sınıf** eşlemesiyle ver (interpolasyon yok).
-4. Açık + koyu modu test et (token'lara bağlı kaldıysan otomatik çalışır).
+3. Blazor sarmalayıcı → `Components/<Ad>/Th<Ad>.razor` **+ `Th<Ad>.razor.cs`** (kod tarafı ayrı, bkz. §11), `TurboComponentBase`'den türet; boyut/varyantı **sabit sınıf** eşlemesiyle ver (interpolasyon yok).
+4. Açık + koyu modu, üç yoğunluğu ve birkaç fontu test et (token'lara bağlı kaldıysan otomatik çalışır).
 5. Bu kataloğa bir satır ekle.
+
+---
+
+## 11. Kod tarafı ayrımı (code-behind) — **zorunlu**
+
+Tüm bileşen ve sayfalarda işaretleme (markup) ile C# **ayrı dosyalardadır**:
+
+- `Component.razor` → yalnızca işaretleme + `@page`/`@namespace`/`@inject`/`@inherits`/`@typeparam` direktifleri.
+- `Component.razor.cs` → `public partial class Component { … }` — alanlar, parametreler (`[Parameter]`), yaşam döngüsü ve olay işleyicileri.
+
+Kurallar:
+- Sınıf adı ve **namespace** `.razor`'unkiyle birebir eşleşir (`@namespace` varsa onu, yoksa klasör tabanlı varsayılanı kullan). Generic bileşende imza tip parametresini taşır: `partial class ThField<TValue>`.
+- `@inject` ile gelen servisler `.razor.cs`'ten doğrudan kullanılabilir (üretilen property'ler). Alternatif olarak `[Inject]` property'si tanımlanabilir (ör. `ThErrorBoundary`).
+- **İstisna**: yalnızca özyinelemeli/görsel `RenderFragment` yardımcıları `.razor` içinde küçük bir `@code` bloğunda kalabilir (ör. `Sidebar` ağaç çizimi). İş mantığı **asla** `.razor`'da tutulmaz.
+
+---
+
+## 12. Web hata loglama (istemci → veritabanı)
+
+Sunucu hataları `error_logs`'a `GlobalExceptionMiddleware` ile yazılır (AGENTS.md §5). **Web (Blazor) tarafında** yakalanan hatalar da aynı tabloya işlenir:
+
+- `ThErrorBoundary` (§7.11) alt bileşen hatalarını yakalar → `WebErrorReporter.ReportAsync(ex, path)`.
+- `WebErrorReporter`, `WebErrorReport`'u **anonim** uç noktaya gönderir: `POST api/v1/diagnostics/client-errors` (kendi hatalarını yutar; uygulamayı düşürmez).
+- API tarafı (`DiagnosticsController` → `LogWebErrorCommand` → `IWebErrorLogService`/`WebErrorLogService`) kaydı `error_logs`'a **`Source = "Web"`** ile, sunucu tarafıyla aynı hash + tekrar (`OccurrenceCount`) mantığıyla yazar. Bu, web tarafında tek API eklemesidir.

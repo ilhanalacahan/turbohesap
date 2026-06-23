@@ -1,0 +1,116 @@
+@namespace Turbohesap.Web.Components.Data
+@typeparam TItem
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThListView.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <!-- Arama Çubuğu -->
+    @if (Searchable)
+    {
+        <div class="th-listview-search">
+            <div class="th-input-wrapper-outer th-input-wrapper-outer--sm">
+                <div class="th-input-inner-wrapper">
+                    <i class="fa-solid fa-magnifying-glass th-input-icon-leading"></i>
+                    <input type="text"
+                           class="th-input-field"
+                           placeholder="@SearchPlaceholder"
+                           value="@_searchQuery"
+                           @oninput="HandleSearchInput" />
+                    @if (_isLoading && SearchFunc != null)
+                    {
+                        <i class="fa-solid fa-circle-notch fa-spin text-text-muted text-xs flex-shrink-0"></i>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Liste Gövdesi -->
+    <div @ref="_scrollContainer" 
+         class="th-listview-body" 
+         style="max-height: @Height; overflow-y: auto;">
+        
+        <ul class="th-listview-items">
+            @if (_displayItems.Any())
+            {
+                @foreach (var item in _displayItems)
+                {
+                    <li class="th-listview-item @(IsSelected(item) ? "th-listview-item--selected" : "")" 
+                        @onclick="() => HandleItemClick(item)">
+                        
+                        <!-- Checkbox Varlığı -->
+                        @if (SelectionMode == ListViewSelectionMode.Multiple && ShowCheckbox)
+                        {
+                            <div class="th-listview-checkbox-wrap">
+                                <input type="checkbox" 
+                                       class="th-checkbox th-checkbox--sm" 
+                                       checked="@IsSelected(item)" 
+                                       readonly />
+                            </div>
+                        }
+
+                        @if (ItemTemplate is not null)
+                        {
+                            @ItemTemplate(item)
+                        }
+                        else
+                        {
+                            <!-- Standart Şablon Tasarımı (Zengin Yerleşim) -->
+                            <div class="th-listview-item-content">
+                                <!-- Sol Bölge: Resim veya İkon -->
+                                @if (ItemLeftImage != null)
+                                {
+                                    <img src="@ItemLeftImage(item)" class="th-listview-item-img" alt="" />
+                                }
+                                else if (ItemLeftIcon != null)
+                                {
+                                    <div class="th-listview-item-icon-wrap">
+                                        <i class="@ItemLeftIcon(item)"></i>
+                                    </div>
+                                }
+
+                                <!-- Orta Bölge: Başlık ve Alt Başlık -->
+                                <div class="th-listview-item-text">
+                                    @if (ItemTitle != null)
+                                    {
+                                        <span class="th-listview-item-title">@ItemTitle(item)</span>
+                                    }
+                                    @if (ItemSubtitle != null)
+                                    {
+                                        <span class="th-listview-item-subtitle">@ItemSubtitle(item)</span>
+                                    }
+                                </div>
+
+                                <!-- Sağ Bölge: Badge veya Metin -->
+                                @if (ItemRightBadge != null)
+                                {
+                                    <span class="th-badge th-badge--sm th-badge--@(ItemRightBadgeVariant != null ? ItemRightBadgeVariant(item) : "neutral")">
+                                        @ItemRightBadge(item)
+                                    </span>
+                                }
+                                else if (ItemRightText != null)
+                                {
+                                    <span class="th-listview-item-right-text">@ItemRightText(item)</span>
+                                }
+                            </div>
+                        }
+                    </li>
+                }
+
+                @if (_isLoading && InfiniteScroll)
+                {
+                    <li class="th-listview-loading">
+                        <i class="fa-solid fa-circle-notch fa-spin text-primary mr-2"></i> Yükleniyor...
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="th-listview-empty">
+                    <i class="fa-solid fa-inbox text-text-subtle text-xl mb-1"></i>
+                    <span>Kayıt bulunamadı</span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

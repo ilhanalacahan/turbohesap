@@ -1,0 +1,40 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<string>
+@* Kod tarafı: ThInput.razor.cs *@
+
+<div class="@RootClass" style="@Style">
+    @if (Prepend is not null)
+    {
+        <div class="th-input-prepend">
+            @Prepend
+        </div>
+    }
+
+    <div class="th-input-inner-wrapper">
+        @if (!string.IsNullOrWhiteSpace(LeadingIcon))
+        {
+            <i class="@LeadingIcon th-input-icon-leading"></i>
+        }
+
+        <input type="@Type"
+               class="th-input-field"
+               placeholder="@Placeholder"
+               disabled="@Disabled"
+               value="@CurrentValue"
+               autocomplete="@Autocomplete"
+               @oninput="HandleChange"
+               @attributes="AdditionalAttributes" />
+
+        @if (!string.IsNullOrWhiteSpace(TrailingIcon))
+        {
+            <i class="@TrailingIcon th-input-icon-trailing"></i>
+        }
+    </div>
+
+    @if (Append is not null)
+    {
+        <div class="th-input-append">
+            @Append
+        </div>
+    }
+</div>

@@ -1,0 +1,18 @@
+@namespace Turbohesap.Web.Components.Feedback
+@inject Turbohesap.Web.Services.ThDrawerService DrawerService
+
+@foreach (var drawer in DrawerService.ActiveDrawers)
+{
+    <ThDrawer Visible="true"
+              VisibleChanged="@(async (bool visible) => { if (!visible) DrawerService.Close(drawer, DrawerResult.Cancel()); })"
+              Title="@drawer.Title"
+              Subtitle="@drawer.Subtitle"
+              Position="@drawer.Options.Position"
+              Size="@drawer.Options.Size"
+              Expandable="@drawer.Options.Expandable"
+              CloseOnOverlay="@drawer.Options.CloseOnOverlay"
+              Variant="@drawer.Options.Variant"
+              @key="drawer.Id">
+        @drawer.Content
+    </ThDrawer>
+}

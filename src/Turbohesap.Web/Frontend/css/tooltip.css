@@ -1,0 +1,75 @@
+/* Tooltip — th-tooltip. Yalnızca --th-* token'ları kullanır. */
+.th-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.th-tooltip {
+  position: absolute;
+  background: var(--th-sidebar-bg); /* koyu premium arka plan */
+  color: var(--th-sidebar-fg);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--th-radius-sm);
+  font-size: 0.75rem;
+  font-weight: var(--th-fw-normal);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  z-index: var(--th-z-tooltip);
+  transition: opacity var(--th-transition-fast) var(--th-ease),
+              visibility var(--th-transition-fast) var(--th-ease),
+              transform var(--th-transition-fast) var(--th-ease);
+  box-shadow: var(--th-shadow-md);
+}
+
+/* Hover durumunda görünürlük */
+.th-tooltip-wrap:hover .th-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Yönlendirme Konumları */
+/* Üst (Top) */
+.th-tooltip--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 0.25rem);
+  margin-bottom: 0.5rem;
+}
+.th-tooltip-wrap:hover .th-tooltip--top {
+  transform: translate(-50%, 0);
+}
+
+/* Alt (Bottom) */
+.th-tooltip--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -0.25rem);
+  margin-top: 0.5rem;
+}
+.th-tooltip-wrap:hover .th-tooltip--bottom {
+  transform: translate(-50%, 0);
+}
+
+/* Sol (Left) */
+.th-tooltip--left {
+  right: 100%;
+  top: 50%;
+  transform: translate(0.25rem, -50%);
+  margin-right: 0.5rem;
+}
+.th-tooltip-wrap:hover .th-tooltip--left {
+  transform: translate(0, -50%);
+}
+
+/* Sağ (Right) */
+.th-tooltip--right {
+  left: 100%;
+  top: 50%;
+  transform: translate(-0.25rem, -50%);
+  margin-left: 0.5rem;
+}
+.th-tooltip-wrap:hover .th-tooltip--right {
+  transform: translate(0, -50%);
+}

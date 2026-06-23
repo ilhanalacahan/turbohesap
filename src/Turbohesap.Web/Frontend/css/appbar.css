@@ -12,11 +12,16 @@
   background: var(--th-appbar-bg);
   color: var(--th-appbar-fg);
   border-bottom: 1px solid var(--th-appbar-border);
+  box-shadow: var(--th-shadow-sm);
 }
 
 .th-appbar__left { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
 .th-appbar__center { flex: 1; display: flex; justify-content: center; min-width: 0; }
 .th-appbar__right { display: flex; align-items: center; gap: 0.25rem; }
+
+/* Mobilde kalabalığı azaltmak için ikincil öğeler gizlenir (yalnızca masaüstünde görünür). */
+.th-appbar__hide-mobile { display: none; }
+@media (min-width: 768px) { .th-appbar__hide-mobile { display: inline-flex; } }
 
 /* Mobil hamburger (masaüstünde gizli, sidebar zaten sabit) */
 .th-appbar__menu {
@@ -31,6 +36,20 @@
 }
 .th-appbar__menu:hover { background: var(--th-surface-3); }
 @media (min-width: 768px) { .th-appbar__menu { display: none; } }
+
+/* Masaüstü daraltma hamburgeri (sidebar'ı genişlet/daralt). Mobilde gizli. */
+.th-appbar__collapse {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--th-radius-md);
+  color: var(--th-text-muted);
+  cursor: pointer;
+}
+.th-appbar__collapse:hover { background: var(--th-surface-3); color: var(--th-text); }
+@media (min-width: 768px) { .th-appbar__collapse { display: inline-flex; } }
 
 /* Breadcrumb */
 .th-breadcrumb { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8125rem; min-width: 0; overflow: hidden; }

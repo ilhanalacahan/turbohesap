@@ -12,20 +12,32 @@
   --th-font-size-base: 16px;
 
   /* ---- Tipografi ---- */
-  --th-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --th-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Varsayılan aile; tema tasarımcısından --th-font-sans override edilerek değiştirilir
+     (çevrimdışı paketlenmiş aileler: Inter / Manrope / Plus Jakarta / IBM Plex / Sistem). */
+  --th-font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --th-font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --th-fw-normal: 400;
   --th-fw-medium: 500;
   --th-fw-semibold: 600;
   --th-fw-bold: 700;
 
-  /* ---- Köşe yarıçapları ---- */
-  --th-radius-xs: 4px;
-  --th-radius-sm: 6px;
-  --th-radius-md: 8px;
-  --th-radius-lg: 12px;
-  --th-radius-xl: 16px;
-  --th-radius-2xl: 24px;
+  /* ---- Yoğunluk (density) — moddan bağımsız yapısal tokenlar.
+     Normal değerler burada; [data-density='compact'|'comfortable'] altında override edilir.
+     Bileşenler dikey ritmi bu tokenlardan alır; böylece yerleşim modu gerçek zamanlı değişir. */
+  --th-nav-pad-y: 0.5rem;   /* sidebar/liste öğesi dikey iç boşluk */
+  --th-row-pad-y: 0.625rem; /* tablo hücresi / satır dikey iç boşluk */
+  --th-density-gap: 0.625rem;
+
+  /* ---- Köşe yarıçapları ----
+     Hepsi tek bir tabandan türer; tema tasarımcısı yalnızca --th-radius-base'i değiştirir,
+     böylece kart, tablo, dialog, buton... tüm köşeler birlikte ölçeklenir. */
+  --th-radius-base: 8px;
+  --th-radius-xs: calc(var(--th-radius-base) * 0.5);
+  --th-radius-sm: calc(var(--th-radius-base) * 0.75);
+  --th-radius-md: calc(var(--th-radius-base) * 1);
+  --th-radius-lg: calc(var(--th-radius-base) * 1.5);
+  --th-radius-xl: calc(var(--th-radius-base) * 2);
+  --th-radius-2xl: calc(var(--th-radius-base) * 3);
   --th-radius-full: 9999px;
 
   /* ---- Yerleşim ölçüleri ---- */
@@ -108,6 +120,41 @@
   --th-shadow-md: 0 4px 6px -1px rgba(16, 24, 40, 0.10), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
   --th-shadow-lg: 0 10px 15px -3px rgba(16, 24, 40, 0.10), 0 4px 6px -4px rgba(16, 24, 40, 0.05);
   --th-shadow-xl: 0 20px 25px -5px rgba(16, 24, 40, 0.10), 0 8px 10px -6px rgba(16, 24, 40, 0.04);
+
+  /* Kart/tablo gibi yüzeylerin yükseltisi (tema tasarımcısından ayarlanır). Temaya duyarlı
+     bir gölgeye işaret eder; "Yok" seçilince none olur. */
+  --th-card-shadow: var(--th-shadow-sm);
+}
+
+/* ======================= YERLEŞİM YOĞUNLUĞU (DENSITY) =======================
+   Yapısal (renkten bağımsız) tokenlar. <html data-density="compact|comfortable">
+   ile gerçek zamanlı değişir; öznitelik yoksa :root'taki "normal" değerler geçerli. */
+:root[data-density='compact'] {
+  --th-content-padding: 0.75rem;
+  --th-content-padding-lg: 1rem;
+  --th-control-height: 2.125rem;
+  --th-control-height-sm: 1.75rem;
+  --th-control-height-lg: 2.5rem;
+  --th-appbar-height: 3rem;
+  --th-tabbar-height: 2.4rem;
+  --th-footer-height: 2.4rem;
+  --th-nav-pad-y: 0.35rem;
+  --th-row-pad-y: 0.4rem;
+  --th-density-gap: 0.45rem;
+}
+
+:root[data-density='comfortable'] {
+  --th-content-padding: 1.25rem;
+  --th-content-padding-lg: 2rem;
+  --th-control-height: 2.75rem;
+  --th-control-height-sm: 2.25rem;
+  --th-control-height-lg: 3.25rem;
+  --th-appbar-height: 3.85rem;
+  --th-tabbar-height: 3rem;
+  --th-footer-height: 3rem;
+  --th-nav-pad-y: 0.7rem;
+  --th-row-pad-y: 0.85rem;
+  --th-density-gap: 0.85rem;
 }
 
 /* ======================= KOYU TEMA RENKLERİ ======================= */

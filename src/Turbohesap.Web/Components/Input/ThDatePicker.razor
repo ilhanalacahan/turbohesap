@@ -1,0 +1,20 @@
+@namespace Turbohesap.Web.Components.Input
+@typeparam TValue
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<TValue>
+@* Kod tarafı: ThDatePicker.razor.cs *@
+
+<div class="@RootClass" style="@Style">
+    <div class="th-input-inner-wrapper">
+        @if (!string.IsNullOrWhiteSpace(IconClass))
+        {
+            <i class="@IconClass th-input-icon-leading"></i>
+        }
+
+        <input type="@InputType"
+               class="th-input-field"
+               value="@FormattedValue"
+               disabled="@Disabled"
+               @onchange="HandleChange"
+               @attributes="AdditionalAttributes" />
+    </div>
+</div>

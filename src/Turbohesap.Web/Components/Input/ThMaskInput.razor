@@ -1,0 +1,34 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThMaskInput.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="th-input-label">@Label</label>
+    }
+    
+    <div class="th-input-wrapper-outer @(Disabled ? "th-input-wrapper-outer--disabled" : "") @(SizeClass(Size, "th-input-wrapper-outer"))">
+        @if (Prepend is not null)
+        {
+            <div class="th-input-prepend">
+                @Prepend
+            </div>
+        }
+
+        <div class="th-input-inner-wrapper">
+            <input type="text"
+                   class="th-input-field th-mask-field"
+                   placeholder="@Placeholder"
+                   disabled="@Disabled"
+                   @ref="_inputRef" />
+        </div>
+
+        @if (Append is not null)
+        {
+            <div class="th-input-append">
+                @Append
+            </div>
+        }
+    </div>
+</div>

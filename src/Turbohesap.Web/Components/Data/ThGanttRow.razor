@@ -1,0 +1,83 @@
+@namespace Turbohesap.Web.Components.Data
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThGanttRow.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <div class="th-gantt-row-header">
+        <div class="th-gantt-row-info">
+            <span class="th-gantt-row-title">@Label</span>
+            @if (!string.IsNullOrEmpty(Subtitle))
+            {
+                <span class="th-gantt-row-subtitle">@Subtitle</span>
+            }
+        </div>
+    </div>
+
+    <div class="th-gantt-track-container">
+        <!-- Ana Gantt Şeridi -->
+        <div class="th-gantt-track">
+            <!-- Zaman Çizelgesi Cetveli ve Segment Konteyneri (Boşlukları Hizalar) -->
+            <div class="th-gantt-segments-container">
+                @if (ShowTicks)
+                {
+                    <div class="th-gantt-ticks">
+                        <div class="th-gantt-tick" style="left: 25%;"></div>
+                        <div class="th-gantt-tick" style="left: 50%;"></div>
+                        <div class="th-gantt-tick" style="left: 75%;"></div>
+                    </div>
+                }
+
+                <!-- Gantt Süreç Segmentleri -->
+                @foreach (var segment in Segments)
+                {
+                    var currentSegment = segment;
+                    var width = GetWidth(currentSegment);
+                    var left = Math.Min(100, Math.Max(0, currentSegment.StartPercent));
+                    var isFirst = Math.Abs(currentSegment.StartPercent) < 0.01;
+                    var isLast = Math.Abs(currentSegment.EndPercent - 100) < 0.01;
+                    
+                    <div class="th-gantt-segment @GetSegmentClass(currentSegment.Status) @(isFirst ? "th-gantt-segment--first" : "") @(isLast ? "th-gantt-segment--last" : "")" 
+                         style="left: @(left.ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%; width: @(width.ToString("F1", System.Globalization.CultureInfo.InvariantCulture))%;">
+                        
+                        <!-- Segment İçerik -->
+                        <div class="th-gantt-segment-content">
+                            @if (!string.IsNullOrEmpty(currentSegment.Icon))
+                            {
+                                <i class="@currentSegment.Icon th-gantt-segment-icon"></i>
+                            }
+                            @if (width >= 10)
+                            {
+                                <span class="th-gantt-segment-label">@currentSegment.Label</span>
+                            }
+                        </div>
+
+                        <!-- Gelişmiş Hover Tooltip (Saf CSS) -->
+                        <div class="th-gantt-tooltip">
+                            <div class="th-gantt-tooltip-header">
+                                <span class="th-gantt-tooltip-title">@currentSegment.Label</span>
+                                <span class="th-gantt-tooltip-badge @GetSegmentClass(currentSegment.Status)">
+                                    @(currentSegment.Status switch
+                                    {
+                                        GanttSegmentStatus.Completed => "Tamamlandı",
+                                        GanttSegmentStatus.Active => "Devam Ediyor",
+                                        GanttSegmentStatus.Delayed => "Gecikti",
+                                        _ => "Planlandı"
+                                    })
+                                </span>
+                            </div>
+                            <div class="th-gantt-tooltip-body">
+                                <div class="th-gantt-tooltip-time">
+                                    <i class="fa-regular fa-clock"></i> Zaman Aralığı: %@(currentSegment.StartPercent.ToString("F0")) - %@(currentSegment.EndPercent.ToString("F0"))
+                                </div>
+                                @if (!string.IsNullOrEmpty(currentSegment.Tooltip))
+                                {
+                                    <div class="th-gantt-tooltip-desc">@currentSegment.Tooltip</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

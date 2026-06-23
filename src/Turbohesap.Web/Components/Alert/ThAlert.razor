@@ -1,0 +1,29 @@
+@namespace Turbohesap.Web.Components.Alert
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThAlert.razor.cs *@
+
+@if (_visible)
+{
+    <div class="@RootClass" style="@Style" role="alert" @attributes="AdditionalAttributes">
+        @if (ShowIcon)
+        {
+            <i class="@IconClass th-alert__icon"></i>
+        }
+        <div class="th-alert__content">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <div class="th-alert__title">@Title</div>
+            }
+            @if (ChildContent is not null)
+            {
+                <div class="th-alert__description">@ChildContent</div>
+            }
+        </div>
+        @if (Closable)
+        {
+            <button type="button" class="th-alert__close" @onclick="Close" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        }
+    </div>
+}

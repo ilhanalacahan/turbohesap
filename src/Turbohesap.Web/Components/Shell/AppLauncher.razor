@@ -4,40 +4,35 @@
 @inject Turbohesap.Web.Services.AppNavigation Navigation
 @inject NavigationManager Nav
 
+@* Uygulama başlatıcı — ortalanmış, ferah ızgara (Microsoft 365 tarzı). *@
 @if (Layout.AppLauncherOpen)
 {
     <div class="th-applauncher-overlay" @onclick="Layout.CloseAppLauncher">
         <div class="th-applauncher" @onclick:stopPropagation="true">
-            <div class="th-panel-header">
-                <div class="th-panel-title">Uygulamalar</div>
-                <span class="th-dialog__close" @onclick="Layout.CloseAppLauncher"><i class="fa-solid fa-xmark"></i></span>
+            <div class="th-applauncher__head">
+                <div>
+                    <div class="th-applauncher__title">Uygulamalar</div>
+                    <div class="th-applauncher__subtitle">Bir modüle geçmek için seçin</div>
+                </div>
+                <span class="th-dialog__close" title="Kapat" @onclick="Layout.CloseAppLauncher"><i class="fa-solid fa-xmark"></i></span>
             </div>
             <div class="th-applauncher__grid">
                 @foreach (var app in Navigation.Apps)
                 {
-                    <div class="th-app-tile" @onclick="() => Open(app)">
-                        <span class="th-app-tile__icon"><i class="@app.Icon"></i></span>
-                        <span class="th-app-tile__label">@app.Name</span>
-                    </div>
+                    <button type="button" class="th-app-tile" @onclick="() => Open(app)">
+                        <span class="th-app-tile__icon" style="--accent:@app.Accent"><i class="@app.Icon"></i></span>
+                        <span class="th-app-tile__name">@app.Name</span>
+                        @if (app.Description is not null)
+                        {
+                            <span class="th-app-tile__desc">@app.Description</span>
+                        }
+                        @if (app.ComingSoon)
+                        {
+                            <span class="th-app-tile__soon">Yakında</span>
+                        }
+                    </button>
                 }
             </div>
         </div>
     </div>
-}
-
-@code {
-    protected override void OnInitialized() => Layout.OnChange += Changed;
-
-    private void Open(AppItem app)
-    {
-        Layout.CloseAppLauncher();
-        if (app.Href != "#")
-        {
-            Nav.NavigateTo(app.Href);
-        }
-    }
-
-    private void Changed() => InvokeAsync(StateHasChanged);
-
-    public void Dispose() => Layout.OnChange -= Changed;
 }

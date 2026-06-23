@@ -1,8 +1,8 @@
 @inherits LayoutComponentBase
-@implements IDisposable
 @inject Turbohesap.Web.Services.LayoutState Layout
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Nav
+@* Kod tarafı: MainLayout.razor.cs *@
 
 @* Kabuk yalnızca kimliği doğrulanmış kullanıcıya gösterilir. Kontrol devre (circuit)
    içinde yapılır; sunucu uç noktası kimlik doğrulaması zorlamaz (token istemci tarafında). *@
@@ -16,17 +16,36 @@
         }
         <div class="th-main">
             <AppBar />
-            <TabBar />
+            <PageTabs />
             <div class="th-content">
-                @Body
+                <Turbohesap.Web.Components.Feedback.ThErrorBoundary @ref="_errorBoundary">
+                    <ChildContent>
+                        @Body
+                    </ChildContent>
+                    <ErrorContent>
+                        <div class="th-page">
+                            <div class="th-card" style="max-width:32rem;margin:2rem auto;text-align:center">
+                                <div class="th-card__body" style="padding:2rem">
+                                    <div style="font-size:2.25rem;color:var(--th-danger)"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                    <h2 class="th-page-title" style="margin-top:0.5rem">Bir şeyler ters gitti</h2>
+                                    <p style="color:var(--th-text-muted);margin:0.5rem 0 1.25rem">Bu sayfada beklenmeyen bir hata oluştu ve kayıt altına alındı.</p>
+                                    <a href="." class="th-btn th-btn--primary"><i class="fa-solid fa-rotate-right"></i> Yeniden yükle</a>
+                                </div>
+                            </div>
+                        </div>
+                    </ErrorContent>
+                </Turbohesap.Web.Components.Feedback.ThErrorBoundary>
             </div>
         </div>
     </div>
 
     <AppLauncher />
     <CommandLauncher />
+    <ThemeDesigner />
     <AiChat />
     <ThToastHost />
+    <ThModalHost />
+    <ThDrawerHost />
 }
 else
 {
@@ -41,46 +60,3 @@ else
     <span class="dismiss">🗙</span>
 </div>
 
-@code {
-    private bool _ready;
-
-    protected override async Task OnInitializedAsync()
-    {
-        Layout.OnChange += Changed;
-        AuthProvider.AuthenticationStateChanged += OnAuthChanged;
-
-        var state = await AuthProvider.GetAuthenticationStateAsync();
-        if (state.User.Identity?.IsAuthenticated == true)
-        {
-            _ready = true;
-        }
-        else
-        {
-            RedirectToLogin();
-        }
-    }
-
-    private void RedirectToLogin()
-    {
-        var returnUrl = Uri.EscapeDataString(new Uri(Nav.Uri).PathAndQuery);
-        Nav.NavigateTo($"/login?returnUrl={returnUrl}", forceLoad: false);
-    }
-
-    private async void OnAuthChanged(Task<AuthenticationState> task)
-    {
-        var state = await task;
-        if (state.User.Identity?.IsAuthenticated != true)
-        {
-            _ready = false;
-            await InvokeAsync(RedirectToLogin);
-        }
-    }
-
-    private void Changed() => InvokeAsync(StateHasChanged);
-
-    public void Dispose()
-    {
-        Layout.OnChange -= Changed;
-        AuthProvider.AuthenticationStateChanged -= OnAuthChanged;
-    }
-}

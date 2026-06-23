@@ -1,0 +1,24 @@
+@namespace Turbohesap.Web.Components.Avatar
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThAvatar.razor.cs *@
+
+<div class="th-avatar-wrap" style="@Style" @attributes="AdditionalAttributes">
+    <div class="@RootClass">
+        @if (!string.IsNullOrEmpty(ImageUrl) && !_imageError)
+        {
+            <img src="@ImageUrl" alt="@AltText" @onerror="HandleImageError" />
+        }
+        else if (!string.IsNullOrEmpty(Initials))
+        {
+            <span>@Initials</span>
+        }
+        else
+        {
+            <i class="fa-solid fa-user"></i>
+        }
+    </div>
+    @if (ShowStatus)
+    {
+        <span class="@StatusClass" title="@Status.ToString()"></span>
+    }
+</div>

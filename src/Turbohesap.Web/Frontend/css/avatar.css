@@ -1,0 +1,68 @@
+/* Avatar — th-avatar. Yalnızca --th-* token'ları kullanır. */
+.th-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  overflow: hidden;
+  user-select: none;
+  background: var(--th-surface-3);
+  color: var(--th-text-muted);
+  font-weight: var(--th-fw-semibold);
+  border-radius: var(--th-radius-full);
+  flex-shrink: 0;
+  border: 1px solid var(--th-border);
+}
+
+.th-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Boyutlar */
+.th-avatar--sm {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.75rem;
+}
+.th-avatar--md {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 0.9375rem;
+}
+.th-avatar--lg {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.25rem;
+}
+
+/* Şekil Varyasyonları */
+.th-avatar--square {
+  border-radius: var(--th-radius-md);
+}
+
+/* Durum Göstergesi (Presence Badge) */
+.th-avatar-wrap {
+  position: relative;
+  display: inline-block;
+}
+.th-avatar-status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: var(--th-radius-full);
+  border: 2px solid var(--th-surface);
+  background: var(--th-success);
+}
+.th-avatar-status--offline {
+  background: var(--th-text-subtle);
+}
+.th-avatar-status--away {
+  background: var(--th-warning);
+}
+.th-avatar-status--busy {
+  background: var(--th-danger);
+}

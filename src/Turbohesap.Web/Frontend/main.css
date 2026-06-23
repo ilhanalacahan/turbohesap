@@ -11,6 +11,17 @@
 @source '../Components/**/*.razor';
 @source '../Pages/**/*.razor';
 
+/* Çevrimdışı paketlenmiş font aileleri (tema tasarımcısından seçilebilir). Yalnızca ağırlık
+   ekseni (wght) içe aktarılır; webfont'lar wwwroot/fonts altına ayrı derlenir (DESIGN.md §Tipografi). */
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/manrope/wght.css';
+@import '@fontsource-variable/plus-jakarta-sans/wght.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/700.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+
 /* Koyu mod, Tailwind'in varsayılan .dark sınıfı yerine <html data-theme="dark">
    özniteliğiyle çalışır. Böylece dark: utility'leri de bizim sistemimize uyar. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
@@ -89,22 +100,58 @@
 
 /* Yeniden kullanılan bileşenler (req: input, toast, dialog, modal, drawer, datatable...) */
 @import './css/button.css' layer(components);
+@import './css/copybutton.css' layer(components);
 @import './css/input.css' layer(components);
+@import './css/addresspicker.css' layer(components);
+@import './css/autocomplete.css' layer(components);
+@import './css/listview.css' layer(components);
+@import './css/calculator.css' layer(components);
+@import './css/currencyinput.css' layer(components);
+@import './css/maskinput.css' layer(components);
+@import './css/segmentedcontrol.css' layer(components);
+@import './css/daterangepicker.css' layer(components);
 @import './css/card.css' layer(components);
+@import './css/accordion.css' layer(components);
 @import './css/badge.css' layer(components);
+@import './css/amountdisplay.css' layer(components);
+@import './css/statusbadge.css' layer(components);
+@import './css/trending.css' layer(components);
+@import './css/shortcuthint.css' layer(components);
+@import './css/avatar.css' layer(components);
+@import './css/progress.css' layer(components);
+@import './css/capacitygauge.css' layer(components);
 @import './css/dialog.css' layer(components);
+@import './css/tooltip.css' layer(components);
+@import './css/popover.css' layer(components);
+@import './css/alert.css' layer(components);
+@import './css/emptystate.css' layer(components);
+@import './css/breadcrumb.css' layer(components);
+@import './css/spinner.css' layer(components);
+@import './css/modal.css' layer(components);
 @import './css/drawer.css' layer(components);
 @import './css/toast.css' layer(components);
 @import './css/datatable.css' layer(components);
+@import './css/ganttrow.css' layer(components);
+@import './css/query-builder.css' layer(components);
+@import './css/stockalertlevel.css' layer(components);
+@import './css/tagsinput.css' layer(components);
+@import './css/kpicard.css' layer(components);
+@import './css/heatmapcalendar.css' layer(components);
+@import './css/processflow.css' layer(components);
+@import './css/funnelchart.css' layer(components);
+@import './css/miniprogressbar.css' layer(components);
 
 /* Kabuk (shell) bileşenleri */
 @import './css/sidebar.css' layer(components);
 @import './css/appbar.css' layer(components);
 @import './css/layout.css' layer(components);
 @import './css/tabs.css' layer(components);
+@import './css/dropdown.css' layer(components);
 @import './css/command-launcher.css' layer(components);
 @import './css/app-launcher.css' layer(components);
 @import './css/ai-chat.css' layer(components);
+@import './css/theme-designer.css' layer(components);
+@import './css/auth.css' layer(components);
 
 /* Font Awesome (ikon webfont'ları fonts/ altına ayrı derlenir). */
 @import '@fortawesome/fontawesome-free/css/all.css';

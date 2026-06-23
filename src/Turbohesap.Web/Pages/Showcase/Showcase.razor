@@ -1,0 +1,105 @@
+@page "/showcase"
+@namespace Turbohesap.Web.Pages.Showcase
+@* Kod tarafı: Showcase.razor.cs *@
+
+<PageTitle>Bileşen Vitrini · Turbohesap</PageTitle>
+
+<ThPage Title="Bileşen Vitrini" Subtitle="Bileşenleri sekmeler üzerinden lazy-load beklemesi ve canlı animasyonlarla inceleyin" TabIcon="fa-solid fa-flask" FooterFixed="true">
+    <ChildContent>
+        <!-- Sekmeler Navigasyonu -->
+        <div class="flex items-center gap-2 border-b border-border overflow-x-auto pb-px mb-6 scrollbar-none">
+            <button type="button" @onclick="() => SetTabAsync(ShowcaseTab.Inputs)" 
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 transition-all duration-200 outline-none whitespace-nowrap @(_activeTab == ShowcaseTab.Inputs ? "border-primary text-primary" : "border-transparent text-text-muted hover:text-text")">
+                <i class="fa-solid fa-keyboard mr-2"></i>Giriş Elemanları
+            </button>
+            <button type="button" @onclick="() => SetTabAsync(ShowcaseTab.Autocomplete)" 
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 transition-all duration-200 outline-none whitespace-nowrap @(_activeTab == ShowcaseTab.Autocomplete ? "border-primary text-primary" : "border-transparent text-text-muted hover:text-text")">
+                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Otomatik Tamamlama
+            </button>
+            <button type="button" @onclick="() => SetTabAsync(ShowcaseTab.ListView)" 
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 transition-all duration-200 outline-none whitespace-nowrap @(_activeTab == ShowcaseTab.ListView ? "border-primary text-primary" : "border-transparent text-text-muted hover:text-text")">
+                <i class="fa-solid fa-list-ul mr-2"></i>Liste Görünümü
+            </button>
+            <button type="button" @onclick="() => SetTabAsync(ShowcaseTab.DataTable)" 
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 transition-all duration-200 outline-none whitespace-nowrap @(_activeTab == ShowcaseTab.DataTable ? "border-primary text-primary" : "border-transparent text-text-muted hover:text-text")">
+                <i class="fa-solid fa-table mr-2"></i>Veri Tablosu
+            </button>
+            <button type="button" @onclick="() => SetTabAsync(ShowcaseTab.Dialogs)" 
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 transition-all duration-200 outline-none whitespace-nowrap @(_activeTab == ShowcaseTab.Dialogs ? "border-primary text-primary" : "border-transparent text-text-muted hover:text-text")">
+                <i class="fa-solid fa-window-restore mr-2"></i>Diyalog & Bildirim
+            </button>
+            <button type="button" @onclick="() => SetTabAsync(ShowcaseTab.Navigation)" 
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 transition-all duration-200 outline-none whitespace-nowrap @(_activeTab == ShowcaseTab.Navigation ? "border-primary text-primary" : "border-transparent text-text-muted hover:text-text")">
+                <i class="fa-solid fa-bars mr-2"></i>Navigasyon & Menü
+            </button>
+            <button type="button" @onclick="() => SetTabAsync(ShowcaseTab.Display)" 
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 transition-all duration-200 outline-none whitespace-nowrap @(_activeTab == ShowcaseTab.Display ? "border-primary text-primary" : "border-transparent text-text-muted hover:text-text")">
+                <i class="fa-solid fa-shapes mr-2"></i>Görsel & Diğer
+            </button>
+        </div>
+
+        <!-- Tab İçeriği (Lazy Load + Spinner) -->
+        @if (_isLoading)
+        {
+            <div class="flex flex-col items-center justify-center min-h-[350px] gap-3 bg-surface border border-border rounded-lg shadow-sm">
+                <ThSpinner Size="ComponentSize.Lg" Variant="SpinnerVariant.Primary" />
+                <span class="text-sm text-text-muted font-medium animate-pulse">Vitrin yükleniyor...</span>
+            </div>
+        }
+        else
+        {
+            @switch (_activeTab)
+            {
+                case ShowcaseTab.Inputs:
+                    <Turbohesap.Web.Pages.Showcase.InputsShowcase />
+                    break;
+                case ShowcaseTab.Autocomplete:
+                    <Turbohesap.Web.Pages.Showcase.AutocompleteShowcase />
+                    break;
+                case ShowcaseTab.ListView:
+                    <Turbohesap.Web.Pages.Showcase.ListViewShowcase />
+                    break;
+                case ShowcaseTab.DataTable:
+                    <Turbohesap.Web.Pages.Showcase.DataTable.DataTableShowcase />
+                    break;
+                case ShowcaseTab.Dialogs:
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Turbohesap.Web.Pages.Showcase.Dialog.DialogShowcase />
+                        <Turbohesap.Web.Pages.Showcase.Modal.ModalShowcase />
+                        <Turbohesap.Web.Pages.Showcase.Toast.ToastShowcase />
+                        <Turbohesap.Web.Pages.Showcase.Drawer.DrawerShowcase />
+                    </div>
+                    break;
+                case ShowcaseTab.Navigation:
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Turbohesap.Web.Pages.Showcase.Tabs.TabsShowcase />
+                        <Turbohesap.Web.Pages.Showcase.Accordion.AccordionShowcase />
+                        <Turbohesap.Web.Pages.Showcase.Dropdown.DropdownShowcase />
+                    </div>
+                    break;
+                case ShowcaseTab.Display:
+                    <div class="flex flex-col gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                            <Turbohesap.Web.Pages.Showcase.DisplayShowcase />
+                            <Turbohesap.Web.Pages.Showcase.OthersShowcase />
+                        </div>
+                        <div class="w-full">
+                            <Turbohesap.Web.Pages.Showcase.AnalyticsShowcase />
+                        </div>
+                    </div>
+                    break;
+            }
+        }
+    </ChildContent>
+    <Footer>
+        <div class="flex justify-between items-center w-full">
+            <div class="flex items-center gap-2">
+                <span class="inline-block w-2 h-2 rounded-full bg-success animate-pulse"></span>
+                <span class="text-xs text-text-muted">Geliştirici Vitrini Çevrimiçi</span>
+            </div>
+            <div class="font-mono text-xs text-primary font-semibold tracking-wider">
+                @GetTabStatistics()
+            </div>
+        </div>
+    </Footer>
+</ThPage>

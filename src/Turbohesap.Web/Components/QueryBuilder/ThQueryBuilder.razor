@@ -1,0 +1,105 @@
+@namespace Turbohesap.Web.Components.QueryBuilder
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@using Turbohesap.Shared.Common.QueryBuilder
+
+@* Kod tarafı: ThQueryBuilder.razor.cs *@
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @RenderGroup(Value)
+</div>
+
+@code {
+    private RenderFragment RenderGroup(QueryGroup group, QueryGroup? parentGroup = null) => 
+        @<div class="th-query-group">
+            <div class="th-query-group__header">
+                <div class="th-query-group__operator-toggle">
+                    <button type="button" class="@(group.Operator == QueryGroupOperator.And ? "th-active" : "")"
+                            @onclick="() => SetGroupOperator(group, QueryGroupOperator.And)">
+                        VE
+                    </button>
+                    <button type="button" class="@(group.Operator == QueryGroupOperator.Or ? "th-active" : "")"
+                            @onclick="() => SetGroupOperator(group, QueryGroupOperator.Or)">
+                        VEYA
+                    </button>
+                </div>
+                
+                <div class="th-query-group__actions">
+                    <button type="button" class="th-btn th-btn--ghost th-btn--sm" @onclick="() => AddRule(group)">
+                        <i class="fa-solid fa-plus me-1"></i> Kural Ekle
+                    </button>
+                    <button type="button" class="th-btn th-btn--ghost th-btn--sm" @onclick="() => AddSubGroup(group)">
+                        <i class="fa-solid fa-folder-plus me-1"></i> Grup Ekle
+                    </button>
+                    @if (parentGroup != null)
+                    {
+                        <button type="button" class="th-btn th-btn--ghost th-btn--sm text-danger" @onclick="() => DeleteGroup(parentGroup, group)" title="Grubu Sil">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    }
+                </div>
+            </div>
+            
+            <div class="th-query-group__content">
+                @if (group.Rules.Count == 0 && group.Groups.Count == 0)
+                {
+                    <div class="th-query-empty">Kural yok. Ekle butonlarını kullanın.</div>
+                }
+                
+                @foreach (var rule in group.Rules)
+                {
+                    var currentRule = rule;
+                    <div class="th-query-rule">
+                        <select class="th-select th-input--sm" value="@currentRule.Field" @onchange="(e) => OnRuleFieldChange(currentRule, e.Value?.ToString())">
+                            @foreach (var f in Fields)
+                            {
+                                <option value="@f.Name">@f.Label</option>
+                            }
+                        </select>
+                        
+                        <select class="th-select th-input--sm" value="@currentRule.Operator" @onchange="(e) => OnRuleOperatorChange(currentRule, e.Value?.ToString())">
+                            @foreach (var op in GetOperators(currentRule.Type))
+                            {
+                                <option value="@op">@GetOperatorLabel(op)</option>
+                            }
+                        </select>
+                        
+                        @if (currentRule.Operator != QueryRuleOperator.IsNull && currentRule.Operator != QueryRuleOperator.IsNotNull)
+                        {
+                            @if (currentRule.Type == QueryFieldType.Boolean)
+                            {
+                                <select class="th-select th-input--sm" value="@currentRule.Value?.ToString()?.ToLowerInvariant()" @onchange="(e) => OnRuleValueChange(currentRule, e.Value?.ToString())">
+                                    <option value="true">Doğru</option>
+                                    <option value="false">Yanlış</option>
+                                </select>
+                            }
+                            else if (currentRule.Type == QueryFieldType.Date)
+                            {
+                                <input type="date" class="th-input th-input--sm" value="@FormatDate(currentRule.Value)" @onchange="(e) => OnRuleValueChange(currentRule, e.Value?.ToString())" />
+                            }
+                            else if (currentRule.Type == QueryFieldType.Number)
+                            {
+                                <input type="number" class="th-input th-input--sm" value="@currentRule.Value" @oninput="(e) => OnRuleValueChange(currentRule, e.Value)" />
+                            }
+                            else
+                            {
+                                <input type="text" class="th-input th-input--sm" value="@currentRule.Value" @oninput="(e) => OnRuleValueChange(currentRule, e.Value?.ToString())" />
+                            }
+                        }
+                        else
+                        {
+                            <div class="th-query-rule__value-placeholder">Değer gerekmiyor</div>
+                        }
+                        
+                        <button type="button" class="th-btn th-btn--ghost th-btn--sm text-danger" @onclick="() => DeleteRule(group, currentRule)" title="Kuralı Sil">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                }
+                
+                @foreach (var g in group.Groups)
+                {
+                    var currentGroup = g;
+                    @RenderGroup(currentGroup, group)
+                }
+            </div>
+        </div>;
+}

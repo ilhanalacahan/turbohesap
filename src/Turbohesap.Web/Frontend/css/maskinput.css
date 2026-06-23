@@ -1,0 +1,11 @@
+/* MaskInput — th-mask-input-wrapper. Yalnızca --th-* token'ları kullanır. */
+.th-mask-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+.th-mask-field {
+  padding: 0;
+}

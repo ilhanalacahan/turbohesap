@@ -1,0 +1,26 @@
+@namespace Turbohesap.Web.Components.Progress
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThProgress.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label) || ShowValue)
+    {
+        <div class="th-progress-header">
+            @if (!string.IsNullOrEmpty(Label))
+            {
+                <span>@Label</span>
+            }
+            else
+            {
+                <span></span>
+            }
+            @if (ShowValue)
+            {
+                <span>@Percentage.ToString("0")%</span>
+            }
+        </div>
+    }
+    <div class="th-progress" role="progressbar" aria-valuenow="@Percentage" aria-valuemin="0" aria-valuemax="100">
+        <div class="th-progress__bar" style="width: @PercentageCss"></div>
+    </div>
+</div>

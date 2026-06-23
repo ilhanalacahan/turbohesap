@@ -1,0 +1,65 @@
+/* MiniProgressBar — th-mini-progress-bar. Yalnızca --th-* token'ları kullanır. */
+.th-mini-progress-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+.th-mini-progress-track {
+  display: flex;
+  width: 100%;
+  background: var(--th-surface-3);
+  border-radius: var(--th-radius-full);
+  overflow: hidden;
+  height: 8px; /* Varsayılan yükseklik (Md) */
+}
+
+.th-mini-progress-segment {
+  height: 100%;
+  transition: width var(--th-transition-normal) var(--th-ease);
+  cursor: pointer;
+}
+
+.th-mini-progress-segment:hover {
+  filter: brightness(1.05);
+}
+
+/* Boyut varyantları */
+.th-mini-progress-bar--sm .th-mini-progress-track {
+  height: 5px;
+}
+
+.th-mini-progress-bar--lg .th-mini-progress-track {
+  height: 12px;
+}
+
+/* Gösterge (Legend) */
+.th-mini-progress-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.6875rem;
+  color: var(--th-text-subtle);
+}
+
+.th-mini-progress-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.th-mini-progress-legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--th-radius-full);
+  display: inline-block;
+}
+
+.th-mini-progress-legend-label {
+  font-weight: var(--th-fw-medium);
+}
+
+.th-mini-progress-legend-val {
+  color: var(--th-text-muted);
+}

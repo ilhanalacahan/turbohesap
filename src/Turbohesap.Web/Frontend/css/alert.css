@@ -1,0 +1,89 @@
+/* Uyarı Kutusu — th-alert. Yalnızca --th-* token'ları kullanır. */
+.th-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-md);
+  background: var(--th-surface);
+  color: var(--th-text);
+  font-family: var(--th-font-sans);
+  position: relative;
+  transition: all var(--th-transition) var(--th-ease);
+}
+
+.th-alert__icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.th-alert__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1 1 auto;
+}
+
+.th-alert__title {
+  font-size: 0.875rem;
+  font-weight: var(--th-fw-semibold);
+}
+
+.th-alert__description {
+  font-size: 0.8125rem;
+  color: var(--th-text-muted);
+}
+
+.th-alert__close {
+  background: transparent;
+  border: none;
+  color: var(--th-text-muted);
+  cursor: pointer;
+  padding: 0.125rem;
+  font-size: 0.875rem;
+  margin-left: auto;
+  align-self: flex-start;
+  margin-top: 0.125rem;
+}
+.th-alert__close:hover {
+  color: var(--th-text);
+}
+
+/* Renk Varyasyonları */
+.th-alert--info {
+  background: var(--th-info-subtle);
+  border-color: var(--th-info);
+}
+.th-alert--info .th-alert__title,
+.th-alert--info .th-alert__icon {
+  color: var(--th-info);
+}
+
+.th-alert--success {
+  background: var(--th-success-subtle);
+  border-color: var(--th-success);
+}
+.th-alert--success .th-alert__title,
+.th-alert--success .th-alert__icon {
+  color: var(--th-success);
+}
+
+.th-alert--warning {
+  background: var(--th-warning-subtle);
+  border-color: var(--th-warning);
+}
+.th-alert--warning .th-alert__title,
+.th-alert--warning .th-alert__icon {
+  color: var(--th-warning);
+}
+
+.th-alert--danger {
+  background: var(--th-danger-subtle);
+  border-color: var(--th-danger);
+}
+.th-alert--danger .th-alert__title,
+.th-alert--danger .th-alert__icon {
+  color: var(--th-danger);
+}

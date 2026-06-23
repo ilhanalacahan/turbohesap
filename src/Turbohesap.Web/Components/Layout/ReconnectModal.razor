@@ -1,31 +1,66 @@
-﻿<script type="module" src="@Assets["Components/Layout/ReconnectModal.razor.js"]"></script>
+<script type="module" src="@Assets["Components/Layout/ReconnectModal.razor.js"]"></script>
 
-<dialog id="components-reconnect-modal" data-nosnippet>
-    <div class="components-reconnect-container">
-        <div class="components-rejoining-animation" aria-hidden="true">
-            <div></div>
-            <div></div>
+<dialog id="components-reconnect-modal" class="th-reconnect-dialog" data-nosnippet>
+    <div class="th-reconnect-content">
+        <!-- İllüstrasyon / İkon Alanı -->
+        <div class="th-reconnect-illustration">
+            <!-- Yeniden bağlanma denemeleri için animasyonlu wifi dalgalanması -->
+            <div class="components-rejoining-animation th-reconnect-pulse" aria-hidden="true">
+                <div class="th-reconnect-pulse__ring"></div>
+                <div class="th-reconnect-pulse__ring"></div>
+                <div class="th-reconnect-pulse__icon"><i class="fa-solid fa-wifi"></i></div>
+            </div>
+            
+            <!-- Duraklatılmış veya hata durumları için uyarı ikonu -->
+            <div class="th-reconnect-status-icon components-reconnect-failed-visible components-pause-visible components-resume-failed-visible">
+                <div class="th-reconnect-status-icon__bg">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+            </div>
         </div>
-        <p class="components-reconnect-first-attempt-visible">
-            Rejoining the server...
-        </p>
-        <p class="components-reconnect-repeated-attempt-visible">
-            Rejoin failed... trying again in <span id="components-seconds-to-next-attempt"></span> seconds.
-        </p>
-        <p class="components-reconnect-failed-visible">
-            Failed to rejoin.<br />Please retry or reload the page.
-        </p>
-        <button id="components-reconnect-button" class="components-reconnect-failed-visible">
-            Retry
-        </button>
-        <p class="components-pause-visible">
-            The session has been paused by the server.
-        </p>
-        <p class="components-resume-failed-visible">
-            Failed to resume the session.<br />Please retry or reload the page.
-        </p>
-        <button id="components-resume-button" class="components-pause-visible components-resume-failed-visible">
-            Resume
-        </button>
+
+        <div class="th-reconnect-body">
+            <!-- Durum 1: İlk Bağlantı Denemesi -->
+            <h3 class="th-reconnect-title components-reconnect-first-attempt-visible">Bağlantı Kesildi</h3>
+            <p class="th-reconnect-desc components-reconnect-first-attempt-visible">
+                Sunucuya yeniden bağlanılıyor. Lütfen bekleyin...
+            </p>
+
+            <!-- Durum 2: Tekrarlayan Bağlantı Denemeleri -->
+            <h3 class="th-reconnect-title components-reconnect-repeated-attempt-visible">Bağlantı Kurulamadı</h3>
+            <p class="th-reconnect-desc components-reconnect-repeated-attempt-visible">
+                Yeniden bağlanma denemesi başarısız oldu. <strong class="th-reconnect-countdown"><span id="components-seconds-to-next-attempt"></span></strong> saniye içinde tekrar denenecek.
+            </p>
+
+            <!-- Durum 3: Bağlantı Tamamen Başarısız -->
+            <h3 class="th-reconnect-title components-reconnect-failed-visible text-danger">Bağlantı Hatası</h3>
+            <p class="th-reconnect-desc components-reconnect-failed-visible">
+                Sunucu ile bağlantı kurulamadı. Lütfen tekrar deneyin veya sayfayı yenileyin.
+            </p>
+
+            <!-- Durum 4: Oturum Askıya Alındı -->
+            <h3 class="th-reconnect-title components-pause-visible">Oturum Duraklatıldı</h3>
+            <p class="th-reconnect-desc components-pause-visible">
+                Oturumunuz sunucu tarafından geçici olarak duraklatıldı.
+            </p>
+
+            <!-- Durum 5: Devam Ettirme Başarısız -->
+            <h3 class="th-reconnect-title components-resume-failed-visible text-danger">Oturum Devam Ettirilemedi</h3>
+            <p class="th-reconnect-desc components-resume-failed-visible">
+                Mevcut oturum devam ettirilemedi. Lütfen tekrar deneyin veya sayfayı yenileyin.
+            </p>
+        </div>
+
+        <div class="th-reconnect-actions">
+            <button id="components-reconnect-button" class="th-btn th-btn--primary th-btn--block components-reconnect-failed-visible">
+                <i class="fa-solid fa-rotate-right me-2"></i>Tekrar Dene
+            </button>
+            <button id="components-resume-button" class="th-btn th-btn--primary th-btn--block components-pause-visible components-resume-failed-visible">
+                <i class="fa-solid fa-play me-2"></i>Devam Et
+            </button>
+            <button class="th-btn th-btn--secondary th-btn--block components-reconnect-failed-visible components-resume-failed-visible" onclick="location.reload();">
+                <i class="fa-solid fa-arrow-rotate-right me-2"></i>Sayfayı Yenile
+            </button>
+        </div>
     </div>
 </dialog>

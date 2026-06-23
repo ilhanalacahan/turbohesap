@@ -1,0 +1,19 @@
+@namespace Turbohesap.Web.Components.Dropdown
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThDropdownSubmenu.razor.cs *@
+
+<div @ref="_itemRef" class="@ItemClass" @onmouseenter="OpenSubmenuAsync" @onmouseleave="CloseSubmenuAsync">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <i class="th-dropdown-item__icon @Icon"></i>
+    }
+    <span class="th-dropdown-item__label">@Header</span>
+    <i class="th-dropdown-item__submenu-arrow fa-solid fa-chevron-right"></i>
+
+    @if (_isSubmenuOpen)
+    {
+        <div @ref="_submenuRef" class="th-dropdown-menu">
+            @ChildContent
+        </div>
+    }
+</div>

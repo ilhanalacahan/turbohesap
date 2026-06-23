@@ -2,7 +2,6 @@
 @implements IDisposable
 @inject Turbohesap.Web.Services.AppNavigation Navigation
 @inject Turbohesap.Web.Services.LayoutState Layout
-@inject Turbohesap.Web.Services.TabService Tabs
 @inject NavigationManager Nav
 
 <aside class="@SidebarClass">
@@ -11,14 +10,20 @@
             <i class="fa-solid fa-table-cells-large"></i>
         </span>
         <span class="th-sidebar__brand">Turbohesap</span>
-        <span class="th-sidebar__hamburger" title="Daralt/Genişlet" @onclick="ToggleCollapse">
-            <i class="fa-solid fa-bars"></i>
-        </span>
     </div>
 
     <div class="th-sidebar__search">
-        <input class="th-sidebar__search-input" type="search" placeholder="Menüde ara…"
-               value="@_search" @oninput="OnSearch" />
+        <div class="th-sidebar__search-wrap">
+            <i class="th-sidebar__search-icon fa-solid fa-magnifying-glass"></i>
+            <input class="th-sidebar__search-input" type="text" placeholder="Menüde ara…"
+                   value="@_search" @oninput="OnSearch" />
+            @if (!string.IsNullOrEmpty(_search))
+            {
+                <span class="th-sidebar__search-clear" title="Temizle" @onclick="ClearSearch">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            }
+        </div>
     </div>
 
     <nav class="th-sidebar__nav">
@@ -28,165 +33,70 @@
                 <div class="th-nav-group__label">@group.Title</div>
                 @foreach (var item in group.Items)
                 {
-                    @RenderItem(item)
+                    @RenderItem(item, true)
                 }
             </div>
         }
     </nav>
 
     <div class="th-sidebar__footer">
-        <span class="th-sidebar__footer-btn" @onclick="@(() => Open("/help", "Yardım", "fa-solid fa-circle-question"))">
+        <span class="th-sidebar__footer-btn" @onclick="@(() => Go("/help"))">
             <i class="fa-solid fa-circle-question"></i><span>Yardım</span>
         </span>
-        <span class="th-sidebar__footer-btn" @onclick="@(() => Open("/feedback", "Geri Bildirim", "fa-solid fa-comment-dots"))">
+        <span class="th-sidebar__footer-btn" @onclick="@(() => Go("/feedback"))">
             <i class="fa-solid fa-comment-dots"></i><span>Geri Bildirim</span>
         </span>
     </div>
 </aside>
 
 @code {
-    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
-
-    private string _search = string.Empty;
-    private readonly HashSet<string> _expanded = [];
-    private string[] _roles = [];
-
-    private string SidebarClass =>
-        string.Join(' ', new[]
-        {
-            "th-sidebar",
-            Layout.SidebarOpen ? "th-sidebar--open" : null,
-            Layout.SidebarCollapsed ? "th-sidebar--collapsed" : null
-        }.Where(c => c is not null));
-
-    protected override void OnInitialized()
-    {
-        Layout.OnChange += StateChanged;
-        Nav.LocationChanged += LocationChanged;
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (AuthState is not null)
-        {
-            var state = await AuthState;
-            _roles = state.User.Claims
-                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToArray();
-        }
-    }
-
-    private IEnumerable<NavGroup> FilteredGroups()
-    {
-        foreach (var group in Navigation.Groups)
-        {
-            var items = group.Items.Select(FilterItem).Where(i => i is not null).Cast<NavItem>().ToList();
-            if (items.Count > 0)
-            {
-                yield return new NavGroup { Title = group.Title, Items = items };
-            }
-        }
-    }
-
-    // Rol + arama filtresi (alt öğeleriyle birlikte).
-    private NavItem? FilterItem(NavItem item)
-    {
-        if (!IsAllowed(item))
-        {
-            return null;
-        }
-
-        var children = item.Children.Select(FilterItem).Where(c => c is not null).Cast<NavItem>().ToList();
-        var matches = string.IsNullOrWhiteSpace(_search)
-            || item.Label.Contains(_search, StringComparison.OrdinalIgnoreCase)
-            || children.Count > 0;
-
-        if (!matches)
-        {
-            return null;
-        }
-
-        if (children.Count > 0 && !string.IsNullOrWhiteSpace(_search))
-        {
-            _expanded.Add(item.Label);
-        }
-
-        return item.HasChildren
-            ? new NavItem { Label = item.Label, Icon = item.Icon, Href = item.Href, Roles = item.Roles, Children = children }
-            : item;
-    }
-
-    private bool IsAllowed(NavItem item)
-        => item.Roles.Count == 0 || item.Roles.Any(r => _roles.Contains(r));
-
-    private RenderFragment RenderItem(NavItem item) => __builder =>
+    // Görsel (recursive) öğe çizimi. İş mantığı Sidebar.razor.cs içindedir.
+    private RenderFragment RenderItem(NavItem item, bool topLevel) => __builder =>
     {
         var isActive = item.Href is not null && IsActive(item.Href);
         var expanded = _expanded.Contains(item.Label);
 
-        <div class="@(item.HasChildren && expanded ? "th-nav-item--expanded" : null)">
-            <div class="@(isActive ? "th-nav-item th-nav-item--active" : "th-nav-item")"
-                 @onclick="() => OnItemClick(item)">
-                <span class="th-nav-item__icon"><i class="@item.Icon"></i></span>
-                <span class="th-nav-item__label">@item.Label</span>
-                @if (item.HasChildren)
+        <div class="@(topLevel ? "th-nav-item-wrap" : null)">
+            <div class="@(item.HasChildren && expanded ? "th-nav-item--expanded" : null)">
+                <div class="@(isActive ? "th-nav-item th-nav-item--active" : "th-nav-item")"
+                     @onclick="() => OnItemClick(item)">
+                    <span class="th-nav-item__icon"><i class="@item.Icon"></i></span>
+                    <span class="th-nav-item__label">@item.Label</span>
+                    @if (item.HasChildren)
+                    {
+                        <i class="th-nav-item__chevron fa-solid fa-chevron-right"></i>
+                    }
+                </div>
+                @if (item.HasChildren && expanded)
                 {
-                    <i class="th-nav-item__chevron fa-solid fa-chevron-right"></i>
+                    <div class="th-nav-children">
+                        @foreach (var child in item.Children)
+                        {
+                            @RenderItem(child, false)
+                        }
+                    </div>
                 }
             </div>
-            @if (item.HasChildren && expanded)
+
+            @* Daraltılmış sidebar'da ikon üzerine gelince açılan flyout (alt menü / etiket). *@
+            @if (topLevel)
             {
-                <div class="th-nav-children">
-                    @foreach (var child in item.Children)
+                <div class="th-nav-flyout">
+                    <div class="th-nav-flyout__title">@item.Label</div>
+                    @if (item.HasChildren)
                     {
-                        @RenderItem(child)
+                        <div class="th-nav-flyout__list">
+                            @foreach (var child in item.Children)
+                            {
+                                <div class="th-nav-flyout__item" @onclick="() => OnItemClick(child)">
+                                    <span class="th-nav-item__icon"><i class="@child.Icon"></i></span>
+                                    <span>@child.Label</span>
+                                </div>
+                            }
+                        </div>
                     }
                 </div>
             }
         </div>
     };
-
-    private void OnItemClick(NavItem item)
-    {
-        if (item.HasChildren)
-        {
-            if (!_expanded.Add(item.Label))
-            {
-                _expanded.Remove(item.Label);
-            }
-            return;
-        }
-
-        if (item.Href is not null)
-        {
-            Open(item.Href, item.Label, item.Icon);
-        }
-    }
-
-    private void Open(string href, string title, string icon)
-    {
-        Tabs.OpenOrFocus(new TabItem { Title = title, Href = href, Icon = icon });
-        Layout.CloseSidebar();
-        Nav.NavigateTo(href);
-    }
-
-    private bool IsActive(string href)
-    {
-        var path = new Uri(Nav.Uri).AbsolutePath;
-        return path.Equals(href, StringComparison.OrdinalIgnoreCase);
-    }
-
-    private void OnSearch(ChangeEventArgs e) => _search = e.Value?.ToString() ?? string.Empty;
-
-    private void ToggleCollapse() => Layout.ToggleCollapse();
-
-    private void StateChanged() => InvokeAsync(StateHasChanged);
-    private void LocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e) => InvokeAsync(StateHasChanged);
-
-    public void Dispose()
-    {
-        Layout.OnChange -= StateChanged;
-        Nav.LocationChanged -= LocationChanged;
-    }
 }

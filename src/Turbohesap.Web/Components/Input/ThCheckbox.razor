@@ -1,0 +1,20 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<bool>
+@* Kod tarafı: ThCheckbox.razor.cs *@
+
+<label class="th-checkbox-wrap" style="@Style">
+    <input type="checkbox"
+           class="@RootClass"
+           checked="@Value"
+           @onchange="Toggle"
+           disabled="@Disabled"
+           @attributes="AdditionalAttributes" />
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <span class="th-checkbox-label">@Label</span>
+    }
+    else if (ChildContent is not null)
+    {
+        <span class="th-checkbox-label">@ChildContent</span>
+    }
+</label>

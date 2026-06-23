@@ -1,0 +1,125 @@
+@namespace Turbohesap.Web.Pages.Showcase
+
+<ThCard Title="Yeni Görsel Bileşenler" Subtitle="Card, Badge, Avatar ve Progress gösterim bileşenleri" Icon="fa-solid fa-box">
+    <div class="flex flex-col gap-6">
+        
+        <!-- Avatar (Profil) Gösterimleri -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Profil Resimleri & Durumlar (Avatars)</h4>
+            <div class="flex flex-wrap gap-3 items-center py-1">
+                <ThAvatar ImageUrl="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" Size="ComponentSize.Lg" ShowStatus="true" Status="AvatarStatus.Online" />
+                <ThAvatar Initials="EY" Size="ComponentSize.Md" ShowStatus="true" Status="AvatarStatus.Away" />
+                <ThAvatar Initials="SM" Size="ComponentSize.Sm" ShowStatus="true" Status="AvatarStatus.Busy" />
+                <ThAvatar Initials="SQ" Shape="AvatarShape.Square" Size="ComponentSize.Md" ShowStatus="true" Status="AvatarStatus.Offline" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Badge (Rozet) Gösterimleri -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Rozetler ve Etiketler (Badges)</h4>
+            <div class="flex flex-wrap gap-2 items-center py-1">
+                <ThBadge Variant="BadgeVariant.Neutral">Neutral</ThBadge>
+                <ThBadge Variant="BadgeVariant.Primary">Primary</ThBadge>
+                <ThBadge Variant="BadgeVariant.Success" ShowDot="true">Success</ThBadge>
+                <ThBadge Variant="BadgeVariant.Warning" ShowDot="true" Size="ComponentSize.Sm">Warning</ThBadge>
+                <ThBadge Variant="BadgeVariant.Danger" Size="ComponentSize.Lg">Danger</ThBadge>
+                <ThBadge Variant="BadgeVariant.Info">Info</ThBadge>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Progress (İlerleme Çubuğu) Gösterimleri -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">İlerleme Göstergeleri (Progress)</h4>
+            <div class="flex flex-col gap-3 py-1">
+                <ThProgress Value="@_progressValue" Variant="ProgressVariant.Info" Label="Dinamik İlerleme" ShowValue="true" />
+                <div class="flex items-center gap-2 justify-end text-xs">
+                    <ThButton Variant="ButtonVariant.Ghost" Size="ComponentSize.Sm" OnClick="DecreaseProgress" Disabled="@(_progressValue <= 0)">-10</ThButton>
+                    <ThButton Variant="ButtonVariant.Secondary" Size="ComponentSize.Sm" OnClick="IncreaseProgress" Disabled="@(_progressValue >= 100)">+10</ThButton>
+                </div>
+                <ThProgress Value="95" Variant="ProgressVariant.Success" Size="ComponentSize.Sm" Label="İnce Çubuk (Sm)" ShowValue="true" />
+                <ThProgress Value="35" Variant="ProgressVariant.Danger" Size="ComponentSize.Lg" Label="Kalın Çubuk (Lg)" ShowValue="true" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Finansal Tutar Gösterimleri (ThAmountDisplay) -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Finansal Tutar Gösterimleri (ThAmountDisplay)</h4>
+            <div class="flex flex-wrap gap-4 items-center py-1">
+                <div class="flex flex-col gap-1 border border-border p-2.5 rounded bg-surface-2">
+                    <span class="text-xs text-text-muted">Alacak (Pozitif):</span>
+                    <ThAmountDisplay Amount="125500.95M" CurrencySymbol="₺" Size="ComponentSize.Lg" />
+                </div>
+                <div class="flex flex-col gap-1 border border-border p-2.5 rounded bg-surface-2">
+                    <span class="text-xs text-text-muted">Borç (Negatif):</span>
+                    <ThAmountDisplay Amount="-45750.50M" CurrencySymbol="₺" Size="ComponentSize.Lg" />
+                </div>
+                <div class="flex flex-col gap-1 border border-border p-2.5 rounded bg-surface-2">
+                    <span class="text-xs text-text-muted">Nötr / Renksiz:</span>
+                    <ThAmountDisplay Amount="8900.00M" CurrencySymbol="$" SymbolPosition="SymbolPosition.Prepend" ColorCode="false" Size="ComponentSize.Md" />
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Stok Seviye Göstergeleri (ThStockAlertLevel) -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Stok Seviye & Limit Alarm Göstergeleri (ThStockAlertLevel)</h4>
+            <div class="flex flex-col gap-4 py-1">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ThStockAlertLevel Value="12" MinLimit="25" MaxLimit="150" Label="Çelik Vida Stoğu (Kritik)" Unit="Adet" />
+                    <ThStockAlertLevel Value="85" MinLimit="25" MaxLimit="150" Label="Bakır Tel Stoğu (Normal)" Unit="Metre" />
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Dairesel Kapasite Kadranları (ThCapacityGauge) -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Dairesel Kapasite/Doluluk Kadranları (ThCapacityGauge)</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center py-1">
+                <div class="flex flex-col gap-2 items-center">
+                    <ThCapacityGauge Value="@_gaugeValue" Max="@_gaugeMax" Label="İnteraktif Kapasite" Subtitle="Depo A Doluluk Oranı" Unit="Palet" Size="ComponentSize.Md" />
+                    <div class="flex items-center gap-2 text-xs">
+                        <ThButton Variant="ButtonVariant.Ghost" Size="ComponentSize.Sm" OnClick="DecreaseGauge" Disabled="@(_gaugeValue <= 0)">-15</ThButton>
+                        <ThButton Variant="ButtonVariant.Secondary" Size="ComponentSize.Sm" OnClick="IncreaseGauge" Disabled="@(_gaugeValue >= _gaugeMax)">+15</ThButton>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2 items-center">
+                    <ThCapacityGauge Value="35" Max="100" Label="Hafif Dolu Depo" Subtitle="Raf Hacim Kapasitesi" Unit="m³" Size="ComponentSize.Md" />
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Süreç Zaman Çizelgesi Şeridi (ThGanttRow) -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Mini Üretim ve Süreç Planlama Gantt Şeridi (ThGanttRow)</h4>
+            <div class="flex flex-col gap-4 py-1">
+                <ThGanttRow Label="İş Emri #2045 (Özel İmalat)" Subtitle="Laser Kesim & Form Verme" Segments="@_productionOrderGantt" />
+                <ThGanttRow Label="CNC-01 Freze İstasyonu Günlük Analizi" Subtitle="24 Saatlik Zaman Dilimi" Segments="@_machineUtilizationGantt" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Card Örneği -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Kart Yapısı (Cards)</h4>
+            <ThCard Title="Örnek Kart Başlığı" Subtitle="Bu bir alt başlıktır">
+                <p class="text-xs text-text-muted leading-relaxed">
+                    Kart bileşeni başlık, alt başlık ve gövde bölümlerini düzenli şekilde bir araya getirir.
+                </p>
+            </ThCard>
+        </div>
+
+    </div>
+</ThCard>

@@ -1,0 +1,133 @@
+/* CurrencyInput — th-currency-input-wrapper. Yalnızca --th-* token'ları kullanır. */
+.th-currency-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+/* Para Birimi Sol Göstergesi */
+.th-currency-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text-subtle);
+  border-right: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+  border-top-left-radius: calc(var(--th-radius-md) - 1px);
+  border-bottom-left-radius: calc(var(--th-radius-md) - 1px);
+  height: 100%;
+}
+
+/* Sağa Yaslı Para Değeri Girişi */
+.th-currency-field {
+  padding-right: 0.75rem;
+  font-family: var(--th-font-mono);
+  font-weight: var(--th-fw-medium);
+}
+
+/* Hesap Makinesi Açma Butonu */
+.th-currency-calc-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  color: var(--th-text-muted);
+  border-left: 1px solid var(--th-border);
+  cursor: pointer;
+  background: transparent;
+  border-top-right-radius: calc(var(--th-radius-md) - 1px);
+  border-bottom-right-radius: calc(var(--th-radius-md) - 1px);
+  transition: all var(--th-transition-fast) var(--th-ease);
+  height: 100%;
+}
+
+.th-currency-calc-btn:hover {
+  color: var(--th-primary);
+  background: var(--th-primary-subtle);
+}
+
+.th-currency-calc-btn:active {
+  transform: scale(0.95);
+}
+
+/* Boyutlar (Opsiyonel varyasyonlar) */
+.th-currency-input-wrapper--sm .th-currency-symbol,
+.th-currency-input-wrapper--sm .th-currency-calc-btn {
+  padding: 0 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.th-currency-input-wrapper--lg .th-currency-symbol,
+.th-currency-input-wrapper--lg .th-currency-calc-btn {
+  padding: 0 1rem;
+  font-size: 1.0625rem;
+}
+
+/* Kompakt Hesap Makinesi Dialog overlay ve panel */
+.th-calc-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--th-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--th-z-modal, 2000);
+}
+
+.th-calc-dialog {
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-lg);
+  box-shadow: var(--th-shadow-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.th-calc-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+}
+
+.th-calc-dialog-title {
+  font-family: var(--th-font-sans);
+  font-size: 0.75rem;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text);
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.th-calc-dialog-close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--th-text-muted);
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--th-radius-sm);
+  transition: all var(--th-transition-fast) var(--th-ease);
+}
+
+.th-calc-dialog-close-btn:hover {
+  background: var(--th-surface-hover);
+  color: var(--th-text);
+}
+
+.th-calc-dialog-body {
+  padding: 0.5rem;
+}

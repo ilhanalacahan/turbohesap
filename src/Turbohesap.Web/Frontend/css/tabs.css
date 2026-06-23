@@ -4,8 +4,10 @@
   display: flex;
   align-items: stretch;
   height: var(--th-tabbar-height);
+  /* AppBar ile sekme şeridi arasında küçük bir boşluk (üstte --th-bg görünür). */
+  margin-top: 0.4rem;
   background: var(--th-surface);
-  border-bottom: 1px solid var(--th-border);
+  border-block: 1px solid var(--th-border);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -39,6 +41,15 @@
 
 .th-tab__icon { font-size: 0.8rem; }
 .th-tab__label { overflow: hidden; text-overflow: ellipsis; }
+
+/* Kaydedilmemiş değişiklik göstergesi (kirli sekme) */
+.th-tab__dirty {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--th-radius-full);
+  background: var(--th-warning);
+  flex: 0 0 auto;
+}
 .th-tab__close {
   display: inline-flex;
   align-items: center;
@@ -50,3 +61,268 @@
   font-size: 0.7rem;
 }
 .th-tab__close:hover { background: var(--th-surface-3); color: var(--th-text); }
+
+/* ============================================================================
+   Reusable Tab Component — th-tabs
+   ============================================================================ */
+
+.th-tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.th-tabs__nav-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid var(--th-border);
+  margin-bottom: 1rem;
+}
+
+.th-tabs__viewport {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  flex: 1;
+  scroll-behavior: smooth;
+}
+.th-tabs__viewport::-webkit-scrollbar {
+  display: none; /* Safari / Chrome */
+}
+
+.th-tabs__nav {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+.th-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: var(--th-fw-medium);
+  color: var(--th-text-muted);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--th-transition-fast) var(--th-ease);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.th-tabs__tab:hover:not(.th-tabs__tab--disabled) {
+  color: var(--th-text);
+}
+
+.th-tabs__tab--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.th-tabs__close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--th-radius-xs);
+  color: var(--th-text-subtle);
+  font-size: 0.65rem;
+  margin-left: 0.25rem;
+  transition: all var(--th-transition-fast) var(--th-ease);
+}
+.th-tabs__close-btn:hover {
+  background: var(--th-surface-3);
+  color: var(--th-text);
+}
+
+/* --- Styles (Variants) --- */
+
+/* 1. Line Style (Default) */
+.th-tabs--line .th-tabs__tab {
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.th-tabs--line .th-tabs__tab--active {
+  color: var(--th-primary);
+  border-bottom-color: var(--th-primary);
+}
+
+/* 2. Pills Style */
+.th-tabs--pills .th-tabs__nav-wrapper {
+  border-bottom: none;
+  background: var(--th-surface-2);
+  padding: 0.375rem;
+  border-radius: var(--th-radius-lg);
+  border: 1px solid var(--th-border);
+}
+.th-tabs--pills .th-tabs__tab {
+  padding: 0.5rem 1rem;
+  border-radius: var(--th-radius-md);
+}
+.th-tabs--pills .th-tabs__tab--active {
+  color: var(--th-primary-fg);
+  background: var(--th-primary);
+}
+
+/* 3. Bordered Style */
+.th-tabs--bordered .th-tabs__tab {
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-top-left-radius: var(--th-radius-md);
+  border-top-right-radius: var(--th-radius-md);
+  margin-bottom: -1px;
+}
+.th-tabs--bordered .th-tabs__tab--active {
+  color: var(--th-primary);
+  background: var(--th-surface);
+  border-color: var(--th-border);
+}
+
+/* 4. Flat Style */
+.th-tabs--flat .th-tabs__tab {
+  border-radius: var(--th-radius-md);
+}
+.th-tabs--flat .th-tabs__tab:hover:not(.th-tabs__tab--disabled):not(.th-tabs__tab--active) {
+  background: var(--th-surface-2);
+}
+.th-tabs--flat .th-tabs__tab--active {
+  color: var(--th-primary);
+  background: var(--th-primary-subtle);
+}
+
+/* Arrow Navigation Buttons */
+.th-tabs__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--th-border);
+  background: var(--th-surface);
+  color: var(--th-text-muted);
+  cursor: pointer;
+  z-index: 2;
+  transition: all var(--th-transition-fast) var(--th-ease);
+}
+.th-tabs__arrow:hover {
+  background: var(--th-surface-2);
+  color: var(--th-text);
+}
+
+.th-tabs__arrow--left {
+  border-top-left-radius: var(--th-radius-md);
+  border-bottom-left-radius: var(--th-radius-md);
+  border-right: none;
+}
+.th-tabs__arrow--right {
+  border-top-right-radius: var(--th-radius-md);
+  border-bottom-right-radius: var(--th-radius-md);
+  border-left: none;
+}
+
+/* Content & Panes */
+.th-tabs__content {
+  width: 100%;
+}
+.th-tabs__pane--hidden {
+  display: none !important;
+}
+.th-tabs__pane--active {
+  display: block;
+}
+
+/* ============================================================================
+   Vertical Tabs Style — th-tabs--vertical
+   ============================================================================ */
+
+.th-tabs--vertical {
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1.5rem;
+}
+
+.th-tabs--vertical .th-tabs__nav-wrapper {
+  flex-direction: column;
+  border-bottom: none;
+  border-right: 1px solid var(--th-border);
+  margin-bottom: 0;
+  align-items: stretch;
+  flex-shrink: 0;
+  min-width: 11rem;
+}
+
+.th-tabs--vertical .th-tabs__viewport {
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.th-tabs--vertical .th-tabs__nav {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+.th-tabs--vertical .th-tabs__tab {
+  justify-content: flex-start;
+  padding: 0.625rem 1rem;
+  border: 1px solid transparent;
+}
+
+.th-tabs--vertical .th-tabs__arrow {
+  display: none !important; /* Hide navigation arrows in vertical mode */
+}
+
+.th-tabs--vertical .th-tabs__content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 1. Line Style (Vertical) */
+.th-tabs--vertical.th-tabs--line .th-tabs__tab {
+  border-bottom: none;
+  border-right: 2px solid transparent;
+  margin-bottom: 0;
+  margin-right: -1px;
+}
+.th-tabs--vertical.th-tabs--line .th-tabs__tab--active {
+  color: var(--th-primary);
+  border-right-color: var(--th-primary);
+}
+
+/* 2. Pills Style (Vertical) */
+.th-tabs--vertical.th-tabs--pills .th-tabs__nav-wrapper {
+  border-right: none;
+  background: var(--th-surface-2);
+  padding: 0.375rem;
+  border-radius: var(--th-radius-lg);
+  border: 1px solid var(--th-border);
+}
+.th-tabs--vertical.th-tabs--pills .th-tabs__tab {
+  border-radius: var(--th-radius-md);
+}
+
+/* 3. Bordered Style (Vertical) */
+.th-tabs--vertical.th-tabs--bordered .th-tabs__tab {
+  border: 1px solid transparent;
+  border-right: none;
+  border-top-left-radius: var(--th-radius-md);
+  border-bottom-left-radius: var(--th-radius-md);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
+  margin-right: -1px;
+}
+.th-tabs--vertical.th-tabs--bordered .th-tabs__tab--active {
+  color: var(--th-primary);
+  background: var(--th-surface);
+  border-color: var(--th-border);
+}
+
+/* 4. Flat Style (Vertical) */
+.th-tabs--vertical.th-tabs--flat .th-tabs__tab {
+  border-radius: var(--th-radius-md);
+}

@@ -1,0 +1,35 @@
+@namespace Turbohesap.Web.Pages.Showcase
+
+<div class="flex flex-col gap-4">
+    <p class="text-sm text-text-muted">Aşağıdaki alana veri girip Gönder butonuna basarak C# form sonucunu test edebilirsiniz.</p>
+    <div class="th-field">
+        <label class="th-label">Giriş Verisi</label>
+        <input type="text" class="th-input" @bind="_inputValue" placeholder="Bir şeyler yazın..." />
+    </div>
+    <div class="flex justify-end gap-2 mt-4">
+        <button class="th-btn th-btn--secondary" @onclick="Cancel">İptal</button>
+        <button class="th-btn th-btn--primary" @onclick="Submit">Gönder</button>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public Turbohesap.Web.Components.Feedback.ThModalRef? ModalRef { get; set; }
+    [Parameter] public string InitialValue { get; set; } = string.Empty;
+
+    private string _inputValue = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        _inputValue = InitialValue;
+    }
+
+    private void Submit()
+    {
+        ModalRef?.Close(Turbohesap.Web.Components.Feedback.ModalResult.Ok(_inputValue));
+    }
+
+    private void Cancel()
+    {
+        ModalRef?.Close(Turbohesap.Web.Components.Feedback.ModalResult.Cancel());
+    }
+}

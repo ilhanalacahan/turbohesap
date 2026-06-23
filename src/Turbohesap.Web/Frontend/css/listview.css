@@ -1,0 +1,159 @@
+/* ListView — th-listview. Yalnızca --th-* token'ları kullanır. */
+
+.th-listview {
+  display: flex;
+  flex-direction: column;
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-lg);
+  box-shadow: var(--th-card-shadow);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Arama Bölümü */
+.th-listview-search {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+}
+
+.th-listview-body {
+  width: 100%;
+}
+
+.th-listview-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Öğe Tasarımı */
+.th-listview-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--th-border);
+  cursor: pointer;
+  background: var(--th-surface);
+  transition: background-color var(--th-transition-fast) var(--th-ease);
+}
+
+.th-listview-item:last-child {
+  border-bottom: none;
+}
+
+.th-listview-item:hover {
+  background: var(--th-surface-3);
+}
+
+.th-listview-item--selected {
+  background: var(--th-primary-subtle) !important;
+  border-left: 3px solid var(--th-primary) !important;
+  padding-left: calc(1rem - 3px) !important;
+}
+
+.th-listview-item--selected .th-listview-item-title {
+  color: var(--th-primary) !important;
+}
+
+/* Standart Şablon Yerleşimi */
+.th-listview-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 0.75rem;
+}
+
+.th-listview-item-img {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--th-radius-md);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.th-listview-item-icon-wrap {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--th-radius-md);
+  background: var(--th-surface-3);
+  color: var(--th-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.th-listview-item--selected .th-listview-item-icon-wrap {
+  background: var(--th-primary);
+  color: var(--th-primary-fg);
+}
+
+.th-listview-item--selected .th-listview-item-icon-wrap i {
+  color: var(--th-primary-fg) !important;
+}
+
+.th-listview-item-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.th-listview-item-title {
+  font-family: var(--th-font-sans);
+  font-size: 0.875rem;
+  font-weight: var(--th-fw-medium);
+  color: var(--th-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.th-listview-item-subtitle {
+  font-family: var(--th-font-sans);
+  font-size: 0.75rem;
+  color: var(--th-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.th-listview-item-right-text {
+  font-family: var(--th-font-sans);
+  font-size: 0.8125rem;
+  color: var(--th-text-subtle);
+  flex-shrink: 0;
+}
+
+/* Checkbox Alanı */
+.th-listview-checkbox-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Yükleme ve Boş Durumlar */
+.th-listview-loading,
+.th-listview-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.8125rem;
+  color: var(--th-text-subtle);
+  border-bottom: 1px solid var(--th-border);
+}
+
+.th-listview-empty {
+  flex-direction: column;
+  gap: 0.25rem;
+  border-bottom: none;
+}

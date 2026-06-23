@@ -1,0 +1,50 @@
+@namespace Turbohesap.Web.Components.Data
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThHeatmapCalendar.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <div class="th-heatmap-header">
+        <span class="th-heatmap-title">@Title</span>
+        <div class="th-heatmap-legend">
+            <span class="text-[10px] text-text-muted">Az</span>
+            <span class="th-heatmap-cell th-heatmap-cell--level-0"></span>
+            <span class="th-heatmap-cell th-heatmap-cell--level-1"></span>
+            <span class="th-heatmap-cell th-heatmap-cell--level-2"></span>
+            <span class="th-heatmap-cell th-heatmap-cell--level-3"></span>
+            <span class="th-heatmap-cell th-heatmap-cell--level-4"></span>
+            <span class="text-[10px] text-text-muted">Çok</span>
+        </div>
+    </div>
+
+    <div class="th-heatmap-container">
+        <!-- Gün Başlıkları -->
+        <div class="th-heatmap-weekdays">
+            <span>Pzt</span>
+            <span>Çar</span>
+            <span>Cum</span>
+        </div>
+
+        <div class="th-heatmap-matrix-wrapper">
+            <!-- Ay Etiketleri -->
+            <div class="th-heatmap-months">
+                @foreach (var month in _monthLabels)
+                {
+                    <span class="th-heatmap-month-label">@month</span>
+                }
+            </div>
+
+            <!-- Kareler (Haftalık Kolonlar Halinde Dikey Akışlı Grid) -->
+            <div class="th-heatmap-grid" style="grid-template-rows: repeat(7, minmax(0, 1fr)); grid-auto-flow: column;">
+                @foreach (var date in _days)
+                {
+                    var currentDate = date;
+                    var activityCount = ActivityData != null && ActivityData.TryGetValue(currentDate, out var c) ? c : 0;
+                    
+                    <div class="@GetCellClass(currentDate)" 
+                         title="@($"{currentDate:dd MMMM yyyy} : {activityCount} İşlem")">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

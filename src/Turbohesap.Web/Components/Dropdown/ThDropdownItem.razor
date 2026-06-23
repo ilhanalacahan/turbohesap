@@ -1,0 +1,15 @@
+@namespace Turbohesap.Web.Components.Dropdown
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThDropdownItem.razor.cs *@
+
+<div class="@ItemClass" @onclick="HandleClickAsync" @onclick:stopPropagation="true">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <i class="th-dropdown-item__icon @Icon"></i>
+    }
+    <span class="th-dropdown-item__label">@ChildContent</span>
+    @if (!string.IsNullOrEmpty(Shortcut))
+    {
+        <span class="th-dropdown-item__shortcut">@Shortcut</span>
+    }
+</div>

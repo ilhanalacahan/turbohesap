@@ -1,0 +1,133 @@
+/* ThTagsInput — th-tags-input. Yalnızca --th-* token'ları kullanır. */
+.th-tags-input {
+  width: 100%;
+  min-height: var(--th-control-height);
+  padding: 0.25rem 0.5rem;
+  background: var(--th-surface);
+  color: var(--th-text);
+  border: 1px solid var(--th-border-strong);
+  border-radius: var(--th-radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: border-color var(--th-transition-fast) var(--th-ease),
+    box-shadow var(--th-transition-fast) var(--th-ease);
+  cursor: text;
+}
+
+.th-tags-input__container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+/* Etiketler */
+.th-tags-input__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--th-surface-2);
+  color: var(--th-text);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-sm);
+  padding: 0.125rem 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+
+.th-tags-input__tag-text {
+  user-select: none;
+}
+
+.th-tags-input__tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--th-text-subtle);
+  border-radius: var(--th-radius-full);
+  cursor: pointer;
+  transition: background-color var(--th-transition-fast) var(--th-ease),
+    color var(--th-transition-fast) var(--th-ease);
+}
+
+.th-tags-input__tag-remove:hover {
+  background: var(--th-surface-hover);
+  color: var(--th-danger);
+}
+
+/* Input Alanı */
+.th-tags-input__input {
+  flex: 1 1 80px;
+  min-width: 80px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--th-text);
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.125rem 0;
+}
+
+.th-tags-input__input::placeholder {
+  color: var(--th-text-subtle);
+}
+
+/* Durumlar */
+.th-tags-input--focused {
+  border-color: var(--th-primary);
+  box-shadow: 0 0 0 3px var(--th-ring);
+  outline: none;
+}
+
+.th-tags-input--error {
+  border-color: var(--th-danger);
+}
+
+.th-tags-input--error.th-tags-input--focused {
+  box-shadow: 0 0 0 3px var(--th-danger-subtle);
+}
+
+.th-tags-input--disabled {
+  background: var(--th-surface-3);
+  color: var(--th-text-subtle);
+  cursor: not-allowed;
+}
+
+.th-tags-input--disabled .th-tags-input__tag {
+  background: var(--th-surface-3);
+  border-color: var(--th-border);
+  color: var(--th-text-subtle);
+}
+
+.th-tags-input--disabled .th-tags-input__input {
+  cursor: not-allowed;
+}
+
+/* Boyut Varyasyonları */
+.th-tags-input--sm {
+  min-height: var(--th-control-height-sm);
+  font-size: 0.8125rem;
+  padding: 0.125rem 0.375rem;
+}
+
+.th-tags-input--sm .th-tags-input__tag {
+  padding: 0.0625rem 0.25rem;
+  font-size: 0.6875rem;
+}
+
+.th-tags-input--lg {
+  min-height: var(--th-control-height-lg);
+  font-size: 0.9375rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.th-tags-input--lg .th-tags-input__tag {
+  padding: 0.1875rem 0.5rem;
+  font-size: 0.8125rem;
+}

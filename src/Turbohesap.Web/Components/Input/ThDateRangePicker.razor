@@ -1,0 +1,141 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThDateRangePicker.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="th-input-label">@Label</label>
+    }
+
+    <div class="th-daterange-relative-container">
+        <!-- Input Bölümü -->
+        <div class="th-input-wrapper-outer @(Disabled ? "th-input-wrapper-outer--disabled" : "")" @onclick="ToggleDropdown">
+            <div class="th-input-inner-wrapper">
+                <i class="fa-solid fa-calendar-days th-input-icon-leading text-text-muted"></i>
+                <input type="text"
+                       class="th-input-field cursor-pointer"
+                       placeholder="@Placeholder"
+                       readonly
+                       disabled="@Disabled"
+                       value="@InputValue" />
+                @if (StartDate.HasValue || EndDate.HasValue)
+                {
+                    <button type="button" class="th-daterange-clear-btn" @onclick="ClearRange" @onclick:stopPropagation>
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- Açılır Tarih Seçim Paneli (Dropdown) -->
+        @if (_isOpen)
+        {
+            <div class="th-daterange-dropdown">
+                <div class="th-daterange-dropdown-layout">
+                    
+                    <!-- Sol Panel: Hızlı Seçimler (Presets) -->
+                    <div class="th-daterange-presets">
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("today")'>Bugün</button>
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("yesterday")'>Dün</button>
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("last-7-days")'>Son 7 Gün</button>
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("last-30-days")'>Son 30 Gün</button>
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("this-week")'>Bu Hafta</button>
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("last-week")'>Geçen Hafta</button>
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("this-month")'>Bu Ay</button>
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("last-month")'>Geçen Ay</button>
+                        <button type="button" class="th-daterange-preset-btn" @onclick='() => SelectPreset("this-year")'>Bu Yıl</button>
+                    </div>
+
+                    <!-- Sağ Panel: Çift Takvim Yapısı -->
+                    <div class="th-daterange-calendars-wrap">
+                        
+                        <!-- Takvim Yönlendirme (Header) -->
+                        <div class="th-daterange-calendar-nav">
+                            <button type="button" class="th-daterange-nav-btn" @onclick="PrevMonth">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <span class="th-daterange-nav-title">
+                                @_leftCalendarMonth.ToString("MMMM yyyy", TrCulture)
+                            </span>
+                            <span class="th-daterange-nav-title">
+                                @_rightCalendarMonth.ToString("MMMM yyyy", TrCulture)
+                            </span>
+                            <button type="button" class="th-daterange-nav-btn" @onclick="NextMonth">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Çift Takvim Izgarası -->
+                        <div class="th-daterange-calendars-grid">
+                            
+                            <!-- Sol Takvim -->
+                            <div class="th-daterange-calendar">
+                                <div class="th-daterange-weekdays">
+                                    <span>Pt</span><span>Sa</span><span>Ça</span><span>Pe</span><span>Cu</span><span>Ct</span><span>Pz</span>
+                                </div>
+                                <div class="th-daterange-days">
+                                    @foreach (var day in GetDaysInMonth(_leftCalendarMonth))
+                                    {
+                                        var isOutside = day.Month != _leftCalendarMonth.Month;
+                                        <button type="button"
+                                                class="th-daterange-day-btn @(isOutside ? "th-daterange-day-btn--outside" : "") @(IsRangeStart(day) ? "th-daterange-day-btn--start" : "") @(IsRangeEnd(day) ? "th-daterange-day-btn--end" : "") @(IsInRange(day) ? "th-daterange-day-btn--range" : "") @(IsSelected(day) ? "th-daterange-day-btn--selected" : "")"
+                                                @onclick="() => HandleDayClick(day)"
+                                                @onmouseover="() => HandleDayHover(day)">
+                                            @day.Day
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Sağ Takvim -->
+                            <div class="th-daterange-calendar">
+                                <div class="th-daterange-weekdays">
+                                    <span>Pt</span><span>Sa</span><span>Ça</span><span>Pe</span><span>Cu</span><span>Ct</span><span>Pz</span>
+                                </div>
+                                <div class="th-daterange-days">
+                                    @foreach (var day in GetDaysInMonth(_rightCalendarMonth))
+                                    {
+                                        var isOutside = day.Month != _rightCalendarMonth.Month;
+                                        <button type="button"
+                                                class="th-daterange-day-btn @(isOutside ? "th-daterange-day-btn--outside" : "") @(IsRangeStart(day) ? "th-daterange-day-btn--start" : "") @(IsRangeEnd(day) ? "th-daterange-day-btn--end" : "") @(IsInRange(day) ? "th-daterange-day-btn--range" : "") @(IsSelected(day) ? "th-daterange-day-btn--selected" : "")"
+                                                @onclick="() => HandleDayClick(day)"
+                                                @onmouseover="() => HandleDayHover(day)">
+                                            @day.Day
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Alt İşlem Butonları (Footer) -->
+                <div class="th-daterange-footer">
+                    <div class="th-daterange-selection-preview text-xs text-text-subtle font-medium">
+                        @if (_tempStartDate.HasValue && _tempEndDate.HasValue)
+                        {
+                            <span>Seçilen: <strong>@_tempStartDate.Value.ToString("dd.MM.yyyy", TrCulture)</strong> - <strong>@_tempEndDate.Value.ToString("dd.MM.yyyy", TrCulture)</strong></span>
+                        }
+                        else if (_tempStartDate.HasValue)
+                        {
+                            <span>Başlangıç: <strong>@_tempStartDate.Value.ToString("dd.MM.yyyy", TrCulture)</strong> (Bitiş seçin...)</span>
+                        }
+                        else
+                        {
+                            <span>Tarih aralığı seçiniz</span>
+                        }
+                    </div>
+                    <div class="flex gap-2">
+                        <ThButton Variant="ButtonVariant.Ghost" Size="ComponentSize.Sm" OnClick="CloseDropdown">İptal</ThButton>
+                        <ThButton Variant="ButtonVariant.Primary" Size="ComponentSize.Sm" OnClick="ApplyRange" Disabled="@(!_tempStartDate.HasValue || !_tempEndDate.HasValue)">Uygula</ThButton>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>

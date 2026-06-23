@@ -1,0 +1,23 @@
+@namespace Turbohesap.Web.Components.Input
+@typeparam TValue
+@* Kod tarafı: ThRadio.razor.cs *@
+
+<label class="@RootClass" style="@Style">
+    <input type="radio"
+           class="th-radio-input"
+           name="@RadioGroupName"
+           checked="@IsChecked"
+           disabled="@IsDisabled"
+           @onchange="HandleChange" />
+    <span class="th-radio-control"></span>
+    <span class="th-radio-label">
+        @if (ChildContent is not null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Label
+        }
+    </span>
+</label>

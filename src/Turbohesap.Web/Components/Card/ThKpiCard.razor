@@ -1,0 +1,55 @@
+@namespace Turbohesap.Web.Components.Card
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThKpiCard.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <div class="th-kpi-card-main">
+        <div class="th-kpi-card-header">
+            <span class="th-kpi-card-title">@Title</span>
+            @if (!string.IsNullOrEmpty(Icon))
+            {
+                <span class="th-kpi-card-icon">
+                    <i class="@Icon"></i>
+                </span>
+            }
+        </div>
+        
+        <div class="th-kpi-card-body">
+            <div class="th-kpi-card-value">@Value</div>
+            
+            @if (TrendValue.HasValue)
+            {
+                var isUp = TrendValue.Value >= 0;
+                <div class="th-kpi-card-trend">
+                    <span class="th-kpi-card-trend-badge @(isUp ? "th-kpi-card-trend-badge--up" : "th-kpi-card-trend-badge--down")">
+                        <i class="fa-solid @(isUp ? "fa-arrow-up" : "fa-arrow-down")"></i>
+                        <span>@(Math.Abs(TrendValue.Value).ToString("P1", System.Globalization.CultureInfo.InvariantCulture))</span>
+                    </span>
+                    @if (!string.IsNullOrEmpty(TrendLabel))
+                    {
+                        <span class="th-kpi-card-trend-label">@TrendLabel</span>
+                    }
+                </div>
+            }
+            
+            @if (!string.IsNullOrEmpty(Subtitle))
+            {
+                <div class="th-kpi-card-subtitle">@Subtitle</div>
+            }
+        </div>
+    </div>
+
+    @if (SparklineData != null && SparklineData.Count >= 2)
+    {
+        <div class="th-kpi-card-sparkline-container">
+            <svg class="th-kpi-card-sparkline" viewBox="0 0 120 36">
+                <polyline fill="none"
+                          stroke="var(--th-sparkline-color, var(--th-primary))"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          points="@SvgPath" />
+            </svg>
+        </div>
+    }
+</div>

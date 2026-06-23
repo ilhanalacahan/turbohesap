@@ -1,0 +1,50 @@
+@namespace Turbohesap.Web.Pages.Showcase.Drawer
+
+<ThCard Title="Yan Panel (Drawer) Testleri" Subtitle="Dört yönden açılabilen, genişletilebilir ve form davranışlı yan paneller" Icon="fa-solid fa-indent">
+    <div class="flex flex-col gap-4">
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Satır İçi Drawer Testleri</h4>
+            <div class="flex flex-wrap gap-2">
+                <ThButton Variant="ButtonVariant.Primary" OnClick="@(() => OpenInlineDrawer(DrawerPosition.Right, DrawerSize.Md, true, ModalVariant.Primary))">Sağdan Aç (Genişleyebilir)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" OnClick="@(() => OpenInlineDrawer(DrawerPosition.Left, DrawerSize.Sm, false, ModalVariant.Success))">Soldan Aç (Sm)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" OnClick="@(() => OpenInlineDrawer(DrawerPosition.Top, DrawerSize.Sm, false, ModalVariant.Warning))">Üstten Aç (Sm)</ThButton>
+                <ThButton Variant="ButtonVariant.Outline" OnClick="@(() => OpenInlineDrawer(DrawerPosition.Bottom, DrawerSize.Md, true, ModalVariant.Danger))">Alttan Aç (Genişleyebilir)</ThButton>
+            </div>
+        </div>
+
+        <hr class="border-border my-2" />
+
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Servis Tabanlı Form Paneli</h4>
+            <div class="flex flex-wrap gap-2">
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-paper-plane" OnClick="@(() => OpenServiceDrawer(DrawerPosition.Right))">Sağdan Form Paneli Aç</ThButton>
+                <ThButton Variant="ButtonVariant.Secondary" Icon="fa-solid fa-paper-plane" OnClick="@(() => OpenServiceDrawer(DrawerPosition.Left))">Soldan Form Paneli Aç</ThButton>
+            </div>
+        </div>
+    </div>
+</ThCard>
+
+<!-- Inline Drawer Tanımlaması -->
+<ThDrawer @bind-Visible="_inlineDrawerOpen" 
+          Title="Satır İçi Yan Panel" 
+          Subtitle="Bu yan panel parametrik olarak yapılandırılmıştır" 
+          Position="_inlineDrawerPosition" 
+          Size="_inlineDrawerSize" 
+          Expandable="_inlineDrawerExpandable" 
+          Variant="_inlineDrawerVariant">
+    <ChildContent>
+        <div class="p-2">
+            <p class="mb-4">Bu yan panel dinamik olarak <strong>@_inlineDrawerPosition</strong> yönünde açılmıştır.</p>
+            <p class="mb-4">Boyutu <strong>@_inlineDrawerSize</strong> olarak ayarlanmıştır.</p>
+            @if (_inlineDrawerExpandable)
+            {
+                <p class="mb-4">Ayrıca <strong>Expandable</strong> özelliğine sahip olduğu için başlıktan genişletilebilir.</p>
+            }
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sit amet finibus sapien. Suspendisse pulvinar erat a leo scelerisque tincidunt.</p>
+        </div>
+    </ChildContent>
+    <Footer>
+        <ThButton Variant="ButtonVariant.Ghost" OnClick="@(() => _inlineDrawerOpen = false)">Vazgeç</ThButton>
+        <ThButton Variant="ButtonVariant.Primary" OnClick="@(() => _inlineDrawerOpen = false)">Tamam</ThButton>
+    </Footer>
+</ThDrawer>

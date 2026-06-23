@@ -3,10 +3,22 @@
 // güncellenir (req 16, 29). Tercihler localStorage'da saklanır.
 
 export type ThemeMode = 'light' | 'dark' | 'system';
+export type Density = 'compact' | 'normal' | 'comfortable';
+export type ShadowLevel = 'none' | 'soft' | 'medium' | 'strong';
 
 const MODE_KEY = 'th-theme-mode';
 const TOKENS_KEY = 'th-theme-tokens';
+const DENSITY_KEY = 'th-theme-density';
+const SHADOW_KEY = 'th-theme-shadow';
 const media = () => window.matchMedia('(prefers-color-scheme: dark)');
+
+// Gölge düzeyi → kart/tablo yükselti tokenı (--th-card-shadow). Temaya duyarlı gölgelere işaret eder.
+const SHADOW_MAP: Record<ShadowLevel, string> = {
+  none: 'none',
+  soft: 'var(--th-shadow-xs)',
+  medium: 'var(--th-shadow-sm)',
+  strong: 'var(--th-shadow-md)',
+};
 
 export function getMode(): ThemeMode {
   const stored = localStorage.getItem(MODE_KEY);
@@ -31,23 +43,100 @@ export function toggle(): 'light' | 'dark' {
   return next;
 }
 
+function applyDerivedRadius(value: string): void {
+  const root = document.documentElement;
+  const pxVal = parseFloat(value);
+  if (!isNaN(pxVal)) {
+    root.style.setProperty('--th-radius-xs', `${pxVal * 0.5}px`);
+    root.style.setProperty('--th-radius-sm', `${pxVal * 0.75}px`);
+    root.style.setProperty('--th-radius-md', `${pxVal * 1.0}px`);
+    root.style.setProperty('--th-radius-lg', `${pxVal * 1.5}px`);
+    root.style.setProperty('--th-radius-xl', `${pxVal * 2.0}px`);
+    root.style.setProperty('--th-radius-2xl', `${pxVal * 3.0}px`);
+  }
+}
+
+function removeDerivedRadius(): void {
+  const root = document.documentElement;
+  const radiusTokens = [
+    '--th-radius-base',
+    '--th-radius-xs',
+    '--th-radius-sm',
+    '--th-radius-md',
+    '--th-radius-lg',
+    '--th-radius-xl',
+    '--th-radius-2xl'
+  ];
+  for (const token of radiusTokens) {
+    root.style.removeProperty(token);
+  }
+}
+
 /** Özelleştirilmiş token değerlerini (örn. {'--th-primary':'#...'}) uygular ve saklar. */
 export function applyTokens(tokens: Record<string, string>): void {
   const root = document.documentElement;
   for (const [key, value] of Object.entries(tokens)) {
     const name = key.startsWith('--') ? key : `--th-${key}`;
     root.style.setProperty(name, value);
+    if (name === '--th-radius-base') {
+      applyDerivedRadius(value);
+    }
   }
   localStorage.setItem(TOKENS_KEY, JSON.stringify(readStoredTokens(tokens)));
 }
 
-/** Özelleştirmeleri temizler, tema varsayılanlarına döner. */
+/** Yazı tipi ailesini değiştirir (--th-font-sans override). Değer tam CSS font-family zinciridir. */
+export function setFont(family: string): void {
+  applyTokens({ '--th-font-sans': family });
+}
+
+/** Yerleşim yoğunluğunu (compact/normal/comfortable) ayarlar; data-density özniteliğini yazar. */
+export function setDensity(density: Density): void {
+  localStorage.setItem(DENSITY_KEY, density);
+  if (density === 'normal') {
+    document.documentElement.removeAttribute('data-density');
+  } else {
+    document.documentElement.setAttribute('data-density', density);
+  }
+}
+
+export function getDensity(): Density {
+  const stored = localStorage.getItem(DENSITY_KEY);
+  return stored === 'compact' || stored === 'comfortable' ? stored : 'normal';
+}
+
+/** Kart/tablo gölge düzeyini ayarlar (--th-card-shadow override). */
+export function setShadow(level: ShadowLevel): void {
+  localStorage.setItem(SHADOW_KEY, level);
+  if (level === 'medium') {
+    document.documentElement.style.removeProperty('--th-card-shadow');
+  } else {
+    document.documentElement.style.setProperty('--th-card-shadow', SHADOW_MAP[level]);
+  }
+}
+
+export function getShadow(): ShadowLevel {
+  const stored = localStorage.getItem(SHADOW_KEY);
+  return stored === 'none' || stored === 'soft' || stored === 'strong' ? stored : 'medium';
+}
+
+/** Saklı token override'larını döner (tema tasarımcısı açık durumu eşitlemek için kullanır). */
+export function getTokens(): Record<string, string> {
+  return readStoredTokens();
+}
+
+/** Özelleştirmeleri temizler, tema + yoğunluk varsayılanlarına döner. */
 export function resetTokens(): void {
   const stored = readStoredTokens();
   for (const key of Object.keys(stored)) {
     document.documentElement.style.removeProperty(key);
   }
+  removeDerivedRadius();
   localStorage.removeItem(TOKENS_KEY);
+  localStorage.removeItem(DENSITY_KEY);
+  localStorage.removeItem(SHADOW_KEY);
+  document.documentElement.removeAttribute('data-density');
+  document.documentElement.style.removeProperty('--th-card-shadow');
 }
 
 function readStoredTokens(merge: Record<string, string> = {}): Record<string, string> {
@@ -66,10 +155,15 @@ function readStoredTokens(merge: Record<string, string> = {}): Record<string, st
 /** Sayfa yüklenirken saklı mod + token override'ları uygular ve sistem değişimini dinler. */
 export function initTheme(): void {
   setMode(getMode());
+  setDensity(getDensity());
+  setShadow(getShadow());
 
   const stored = readStoredTokens();
   for (const [key, value] of Object.entries(stored)) {
     document.documentElement.style.setProperty(key, value);
+    if (key === '--th-radius-base') {
+      applyDerivedRadius(value);
+    }
   }
 
   media().addEventListener('change', () => {

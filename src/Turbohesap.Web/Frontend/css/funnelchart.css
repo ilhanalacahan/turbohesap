@@ -1,0 +1,138 @@
+/* FunnelChart — th-funnel-chart. Yalnızca --th-* token'ları kullanır. */
+.th-funnel-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: var(--th-content-padding);
+  background: var(--th-surface);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-lg);
+  box-shadow: var(--th-card-shadow);
+  width: 100%;
+}
+
+.th-funnel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.th-funnel-title {
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.th-funnel-container {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .th-funnel-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.th-funnel-svg-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+}
+
+.th-funnel-svg {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.04));
+  overflow: visible;
+}
+
+.th-funnel-polygon {
+  cursor: pointer;
+  transition: all var(--th-transition-fast) var(--th-ease);
+  stroke: var(--th-surface);
+  stroke-width: 1px;
+}
+
+.th-funnel-polygon:hover {
+  filter: brightness(1.05) saturate(1.1);
+  transform: scale(1.02);
+  transform-origin: center;
+}
+
+/* Huni Aşaması Renkleri (HSL bazlı marka uyumu) */
+.th-funnel-polygon--color-0 {
+  fill: var(--th-primary);
+}
+
+.th-funnel-polygon--color-1 {
+  fill: color-mix(in srgb, var(--th-primary) 75%, var(--th-success));
+}
+
+.th-funnel-polygon--color-2 {
+  fill: color-mix(in srgb, var(--th-primary) 50%, var(--th-success));
+}
+
+.th-funnel-polygon--color-3 {
+  fill: var(--th-success);
+}
+
+/* Etiket Açıklamaları */
+.th-funnel-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Aşamaların gap ve yüksekliğiyle eşleşecek şekilde dikey ritim */
+}
+
+.th-funnel-label-item {
+  height: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 3px solid var(--th-border-strong);
+  padding-left: 0.75rem;
+  transition: all var(--th-transition-fast) var(--th-ease);
+}
+
+.th-funnel-label-item:hover {
+  border-left-color: var(--th-primary);
+  background: var(--th-surface-2);
+  border-radius: 0 var(--th-radius-md) var(--th-radius-md) 0;
+}
+
+.th-funnel-label-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.th-funnel-label-text {
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text);
+}
+
+.th-funnel-label-value {
+  font-size: 0.875rem;
+  font-weight: var(--th-fw-bold);
+  color: var(--th-text);
+}
+
+.th-funnel-label-sub {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  color: var(--th-text-subtle);
+}
+
+.th-funnel-label-desc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

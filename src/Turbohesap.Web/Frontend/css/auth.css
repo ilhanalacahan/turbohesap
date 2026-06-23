@@ -1,0 +1,147 @@
+/* Kimlik doğrulama yerleşimi — th-auth + th-login. Login kurumsal split (sol tanıtım,
+   sağ form); diğer auth sayfaları (ör. not-found) ortalanır. Yalnızca --th-* tokenları. */
+
+.th-auth-root { min-height: 100dvh; display: flex; }
+
+/* Ortalanmış sade auth (not-found, hata vb.) */
+.th-auth-center {
+  flex: 1;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background:
+    radial-gradient(1200px 600px at 100% 0%, var(--th-primary-subtle), transparent 60%),
+    var(--th-bg);
+}
+
+/* ---- Login split ---- */
+.th-login {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100dvh;
+}
+@media (min-width: 900px) {
+  .th-login { grid-template-columns: 1.12fr 0.88fr; }
+}
+
+/* Sol tanıtım paneli (mobilde gizli) */
+.th-login__brand {
+  display: none;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(900px 500px at 0% 100%, rgba(255, 255, 255, 0.12), transparent 55%),
+    linear-gradient(135deg, var(--th-primary-active), var(--th-primary));
+}
+@media (min-width: 900px) { .th-login__brand { display: flex; } }
+
+.th-login__brand::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.th-login__brand-top { position: relative; display: flex; align-items: center; gap: 0.75rem; z-index: 1; }
+.th-login__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--th-radius-lg);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  font-size: 1.25rem;
+}
+.th-login__brand-name { font-size: 1.25rem; font-weight: var(--th-fw-bold); letter-spacing: -0.01em; color: #fff; }
+
+.th-login__brand-body { position: relative; z-index: 1; max-width: 30rem; }
+.th-login__headline {
+  font-size: clamp(1.75rem, 2.4vw, 2.5rem);
+  font-weight: var(--th-fw-bold);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+.th-login__subhead { font-size: 1rem; line-height: 1.6; color: rgba(255, 255, 255, 0.82); }
+
+/* Tanıtım slaytları */
+.th-login__slides { position: relative; z-index: 1; min-height: 5.5rem; }
+.th-login__slide {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  animation: th-fade-in var(--th-transition-slow) var(--th-ease);
+}
+.th-login__slide-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  border-radius: var(--th-radius-md);
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 1rem;
+}
+.th-login__slide-title { font-weight: var(--th-fw-semibold); margin-bottom: 0.15rem; color: #fff; }
+.th-login__slide-text { font-size: 0.875rem; color: rgba(255, 255, 255, 0.78); line-height: 1.5; }
+
+.th-login__dots { display: flex; gap: 0.4rem; margin-top: 1.25rem; }
+.th-login__dot {
+  width: 1.5rem;
+  height: 0.25rem;
+  border-radius: var(--th-radius-full);
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--th-transition) var(--th-ease);
+}
+.th-login__dot--active { background: #fff; }
+
+/* Sağ form tarafı */
+.th-login__form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  background: var(--th-bg);
+}
+.th-login__form { width: 100%; max-width: 23rem; }
+.th-login__form-head { margin-bottom: 1.75rem; }
+.th-login__form-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  border-radius: var(--th-radius-lg);
+  background: var(--th-primary);
+  color: var(--th-primary-fg);
+  font-size: 1.25rem;
+}
+@media (min-width: 900px) { .th-login__form-logo { display: none; } }
+.th-login__title { font-size: 1.5rem; font-weight: var(--th-fw-bold); letter-spacing: -0.01em; color: var(--th-text); }
+.th-login__hint { margin-top: 0.35rem; font-size: 0.875rem; color: var(--th-text-muted); }
+.th-login__demo {
+  margin-top: 1.25rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px dashed var(--th-border-strong);
+  border-radius: var(--th-radius-md);
+  font-size: 0.75rem;
+  color: var(--th-text-subtle);
+  text-align: center;
+}

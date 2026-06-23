@@ -52,6 +52,7 @@ public sealed class AppNavigation
             [
                 new NavItem { Label = "Denetim Kayıtları", Icon = "fa-solid fa-clipboard-list", Href = "/audit-logs", Roles = [Roles.Administrator] },
                 new NavItem { Label = "Hata Kayıtları", Icon = "fa-solid fa-bug", Href = "/error-logs", Roles = [Roles.Administrator] },
+                new NavItem { Label = "Bileşen Vitrini", Icon = "fa-solid fa-flask", Href = "/showcase" },
                 new NavItem { Label = "Ayarlar", Icon = "fa-solid fa-gear", Href = "/settings" }
             ]
         }
@@ -59,11 +60,11 @@ public sealed class AppNavigation
 
     public IReadOnlyList<AppItem> Apps { get; } =
     [
-        new AppItem { Name = "Turbohesap", Icon = "fa-solid fa-calculator", Href = "/dashboard", Description = "Ön muhasebe" },
-        new AppItem { Name = "CRM", Icon = "fa-solid fa-handshake", Href = "#" },
-        new AppItem { Name = "Stok", Icon = "fa-solid fa-boxes-stacked", Href = "#" },
-        new AppItem { Name = "İK", Icon = "fa-solid fa-id-badge", Href = "#" },
-        new AppItem { Name = "Belgeler", Icon = "fa-solid fa-folder-open", Href = "#" },
-        new AppItem { Name = "Takvim", Icon = "fa-solid fa-calendar-days", Href = "#" }
+        new AppItem { Name = "Turbohesap", Icon = "fa-solid fa-calculator", Href = "/dashboard", Description = "Ön muhasebe ve cari", Accent = "#2563eb" },
+        new AppItem { Name = "CRM", Icon = "fa-solid fa-handshake", Href = "#", Description = "Müşteri ilişkileri", Accent = "#7c3aed" },
+        new AppItem { Name = "Stok", Icon = "fa-solid fa-boxes-stacked", Href = "#", Description = "Depo ve envanter", Accent = "#0891b2" },
+        new AppItem { Name = "İK", Icon = "fa-solid fa-id-badge", Href = "#", Description = "İnsan kaynakları", Accent = "#16a34a" },
+        new AppItem { Name = "Belgeler", Icon = "fa-solid fa-folder-open", Href = "#", Description = "Doküman yönetimi", Accent = "#d97706" },
+        new AppItem { Name = "Takvim", Icon = "fa-solid fa-calendar-days", Href = "#", Description = "Planlama ve ajanda", Accent = "#e11d48" }
     ];
 }

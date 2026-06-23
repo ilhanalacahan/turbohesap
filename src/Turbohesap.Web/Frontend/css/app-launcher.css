@@ -1,59 +1,95 @@
-/* Uygulama başlatıcı — th-applauncher. App ikonuna tıklayınca açılan uygulama ızgarası
-   (Microsoft 365 / Ubuntu Unity tarzı, req 29). */
+/* Uygulama başlatıcı — th-applauncher. Ortalanmış, ferah modal ızgara. Yalnızca --th-* token. */
 
 .th-applauncher-overlay {
   position: fixed;
   inset: 0;
   z-index: var(--th-z-command);
   background: var(--th-overlay);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
-  padding: 0.75rem;
+  justify-content: center;
+  padding: 1rem;
   animation: th-fade-in var(--th-transition) var(--th-ease);
 }
+@media (min-width: 640px) { .th-applauncher-overlay { padding-top: 10vh; } }
 
 .th-applauncher {
   width: 100%;
-  max-width: 24rem;
+  max-width: 40rem;
   background: var(--th-surface);
   border: 1px solid var(--th-border);
   border-radius: var(--th-radius-xl);
   box-shadow: var(--th-shadow-xl);
   overflow: hidden;
-  animation: th-slide-up var(--th-transition) var(--th-ease);
+  animation: th-fade-in var(--th-transition) var(--th-ease);
 }
+
+.th-applauncher__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+}
+.th-applauncher__title { font-size: 1.0625rem; font-weight: var(--th-fw-semibold); color: var(--th-text); }
+.th-applauncher__subtitle { margin-top: 0.15rem; font-size: 0.8125rem; color: var(--th-text-muted); }
 
 .th-applauncher__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  padding: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding: 1.25rem;
 }
+@media (min-width: 560px) { .th-applauncher__grid { grid-template-columns: repeat(3, 1fr); } }
 
 .th-app-tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 0.5rem;
+  gap: 0.6rem;
+  padding: 1.25rem 0.75rem;
+  border: 1px solid transparent;
   border-radius: var(--th-radius-lg);
+  background: var(--th-surface-2);
   color: var(--th-text);
   text-align: center;
   cursor: pointer;
-  transition: background-color var(--th-transition-fast) var(--th-ease);
+  transition: transform var(--th-transition-fast) var(--th-ease),
+    border-color var(--th-transition-fast) var(--th-ease),
+    box-shadow var(--th-transition-fast) var(--th-ease);
 }
-.th-app-tile:hover { background: var(--th-surface-3); }
+.th-app-tile:hover {
+  transform: translateY(-2px);
+  border-color: var(--th-border-strong);
+  box-shadow: var(--th-shadow-md);
+}
+
 .th-app-tile__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 3.25rem;
+  height: 3.25rem;
   border-radius: var(--th-radius-lg);
-  background: var(--th-primary-subtle);
-  color: var(--th-primary);
-  font-size: 1.15rem;
+  /* Vurgu renginin yumuşak zemini + dolu ikon (color-mix ile saydam ton). */
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+  font-size: 1.4rem;
 }
-.th-app-tile__label { font-size: 0.75rem; line-height: 1.2; }
+.th-app-tile__name { font-size: 0.875rem; font-weight: var(--th-fw-semibold); line-height: 1.2; }
+.th-app-tile__desc { font-size: 0.75rem; color: var(--th-text-muted); line-height: 1.3; }
+.th-app-tile__soon {
+  position: absolute;
+  top: 0.5rem;
+  inset-inline-end: 0.5rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--th-radius-full);
+  background: var(--th-surface-3);
+  color: var(--th-text-subtle);
+  font-size: 0.625rem;
+  font-weight: var(--th-fw-medium);
+}

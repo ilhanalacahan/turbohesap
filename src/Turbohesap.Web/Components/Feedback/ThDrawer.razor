@@ -1,0 +1,40 @@
+@namespace Turbohesap.Web.Components.Feedback
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThDrawer.razor.cs *@
+
+@if (Visible)
+{
+    <div class="@OverlayClass" @onclick="OnOverlayClick">
+        <div @ref="_drawerRef" class="@RootClass" role="dialog" aria-modal="true" @onclick:stopPropagation="true" style="@Style" @attributes="AdditionalAttributes">
+            @if (Expandable)
+            {
+                <div @ref="_resizeHandleRef" class="@ResizeHandleClass"></div>
+            }
+            <div class="th-panel-header">
+                <div class="th-modal__header-title-area">
+                    <div class="th-panel-title">@Title</div>
+                    @if (!string.IsNullOrEmpty(Subtitle))
+                    {
+                        <div class="th-panel-subtitle">@Subtitle</div>
+                    }
+                </div>
+                <div class="th-modal__header-actions">
+                    <span class="th-modal__close" @onclick="CloseAsync" title="Kapat">
+                        <i class="fa-solid fa-xmark"></i>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="th-drawer__body">
+                @ChildContent
+            </div>
+            
+            @if (Footer is not null)
+            {
+                <div class="th-drawer__footer">
+                    @Footer
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,24 @@
+@namespace Turbohesap.Web.Components.Data
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThAmountDisplay.razor.cs *@
+
+<span class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (SymbolPosition == SymbolPosition.Prepend)
+    {
+        <span class="th-amount-display-symbol th-amount-display-symbol--prepend">@CurrencySymbol</span>
+    }
+    
+    <span class="th-amount-display-number">
+        <span class="th-amount-display-sign">@SignPrefix</span>
+        <span class="th-amount-display-integer">@IntegerPart</span>
+        <span class="th-amount-display-decimals-wrapper">
+            <span class="th-amount-display-separator">@DecimalSeparator</span>
+            <span class="th-amount-display-decimals">@DecimalPart</span>
+        </span>
+    </span>
+
+    @if (SymbolPosition == SymbolPosition.Append)
+    {
+        <span class="th-amount-display-symbol th-amount-display-symbol--append">@CurrencySymbol</span>
+    }
+</span>

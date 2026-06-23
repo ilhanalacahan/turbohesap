@@ -1,0 +1,35 @@
+/* Ekmek Kırıntısı — th-breadcrumb. Yalnızca --th-* token'ları kullanır. */
+.th-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-family: var(--th-font-sans);
+  color: var(--th-text-muted);
+}
+
+.th-breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.th-breadcrumb__link {
+  color: var(--th-text-muted);
+  transition: color var(--th-transition-fast) var(--th-ease);
+}
+.th-breadcrumb__link:hover {
+  color: var(--th-primary);
+}
+
+.th-breadcrumb__item--active {
+  color: var(--th-text);
+  font-weight: var(--th-fw-medium);
+  pointer-events: none;
+}
+
+.th-breadcrumb__separator {
+  color: var(--th-text-subtle);
+  font-size: 0.75rem;
+}

@@ -1,0 +1,159 @@
+/* Modal — th-modal. DESIGN.md ve token sistemine göre %100 uyumlu. */
+
+.th-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--th-overlay);
+  backdrop-filter: blur(2px);
+  z-index: var(--th-z-modal);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  animation: th-modal-fade-in var(--th-transition) var(--th-ease);
+}
+
+/* Mobile-first: tam genişlik ve alta yapışık; sm üstünde ortalanır. */
+.th-modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 92dvh;
+  background: var(--th-surface);
+  border-top-left-radius: var(--th-radius-xl);
+  border-top-right-radius: var(--th-radius-xl);
+  box-shadow: var(--th-shadow-xl);
+  overflow: hidden;
+  animation: th-modal-fade-in var(--th-transition) var(--th-ease);
+}
+
+@media (min-width: 640px) {
+  .th-modal-overlay { align-items: center; padding: 1.5rem; }
+  .th-modal { border: 1px solid var(--th-border); border-radius: var(--th-radius-xl); max-height: 85dvh; }
+  .th-modal--sm { width: 24rem; }
+  .th-modal--md { width: 32rem; }
+  .th-modal--lg { width: 46rem; }
+  .th-modal--xl { width: 64rem; }
+}
+
+/* Tam ekran modu */
+.th-modal--fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  animation: none !important;
+}
+
+.th-modal-overlay:has(.th-modal--fullscreen) {
+  padding: 0 !important;
+  align-items: stretch !important;
+}
+
+/* Draggable modal başlığı için imleç */
+.th-modal--draggable .th-panel-header {
+  user-select: none;
+}
+
+.th-modal__body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.th-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid var(--th-border);
+  background: var(--th-surface-2);
+}
+
+/* Header Eylemleri */
+.th-modal__header-title-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.th-modal__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline-start: 1rem;
+}
+
+.th-modal__close, .th-modal__maximize {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--th-radius-md);
+  color: var(--th-text-subtle);
+  cursor: pointer;
+  transition: background-color var(--th-transition-fast) var(--th-ease), color var(--th-transition-fast) var(--th-ease);
+}
+.th-modal__close:hover, .th-modal__maximize:hover { background: var(--th-surface-3); color: var(--th-text); }
+
+/* Soft Renkli Başlık Varyantları (DESIGN.md semantik renk tokenları ile) */
+.th-modal--variant-primary .th-panel-header {
+  background: var(--th-primary-subtle);
+  color: var(--th-primary);
+  border-bottom: 1px solid color-mix(in srgb, var(--th-primary) 12%, transparent);
+}
+.th-modal--variant-primary .th-modal__close:hover,
+.th-modal--variant-primary .th-modal__maximize:hover {
+  background: color-mix(in srgb, var(--th-primary) 10%, transparent);
+  color: var(--th-primary);
+}
+
+.th-modal--variant-success .th-panel-header {
+  background: var(--th-success-subtle);
+  color: var(--th-success);
+  border-bottom: 1px solid color-mix(in srgb, var(--th-success) 12%, transparent);
+}
+.th-modal--variant-success .th-modal__close:hover,
+.th-modal--variant-success .th-modal__maximize:hover {
+  background: color-mix(in srgb, var(--th-success) 10%, transparent);
+  color: var(--th-success);
+}
+
+.th-modal--variant-danger .th-panel-header {
+  background: var(--th-danger-subtle);
+  color: var(--th-danger);
+  border-bottom: 1px solid color-mix(in srgb, var(--th-danger) 12%, transparent);
+}
+.th-modal--variant-danger .th-modal__close:hover,
+.th-modal--variant-danger .th-modal__maximize:hover {
+  background: color-mix(in srgb, var(--th-danger) 10%, transparent);
+  color: var(--th-danger);
+}
+
+.th-modal--variant-warning .th-panel-header {
+  background: var(--th-warning-subtle);
+  color: var(--th-warning);
+  border-bottom: 1px solid color-mix(in srgb, var(--th-warning) 12%, transparent);
+}
+.th-modal--variant-warning .th-modal__close:hover,
+.th-modal--variant-warning .th-modal__maximize:hover {
+  background: color-mix(in srgb, var(--th-warning) 10%, transparent);
+  color: var(--th-warning);
+}
+
+.th-modal--variant-info .th-panel-header {
+  background: var(--th-info-subtle);
+  color: var(--th-info);
+  border-bottom: 1px solid color-mix(in srgb, var(--th-info) 12%, transparent);
+}
+.th-modal--variant-info .th-modal__close:hover,
+.th-modal--variant-info .th-modal__maximize:hover {
+  background: color-mix(in srgb, var(--th-info) 10%, transparent);
+  color: var(--th-info);
+}
+
+/* Animasyonlar */
+@keyframes th-modal-fade-in { from { opacity: 0; } to { opacity: 1; } }

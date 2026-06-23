@@ -11,6 +11,7 @@ public sealed class LayoutState
     public bool CommandOpen { get; private set; }
     public bool AppLauncherOpen { get; private set; }
     public bool AiOpen { get; private set; }
+    public bool ThemeDesignerOpen { get; private set; }
 
     public event Action? OnChange;
 
@@ -26,6 +27,9 @@ public sealed class LayoutState
 
     public void ToggleAi() { AiOpen = !AiOpen; Notify(); }
     public void CloseAi() { if (AiOpen) { AiOpen = false; Notify(); } }
+
+    public void ToggleThemeDesigner() { ThemeDesignerOpen = !ThemeDesignerOpen; Notify(); }
+    public void CloseThemeDesigner() { if (ThemeDesignerOpen) { ThemeDesignerOpen = false; Notify(); } }
 
     private void Notify() => OnChange?.Invoke();
 }

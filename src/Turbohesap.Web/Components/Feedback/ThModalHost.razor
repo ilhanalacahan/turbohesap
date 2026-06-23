@@ -1,0 +1,19 @@
+@namespace Turbohesap.Web.Components.Feedback
+@inject Turbohesap.Web.Services.ThModalService ModalService
+
+@foreach (var modal in ModalService.ActiveModals)
+{
+    <ThModal Visible="true"
+             VisibleChanged="@(async (bool visible) => { if (!visible) ModalService.Close(modal, ModalResult.Cancel()); })"
+             Title="@modal.Title"
+             Subtitle="@modal.Subtitle"
+             Size="@modal.Options.Size"
+             Draggable="@modal.Options.Draggable"
+             Fullscreen="@modal.Options.Fullscreen"
+             Maximizable="@modal.Options.Maximizable"
+             CloseOnOverlay="@modal.Options.CloseOnOverlay"
+             Variant="@modal.Options.Variant"
+             @key="modal.Id">
+        @modal.Content
+    </ThModal>
+}

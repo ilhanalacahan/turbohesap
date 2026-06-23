@@ -1,0 +1,138 @@
+@namespace Turbohesap.Web.Pages.Showcase
+@* Kod tarafı: AutocompleteShowcase.razor.cs *@
+
+<ThCard Title="Otomatik Tamamlama (ThAutocomplete)" Subtitle="Statik liste, asenkron REST servisi, şablonlu satırlar ve gecikmeli arama özellikleri" Icon="fa-solid fa-wand-magic-sparkles" Style="overflow: visible;">
+    <div class="flex flex-col gap-6">
+
+        <!-- Senaryo 1 & 2: Statik Arama ve REST Araması -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Statik Arama -->
+            <div class="flex flex-col gap-2">
+                <h4 class="text-sm font-semibold">1. Statik Liste ile Filtreleme</h4>
+                <p class="text-xs text-text-muted">Yerel bir koleksiyon (Şehir listesi) içinden anlık harf eşleşmesine göre filtreleme yapar.</p>
+                <div class="mt-1">
+                    <ThField TValue="City" Label="Şehir Seçin">
+                        <ThAutocomplete TItem="City"
+                                        Items="_cities"
+                                        ItemTextFunc="c => c.Name"
+                                        @bind-Value="_selectedCity"
+                                        OnItemSelected="OnCitySelected"
+                                        Placeholder="Şehir adı yazmaya başlayın (örn. İzmir, Konya)..." />
+                    </ThField>
+                    @if (_selectedCity != null)
+                    {
+                        <div class="mt-2 text-xs text-text-muted bg-surface-2 p-2 rounded border border-border">
+                            Seçilen: <strong>@_selectedCity.Name</strong> (Kod: @_selectedCity.Code)
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- REST Arama -->
+            <div class="flex flex-col gap-2">
+                <h4 class="text-sm font-semibold">2. REST Servis Arama (Simüle Edilmiş)</h4>
+                <p class="text-xs text-text-muted">Girdi bittikten sonra 300ms bekler (debounce) ve REST API'ye istek atarak 500ms ağ gecikmesi simüle eder.</p>
+                <div class="mt-1">
+                    <ThField TValue="UserItem" Label="Kullanıcı Arayın">
+                        <ThAutocomplete TItem="UserItem"
+                                        SearchFunc="SearchUsersAsync"
+                                        ItemTextFunc="u => u.FullName"
+                                        @bind-Value="_selectedUser"
+                                        OnItemSelected="OnUserSelected"
+                                        MinLength="1"
+                                        Placeholder="Kullanıcı adı veya e-posta girin (örn. cihad, admin)..." />
+                    </ThField>
+                    @if (_selectedUser != null)
+                    {
+                        <div class="mt-2 text-xs text-text-muted bg-surface-2 p-2 rounded border border-border">
+                            Seçilen: <strong>@_selectedUser.FullName</strong> (@_selectedUser.Email)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- Senaryo 3: Şablonlu Elemanlar (Item Template) -->
+        <div class="flex flex-col gap-2">
+            <h4 class="text-sm font-semibold">3. Şablonlu Elemanlar (Item Template)</h4>
+            <p class="text-xs text-text-muted">Açılır listedeki satır görünümlerini tamamen özelleştirilmiş HTML ve ikonlarla render eder (Ürün listesi).</p>
+            <div class="max-w-md mt-1">
+                <ThField TValue="ProductItem" Label="Ürün Seçin">
+                    <ThAutocomplete TItem="ProductItem"
+                                    Items="_products"
+                                    ItemTextFunc="p => p.Name"
+                                    @bind-Value="_selectedProduct"
+                                    OnItemSelected="OnProductSelected"
+                                    Placeholder="Apple ürün adı yazın (örn. iPhone, AirPods)...">
+                        <ItemTemplate Context="product">
+                            <div class="flex items-center justify-between w-full py-1">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded bg-primary-subtle flex items-center justify-center text-primary">
+                                        <i class="@product.Icon"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="font-medium text-xs text-text">@product.Name</span>
+                                        <span class="text-[10px] text-text-subtle">Kod: @product.Code</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-xs font-semibold text-primary">@product.Price</span>
+                                    <span class="text-[10px] text-success-fg">Stok: @product.Stock adet</span>
+                                </div>
+                            </div>
+                        </ItemTemplate>
+                    </ThAutocomplete>
+                </ThField>
+                @if (_selectedProduct != null)
+                {
+                    <div class="mt-2 text-xs text-text-muted bg-surface-2 p-3 rounded border border-border flex items-center gap-3">
+                        <i class="@_selectedProduct.Icon text-lg text-primary"></i>
+                        <div>
+                            Seçilen Ürün: <strong>@_selectedProduct.Name</strong> | Fiyat: <strong>@_selectedProduct.Price</strong> | Stok: <strong>@_selectedProduct.Stock</strong>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- Senaryo 4: Limitli Karakter ve Otomatik Açılma (Focus) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- MinLength Belirleme -->
+            <div class="flex flex-col gap-2">
+                <h4 class="text-sm font-semibold">4. Minimum Girdi Karakter Sınırı</h4>
+                <p class="text-xs text-text-muted">Açılır listenin tetiklenmesi için en az 3 karakter girilmesini bekler (`MinLength="3"`).</p>
+                <div class="mt-1">
+                    <ThField TValue="City" Label="En az 3 karakter girin">
+                        <ThAutocomplete TItem="City"
+                                        Items="_cities"
+                                        ItemTextFunc="c => c.Name"
+                                        @bind-Value="_selectedMinLenCity"
+                                        MinLength="3"
+                                        Placeholder="3 karakter yazmadan açılmaz (örn. İst)..." />
+                    </ThField>
+                </div>
+            </div>
+
+            <!-- OpenOnFocus Belirleme -->
+            <div class="flex flex-col gap-2">
+                <h4 class="text-sm font-semibold">5. Odaklanınca Otomatik Açılma</h4>
+                <p class="text-xs text-text-muted">Kutunun içine tıklandığı (focus) anda arama yapmadan tüm listeyi otomatik listeler (`OpenOnFocus="true"`).</p>
+                <div class="mt-1">
+                    <ThField TValue="City" Label="Tıklayınca Açılan Liste">
+                        <ThAutocomplete TItem="City"
+                                        Items="_cities"
+                                        ItemTextFunc="c => c.Name"
+                                        @bind-Value="_selectedFocusCity"
+                                        OpenOnFocus="true"
+                                        Placeholder="Tıklar tıklamaz önerileri göreceksiniz..." />
+                    </ThField>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ThCard>

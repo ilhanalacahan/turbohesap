@@ -1,7 +1,7 @@
 @namespace Turbohesap.Web.Pages.Showcase
 
 <ThCard Title="Yeni Görsel Bileşenler" Subtitle="Card, Badge, Avatar ve Progress gösterim bileşenleri" Icon="fa-solid fa-box">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-6">
         
         <!-- Avatar (Profil) Gösterimleri -->
         <div>
@@ -63,10 +63,6 @@
                     <span class="text-xs text-text-muted">Nötr / Renksiz:</span>
                     <ThAmountDisplay Amount="8900.00M" CurrencySymbol="$" SymbolPosition="SymbolPosition.Prepend" ColorCode="false" Size="ComponentSize.Md" />
                 </div>
-                <div class="flex flex-col gap-1 border border-border p-2.5 rounded bg-surface-2">
-                    <span class="text-xs text-text-muted">Küçük Boyut (Sm):</span>
-                    <ThAmountDisplay Amount="120.45M" CurrencySymbol="€" SymbolPosition="SymbolPosition.Prepend" Size="ComponentSize.Sm" />
-                </div>
             </div>
         </div>
 
@@ -76,10 +72,9 @@
         <div>
             <h4 class="text-sm font-semibold mb-2">Stok Seviye & Limit Alarm Göstergeleri (ThStockAlertLevel)</h4>
             <div class="flex flex-col gap-4 py-1">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <ThStockAlertLevel Value="12" MinLimit="25" MaxLimit="150" Label="Çelik Vida Stoğu (Kritik)" Unit="Adet" />
                     <ThStockAlertLevel Value="85" MinLimit="25" MaxLimit="150" Label="Bakır Tel Stoğu (Normal)" Unit="Metre" />
-                    <ThStockAlertLevel Value="185" MinLimit="25" MaxLimit="150" Label="Rondela Stoğu (Aşırı)" Unit="Kutu" />
                 </div>
             </div>
         </div>
@@ -89,26 +84,16 @@
         <!-- Dairesel Kapasite Kadranları (ThCapacityGauge) -->
         <div>
             <h4 class="text-sm font-semibold mb-2">Dairesel Kapasite/Doluluk Kadranları (ThCapacityGauge)</h4>
-            <div class="flex flex-col gap-4 py-1">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                    <!-- Dinamik İnteraktif Kadran -->
-                    <div class="flex flex-col gap-2 items-center">
-                        <ThCapacityGauge Value="@_gaugeValue" Max="@_gaugeMax" Label="İnteraktif Kapasite" Subtitle="Depo A Doluluk Oranı" Unit="Palet" Size="ComponentSize.Md" />
-                        <div class="flex items-center gap-2 text-xs">
-                            <ThButton Variant="ButtonVariant.Ghost" Size="ComponentSize.Sm" OnClick="DecreaseGauge" Disabled="@(_gaugeValue <= 0)">-15</ThButton>
-                            <ThButton Variant="ButtonVariant.Secondary" Size="ComponentSize.Sm" OnClick="IncreaseGauge" Disabled="@(_gaugeValue >= _gaugeMax)">+15</ThButton>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center py-1">
+                <div class="flex flex-col gap-2 items-center">
+                    <ThCapacityGauge Value="@_gaugeValue" Max="@_gaugeMax" Label="İnteraktif Kapasite" Subtitle="Depo A Doluluk Oranı" Unit="Palet" Size="ComponentSize.Md" />
+                    <div class="flex items-center gap-2 text-xs">
+                        <ThButton Variant="ButtonVariant.Ghost" Size="ComponentSize.Sm" OnClick="DecreaseGauge" Disabled="@(_gaugeValue <= 0)">-15</ThButton>
+                        <ThButton Variant="ButtonVariant.Secondary" Size="ComponentSize.Sm" OnClick="IncreaseGauge" Disabled="@(_gaugeValue >= _gaugeMax)">+15</ThButton>
                     </div>
-
-                    <!-- Müsait Kadran -->
-                    <div class="flex flex-col gap-2 items-center">
-                        <ThCapacityGauge Value="35" Max="100" Label="Hafif Dolu Depo" Subtitle="Raf Hacim Kapasitesi" Unit="m³" Size="ComponentSize.Md" />
-                    </div>
-
-                    <!-- Aşırı Dolu (Tehlike) Kadranı -->
-                    <div class="flex flex-col gap-2 items-center">
-                        <ThCapacityGauge Value="95" Max="100" Label="Üretim İstasyonu" Subtitle="Haftalık Makine Yükü" Unit="Saat" Size="ComponentSize.Md" />
-                    </div>
+                </div>
+                <div class="flex flex-col gap-2 items-center">
+                    <ThCapacityGauge Value="35" Max="100" Label="Hafif Dolu Depo" Subtitle="Raf Hacim Kapasitesi" Unit="m³" Size="ComponentSize.Md" />
                 </div>
             </div>
         </div>
@@ -119,80 +104,8 @@
         <div>
             <h4 class="text-sm font-semibold mb-2">Mini Üretim ve Süreç Planlama Gantt Şeridi (ThGanttRow)</h4>
             <div class="flex flex-col gap-4 py-1">
-                <ThGanttRow Label="İş Emri #2045 (Özel İmalat Siparişi)" Subtitle="Laser Kesim & Form Verme Hücresi" Segments="@_productionOrderGantt" />
-                <ThGanttRow Label="CNC-01 Freze İstasyonu Günlük Çalışma Analizi" Subtitle="24 Saatlik Zaman Dilimi" Segments="@_machineUtilizationGantt" />
-            </div>
-        </div>
-
-        <hr class="border-border my-1" />
-
-        <!-- Akıllı Durum ve Trend Rozetleri -->
-        <div>
-            <h4 class="text-sm font-semibold mb-2">Akıllı Durum ve Trend Rozetleri (Status Badges & Trending)</h4>
-            <div class="flex flex-wrap gap-4 items-center py-1">
-                <div class="flex flex-wrap gap-2">
-                    <ThStatusBadge Status="Draft" Label="Taslak" />
-                    <ThStatusBadge Status="Processing" Label="İşleniyor" />
-                    <ThStatusBadge Status="Completed" Label="Tamamlandı" />
-                    <ThStatusBadge Status="Cancelled" Label="İptal Edildi" />
-                    <ThStatusBadge Status="Approved" Label="Onaylandı" />
-                </div>
-                
-                <span class="border-l border-border h-6 mx-2 hidden md:inline"></span>
-
-                <div class="flex flex-wrap gap-2">
-                    <ThTrending Value="0.124" Format="p1" Size="ComponentSize.Md" />
-                    <ThTrending Value="-0.032" Format="p1" Size="ComponentSize.Md" />
-                    <ThTrending Value="0.0" Format="p0" ShowIcon="false" Size="ComponentSize.Sm" />
-                    <ThTrending Value="2450" Format="c0" ShowSign="true" Size="ComponentSize.Lg" />
-                </div>
-            </div>
-        </div>
-
-        <hr class="border-border my-1" />
-
-        <!-- Klavye Kısayol İpucu -->
-        <div>
-            <h4 class="text-sm font-semibold mb-2">Klavye Kısayol İpuçları (Shortcut Hints)</h4>
-            <div class="flex flex-wrap gap-6 items-center py-1">
-                <div class="flex items-center gap-2 text-xs">
-                    <span class="text-text-muted">Arama Yap:</span>
-                    <ThShortcutHint Keys="Ctrl+K" />
-                </div>
-                <div class="flex items-center gap-2 text-xs">
-                    <span class="text-text-muted">Satırı Kaydet:</span>
-                    <ThShortcutHint Keys="Ctrl+Enter" />
-                </div>
-                <div class="flex items-center gap-2 text-xs">
-                    <span class="text-text-muted">Geri Dön:</span>
-                    <ThShortcutHint Keys="Esc" />
-                </div>
-                <div class="flex items-center gap-2 text-xs">
-                    <span class="text-text-muted">Çoklu Kısayol:</span>
-                    <ThShortcutHint Keys="Shift+Alt+S" />
-                </div>
-            </div>
-        </div>
-
-        <hr class="border-border my-1" />
-
-        <!-- Boş Veri Şablonu -->
-        <div>
-            <h4 class="text-sm font-semibold mb-2">Boş Veri Şablonları (Empty States)</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-1">
-                <div class="border border-border rounded p-4 bg-surface-2">
-                    <ThEmptyState Title="Henüz Fatura Eklenmedi" 
-                                  Description="Sisteme kayıtlı fatura bulunamadı. Yeni bir satış veya alış faturası oluşturarak başlayabilirsiniz."
-                                  Icon="fa-solid fa-file-invoice-dollar"
-                                  ActionButtonText="Fatura Oluştur"
-                                  OnActionClick="OnEmptyStateActionClick" />
-                </div>
-                <div class="border border-border rounded p-4 bg-surface-2 flex items-center justify-center">
-                    <ThEmptyState Title="Arama Sonucu Bulunamadı" 
-                                  Description="Kriterlerinize uygun müşteri kaydı bulunamadı. Lütfen filtrelerinizi kontrol edin."
-                                  Icon="fa-solid fa-magnifying-glass"
-                                  Size="ComponentSize.Sm" />
-                </div>
+                <ThGanttRow Label="İş Emri #2045 (Özel İmalat)" Subtitle="Laser Kesim & Form Verme" Segments="@_productionOrderGantt" />
+                <ThGanttRow Label="CNC-01 Freze İstasyonu Günlük Analizi" Subtitle="24 Saatlik Zaman Dilimi" Segments="@_machineUtilizationGantt" />
             </div>
         </div>
 

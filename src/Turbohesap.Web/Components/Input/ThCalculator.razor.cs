@@ -19,6 +19,7 @@ public partial class ThCalculator : TurboComponentBase
     [Parameter] public decimal InitialValue { get; set; }
     [Parameter] public EventCallback<decimal> OnValueSelected { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public bool Autofocus { get; set; } = false;
 
     private string _expression = "";
     private string _result = "0";
@@ -36,7 +37,7 @@ public partial class ThCalculator : TurboComponentBase
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && Autofocus)
         {
             try
             {

@@ -4,6 +4,9 @@
 @using Turbohesap.Web.Components.Alert
 @using Turbohesap.Web.Components.Breadcrumb
 @using Turbohesap.Web.Components.Spinner
+@using Turbohesap.Web.Components.Badge
+@using Turbohesap.Web.Components.Feedback
+@using Turbohesap.Web.Components.Input
 
 <ThCard Title="Yeni Yardımcı Bileşenler" Subtitle="Tooltip, Popover, Alert, Breadcrumb ve Spinner bileşenleri" Icon="fa-solid fa-layer-group">
     <div class="flex flex-col gap-4">
@@ -63,6 +66,70 @@
                 <ThSpinner Size="ComponentSize.Sm" Variant="SpinnerVariant.Primary" />
                 <ThSpinner Size="ComponentSize.Md" Variant="SpinnerVariant.Success" />
                 <ThSpinner Size="ComponentSize.Lg" Variant="SpinnerVariant.Danger" />
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Akıllı Durum ve Trend Rozetleri -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Akıllı Durum ve Trend Rozetleri</h4>
+            <div class="flex flex-col gap-4 py-1">
+                <div class="flex flex-wrap gap-1.5">
+                    <ThStatusBadge Status="Draft" Label="Taslak" />
+                    <ThStatusBadge Status="Processing" Label="İşleniyor" />
+                    <ThStatusBadge Status="Completed" Label="Tamamlandı" />
+                    <ThStatusBadge Status="Cancelled" Label="İptal Edildi" />
+                </div>
+                <div class="flex flex-wrap gap-2 pt-2 border-t border-border/60">
+                    <ThTrending Value="0.124" Format="p1" Size="ComponentSize.Sm" />
+                    <ThTrending Value="-0.032" Format="p1" Size="ComponentSize.Sm" />
+                    <ThTrending Value="2450" Format="c0" ShowSign="true" Size="ComponentSize.Sm" />
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Klavye Kısayol İpuçları -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Klavye Kısayol İpuçları</h4>
+            <div class="flex flex-col gap-3 py-1">
+                <div class="flex items-center justify-between text-xs">
+                    <span class="text-text-muted">Arama Yap:</span>
+                    <ThShortcutHint Keys="Ctrl+K" />
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                    <span class="text-text-muted">Satırı Kaydet:</span>
+                    <ThShortcutHint Keys="Ctrl+Enter" />
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                    <span class="text-text-muted">Geri Dön:</span>
+                    <ThShortcutHint Keys="Esc" />
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-border my-1" />
+
+        <!-- Boş Veri Şablonları -->
+        <div>
+            <h4 class="text-sm font-semibold mb-2">Boş Veri Şablonları (Empty States)</h4>
+            <div class="flex flex-col gap-4 py-1">
+                <div class="border border-border rounded-lg p-3 bg-surface">
+                    <ThEmptyState Title="Henüz Fatura Eklenmedi" 
+                                  Description="Sisteme kayıtlı fatura bulunamadı."
+                                  Icon="fa-solid fa-file-invoice-dollar"
+                                  Size="ComponentSize.Sm"
+                                  ActionButtonText="Oluştur"
+                                  OnActionClick="OnEmptyStateActionClick" />
+                </div>
+                <div class="border border-border rounded-lg p-3 bg-surface">
+                    <ThEmptyState Title="Sonuç Bulunamadı" 
+                                  Description="Kriterlere uygun kayıt yok."
+                                  Icon="fa-solid fa-magnifying-glass"
+                                  Size="ComponentSize.Sm" />
+                </div>
             </div>
         </div>
 

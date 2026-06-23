@@ -57,6 +57,11 @@ dökümanı kendi dizinindeki `Th<Ad>.md` dosyasındadır. Bu liste `create-comp
 | ThShortcutHint | [Badge/ThShortcutHint.md](Badge/ThShortcutHint.md) | Klavye kısayollarını şık bir şekilde gösteren ipucu bileşeni | ✅ |
 | ThEmptyState | [Feedback/ThEmptyState.md](Feedback/ThEmptyState.md) | Boş veri durumlarında kullanıcıya rehberlik eden görsel şablon | ✅ |
 | ThTagsInput | [Input/ThTagsInput.md](Input/ThTagsInput.md) | Virgül veya Enter tuşu ile dinamik olarak etiket eklemeyi sağlayan çoklu giriş kutusu | ✅ |
+| ThKpiCard | [Card/ThKpiCard.md](Card/ThKpiCard.md) | Entegre mikro çizgi grafikli (Sparkline) akıllı metrik ve performans kartı | ✅ |
+| ThHeatmapCalendar | [Data/ThHeatmapCalendar.md](Data/ThHeatmapCalendar.md) | Katkı/Yoğunluk matrisi stilinde, gün bazında aktivite sıklığını görselleştiren takvim bileşeni | ✅ |
+| ThProcessFlow | [Data/ThProcessFlow.md](Data/ThProcessFlow.md) | İş akışlarını, sipariş adımlarını ve onay durumlarını yatay/dikey çizgilerle görselleştiren süreç izleyici | ✅ |
+| ThFunnelChart | [Data/ThFunnelChart.md](Data/ThFunnelChart.md) | Süreç dönüşüm oranlarını yamuk katmanlarla görselleştiren dikey huni grafiği | ✅ |
+| ThMiniProgressBar | [Progress/ThMiniProgressBar.md](Progress/ThMiniProgressBar.md) | Tablo satırlarına ve küçük alanlara sığacak boyutta çoklu kategorik ilerleme çubuğu ve göstergesi | ✅ |
 
 ## Yerleşim bileşenleri (`Layout`)
 

@@ -1,0 +1,47 @@
+@namespace Turbohesap.Web.Components.Data
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThFunnelChart.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <div class="th-funnel-header">
+        <span class="th-funnel-title">@Title</span>
+    </div>
+
+    <div class="th-funnel-container">
+        <!-- SVG Huni Çizimi -->
+        <div class="th-funnel-svg-wrapper">
+            @{
+                var totalHeight = _drawStages.Count * 51 - 6; // height + gap
+            }
+            <svg class="th-funnel-svg" viewBox="0 0 300 @totalHeight" width="100%" height="@totalHeight">
+                @foreach (var stage in _drawStages)
+                {
+                    <polygon points="@stage.Points" 
+                             class="th-funnel-polygon th-funnel-polygon--color-@stage.ColorIndex"
+                             title="@($"{stage.Label}: {stage.Value} (%{stage.Percentage:F0})")" />
+                }
+            </svg>
+        </div>
+
+        <!-- Aşamaların Etiketleri (Sağ Taraf Açıklamaları) -->
+        <div class="th-funnel-labels">
+            @foreach (var stage in _drawStages)
+            {
+                <div class="th-funnel-label-item">
+                    <div class="th-funnel-label-main">
+                        <span class="th-funnel-label-text">@stage.Label</span>
+                        <span class="th-funnel-label-value font-mono">@stage.Value.ToString("N0")</span>
+                    </div>
+                    <div class="th-funnel-label-sub">
+                        <span>En Üst Aşamaya Oranı:</span>
+                        <span class="font-mono font-semibold text-primary">%@stage.Percentage.ToString("F0")</span>
+                        @if (!string.IsNullOrEmpty(stage.Description))
+                        {
+                            <span class="th-funnel-label-desc">• @stage.Description</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

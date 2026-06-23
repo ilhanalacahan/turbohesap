@@ -1,0 +1,34 @@
+@namespace Turbohesap.Web.Components.Progress
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThMiniProgressBar.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <!-- Bar Göstergesi -->
+    <div class="th-mini-progress-track">
+        @foreach (var seg in _drawSegments)
+        {
+            <div class="th-mini-progress-segment @seg.ColorClass" 
+                 style="width: @(seg.Percentage.ToString("F2", System.Globalization.CultureInfo.InvariantCulture))%"
+                 title="@($"{seg.Label}: {seg.Value} (%{seg.Percentage:F1})")">
+            </div>
+        }
+    </div>
+
+    <!-- Gösterge (Legend) -->
+    @if (ShowLegend && _drawSegments.Any())
+    {
+        <div class="th-mini-progress-legend">
+            @foreach (var seg in _drawSegments)
+            {
+                <div class="th-mini-progress-legend-item">
+                    <span class="th-mini-progress-legend-dot @seg.ColorClass"></span>
+                    <span class="th-mini-progress-legend-label">@seg.Label</span>
+                    <span class="th-mini-progress-legend-val font-mono">(%@seg.Percentage.ToString("F0"))</span>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@* Tailwind'in JIT derleyicisinin dinamik atanan segment renklerini (bg-*) tarayıp çıktıya eklemesini sağlamak için yardımcı gizli element: *@
+<div class="hidden bg-primary bg-success bg-warning bg-danger bg-info bg-accent"></div>

@@ -1,0 +1,166 @@
+/* ProcessFlow — th-process-flow. Yalnızca --th-* token'ları kullanır. */
+.th-process-flow {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.th-process-flow--horizontal {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.th-process-flow--vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.th-process-step {
+  position: relative;
+  display: flex;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.th-process-flow--horizontal .th-process-step {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.th-process-flow--vertical .th-process-step {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+/* Çizgi bağlantıları */
+.th-process-line {
+  position: absolute;
+  background: var(--th-border-strong);
+  z-index: 1;
+}
+
+.th-process-flow--horizontal .th-process-line {
+  top: 1.25rem; /* Düğüm merkez hizası */
+  left: 50%;
+  width: calc(100% + 1.75rem);
+  height: 2px;
+}
+
+.th-process-flow--vertical .th-process-line {
+  top: 1.25rem; /* Düğüm merkezinden başlar */
+  left: 1.25rem; /* Düğümün tam ortası */
+  height: calc(100% + 1.75rem); /* Adım yüksekliği + gap + taşma payı */
+  width: 2px;
+}
+
+/* Duruma göre çizgi rengi */
+.th-process-step--completed .th-process-line {
+  background: var(--th-success);
+}
+
+/* Düğüm (Node) tasarımı */
+.th-process-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--th-radius-full);
+  background: var(--th-surface-2);
+  border: 2px solid var(--th-border-strong);
+  color: var(--th-text-subtle);
+  font-weight: var(--th-fw-semibold);
+  font-size: 0.875rem;
+  z-index: 2;
+  transition: all var(--th-transition-fast) var(--th-ease);
+}
+
+.th-process-step--clickable {
+  cursor: pointer;
+}
+
+.th-process-step--clickable:hover .th-process-node {
+  transform: scale(1.05);
+  border-color: var(--th-primary);
+  box-shadow: 0 0 8px var(--th-primary-subtle);
+}
+
+/* Durumlara göre düğüm renklendirmesi */
+.th-process-step--pending .th-process-node {
+  background: var(--th-surface-3);
+  border-color: var(--th-border);
+}
+
+.th-process-step--active .th-process-node {
+  background: var(--th-primary-subtle);
+  border-color: var(--th-primary);
+  color: var(--th-primary);
+}
+
+.th-process-step--completed .th-process-node {
+  background: var(--th-success);
+  border-color: var(--th-success);
+  color: var(--th-success-fg, #ffffff);
+}
+
+.th-process-step--failed .th-process-node {
+  background: var(--th-danger);
+  border-color: var(--th-danger);
+  color: var(--th-danger-fg, #ffffff);
+}
+
+/* Pulse (Dalgalanma) Efekti */
+.th-process-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--th-radius-full);
+  border: 2px solid var(--th-primary);
+  opacity: 0.4;
+  animation: th-process-pulse-anim 1.5s infinite var(--th-ease);
+}
+
+@keyframes th-process-pulse-anim {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
+/* İçerik Hizalamaları */
+.th-process-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  z-index: 2;
+}
+
+.th-process-flow--horizontal .th-process-content {
+  padding-top: 0.5rem;
+  max-width: 180px;
+}
+
+.th-process-flow--vertical .th-process-content {
+  padding-top: 0.375rem;
+}
+
+.th-process-label {
+  font-size: 0.8125rem;
+  font-weight: var(--th-fw-semibold);
+  color: var(--th-text);
+}
+
+.th-process-description {
+  font-size: 0.75rem;
+  color: var(--th-text-subtle);
+}
+
+.th-process-step--active .th-process-label {
+  color: var(--th-primary);
+}

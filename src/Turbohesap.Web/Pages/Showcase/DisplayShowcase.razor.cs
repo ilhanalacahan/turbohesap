@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using Turbohesap.Web.Components.Data;
+using Turbohesap.Web.Components.Progress;
 
 namespace Turbohesap.Web.Pages.Showcase;
 
@@ -10,8 +11,6 @@ namespace Turbohesap.Web.Pages.Showcase;
 /// </summary>
 public partial class DisplayShowcase : ComponentBase
 {
-    [Inject] private Services.ToastService ToastService { get; set; } = default!;
-
     private double _progressValue = 45;
 
     // Kadran (Gauge) için interaktif veri
@@ -54,9 +53,4 @@ public partial class DisplayShowcase : ComponentBase
         new() { Label = "CNC-01 Çalışıyor", StartPercent = 60, EndPercent = 90, Status = GanttSegmentStatus.Active, Icon = "fa-solid fa-gear", Tooltip = "Yedek iş emri #3102 devreye alındı." },
         new() { Label = "Boşta / Bekleme", StartPercent = 90, EndPercent = 100, Status = GanttSegmentStatus.Pending, Tooltip = "Sıradaki iş emri için onay bekleniyor." }
     };
-
-    private void OnEmptyStateActionClick()
-    {
-        ToastService.Success("Yeni fatura oluşturma ekranı tetiklendi.", "Fatura Oluştur");
-    }
 }

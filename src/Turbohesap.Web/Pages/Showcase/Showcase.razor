@@ -78,9 +78,14 @@
                     </div>
                     break;
                 case ShowcaseTab.Display:
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <Turbohesap.Web.Pages.Showcase.DisplayShowcase />
-                        <Turbohesap.Web.Pages.Showcase.OthersShowcase />
+                    <div class="flex flex-col gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                            <Turbohesap.Web.Pages.Showcase.DisplayShowcase />
+                            <Turbohesap.Web.Pages.Showcase.OthersShowcase />
+                        </div>
+                        <div class="w-full">
+                            <Turbohesap.Web.Pages.Showcase.AnalyticsShowcase />
+                        </div>
                     </div>
                     break;
             }

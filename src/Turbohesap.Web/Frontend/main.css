@@ -135,6 +135,11 @@
 @import './css/query-builder.css' layer(components);
 @import './css/stockalertlevel.css' layer(components);
 @import './css/tagsinput.css' layer(components);
+@import './css/kpicard.css' layer(components);
+@import './css/heatmapcalendar.css' layer(components);
+@import './css/processflow.css' layer(components);
+@import './css/funnelchart.css' layer(components);
+@import './css/miniprogressbar.css' layer(components);
 
 /* Kabuk (shell) bileşenleri */
 @import './css/sidebar.css' layer(components);

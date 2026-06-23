@@ -200,5 +200,64 @@
             </div>
         </div>
 
+        <hr class="border-border my-1" />
+
+        <!-- Müşteri Derecelendirme (ThCustomerRating) -->
+        <div>
+            <h4 class="text-sm font-semibold mb-3">Müşteri Derecelendirme Göstergesi (ThCustomerRating)</h4>
+            <p class="text-xs text-text-muted mb-4 leading-relaxed max-w-3xl">
+                Ödeme zamanlaması, alışveriş hacmi ve sıklığı gibi kriterleri <strong>ağırlıklı</strong> bir genel puana indirger;
+                puanı radyal madalyon, harf notu (A–D), yıldız ve kademe renkleriyle (Mükemmel / İyi / Orta / Riskli) görselleştirir.
+            </p>
+
+            <!-- Örnek Müşteri Kartları -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 py-1 items-start">
+                <ThCustomerRating CustomerName="Mega Yapı Market A.Ş."
+                                  Subtitle="CARİ-1042 · Bayi"
+                                  Factors="_excellentCustomerFactors" />
+
+                <ThCustomerRating CustomerName="Yıldız Ticaret Ltd."
+                                  Subtitle="CARİ-2208 · Perakende"
+                                  Factors="_goodCustomerFactors" />
+
+                <ThCustomerRating CustomerName="Deneme İnşaat"
+                                  Subtitle="CARİ-3391 · Proje"
+                                  Factors="_riskyCustomerFactors" />
+            </div>
+
+            <!-- Canlı Derecelendirme Simülatörü -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mt-6">
+                <div class="lg:col-span-2 border border-border rounded p-4 bg-surface flex flex-col justify-center">
+                    <h5 class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-4">Canlı Derecelendirme (Kriterlere göre yeniden hesaplanır)</h5>
+                    <ThCustomerRating CustomerName="Test Cari Hesabı"
+                                      Subtitle="Kriterleri sağdan ayarlayın"
+                                      Factors="_ratingSimFactors"
+                                      Size="ComponentSize.Lg" />
+                </div>
+                <div class="border border-border rounded p-4 bg-surface-2 flex flex-col gap-3 text-xs">
+                    <h5 class="text-xs font-semibold text-text uppercase tracking-wider">Kriter Puanlarını Ayarla</h5>
+                    <p class="text-text-muted leading-relaxed">Her kriterin iyilik puanını (0–100) değiştirin; genel not ve kademe anında güncellenir:</p>
+
+                    <div class="flex flex-col gap-3 mt-2">
+                        @for (int i = 0; i < _ratingSimFactors.Count; i++)
+                        {
+                            var index = i;
+                            var factor = _ratingSimFactors[i];
+                            <div class="flex flex-col gap-1">
+                                <div class="flex justify-between font-medium">
+                                    <span><i class="@factor.Icon mr-1.5 text-text-subtle"></i>@factor.Label</span>
+                                    <span class="font-mono text-primary">@Math.Round(factor.Value)</span>
+                                </div>
+                                <input type="range" min="0" max="100" step="1"
+                                       value="@factor.Value"
+                                       @oninput="@((ChangeEventArgs e) => UpdateRatingFactor(index, Convert.ToDouble(e.Value)))"
+                                       class="w-full h-1 bg-border rounded-lg appearance-none cursor-pointer accent-primary" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </ThCard>

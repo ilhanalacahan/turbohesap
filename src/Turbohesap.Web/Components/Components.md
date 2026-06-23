@@ -62,6 +62,7 @@ dökümanı kendi dizinindeki `Th<Ad>.md` dosyasındadır. Bu liste `create-comp
 | ThProcessFlow | [Data/ThProcessFlow.md](Data/ThProcessFlow.md) | İş akışlarını, sipariş adımlarını ve onay durumlarını yatay/dikey çizgilerle görselleştiren süreç izleyici | ✅ |
 | ThFunnelChart | [Data/ThFunnelChart.md](Data/ThFunnelChart.md) | Süreç dönüşüm oranlarını yamuk katmanlarla görselleştiren dikey huni grafiği | ✅ |
 | ThMiniProgressBar | [Progress/ThMiniProgressBar.md](Progress/ThMiniProgressBar.md) | Tablo satırlarına ve küçük alanlara sığacak boyutta çoklu kategorik ilerleme çubuğu ve göstergesi | ✅ |
+| ThCustomerRating | [Data/ThCustomerRating.md](Data/ThCustomerRating.md) | Ödeme, hacim ve sıklık kriterlerini ağırlıklı bir nota indirgeyen radyal madalyonlu müşteri derecelendirme göstergesi | ✅ |
 
 ## Yerleşim bileşenleri (`Layout`)
 

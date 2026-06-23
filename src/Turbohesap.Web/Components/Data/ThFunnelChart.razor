@@ -7,41 +7,42 @@
         <span class="th-funnel-title">@Title</span>
     </div>
 
-    <div class="th-funnel-container">
-        <!-- SVG Huni Çizimi -->
-        <div class="th-funnel-svg-wrapper">
-            @{
-                var totalHeight = _drawStages.Count * 51 - 6; // height + gap
-            }
-            <svg class="th-funnel-svg" viewBox="0 0 300 @totalHeight" width="100%" height="@totalHeight">
+    @if (_drawStages.Count > 0)
+    {
+        <div class="th-funnel-container">
+            <!-- SVG Huni Çizimi -->
+            <div class="th-funnel-svg-wrapper">
+                <svg class="th-funnel-svg" viewBox="0 0 300 @TotalHeight" width="100%" height="@TotalHeight" preserveAspectRatio="none">
+                    @foreach (var stage in _drawStages)
+                    {
+                        <polygon points="@stage.Points"
+                                 class="th-funnel-polygon @stage.ColorClass">
+                            <title>@($"{stage.Label}: {stage.Value:N0} (%{stage.Percentage:F0})")</title>
+                        </polygon>
+                    }
+                </svg>
+            </div>
+
+            <!-- Aşamaların Etiketleri (Sağ Taraf Açıklamaları) -->
+            <div class="th-funnel-labels">
                 @foreach (var stage in _drawStages)
                 {
-                    <polygon points="@stage.Points" 
-                             class="th-funnel-polygon th-funnel-polygon--color-@stage.ColorIndex"
-                             title="@($"{stage.Label}: {stage.Value} (%{stage.Percentage:F0})")" />
+                    <div class="th-funnel-label-item">
+                        <div class="th-funnel-label-main">
+                            <span class="th-funnel-label-text">@stage.Label</span>
+                            <span class="th-funnel-label-value font-mono">@stage.Value.ToString("N0")</span>
+                        </div>
+                        <div class="th-funnel-label-sub">
+                            <span>En Üst Aşamaya Oranı:</span>
+                            <span class="font-mono font-semibold text-primary">%@stage.Percentage.ToString("F0")</span>
+                            @if (!string.IsNullOrEmpty(stage.Description))
+                            {
+                                <span class="th-funnel-label-desc">• @stage.Description</span>
+                            }
+                        </div>
+                    </div>
                 }
-            </svg>
+            </div>
         </div>
-
-        <!-- Aşamaların Etiketleri (Sağ Taraf Açıklamaları) -->
-        <div class="th-funnel-labels">
-            @foreach (var stage in _drawStages)
-            {
-                <div class="th-funnel-label-item">
-                    <div class="th-funnel-label-main">
-                        <span class="th-funnel-label-text">@stage.Label</span>
-                        <span class="th-funnel-label-value font-mono">@stage.Value.ToString("N0")</span>
-                    </div>
-                    <div class="th-funnel-label-sub">
-                        <span>En Üst Aşamaya Oranı:</span>
-                        <span class="font-mono font-semibold text-primary">%@stage.Percentage.ToString("F0")</span>
-                        @if (!string.IsNullOrEmpty(stage.Description))
-                        {
-                            <span class="th-funnel-label-desc">• @stage.Description</span>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+    }
 </div>

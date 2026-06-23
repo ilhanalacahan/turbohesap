@@ -51,6 +51,49 @@ public partial class AnalyticsShowcase : ComponentBase
         new() { Label = "Fireler", Value = 50, ColorClass = "bg-danger" }
     };
 
+    // Müşteri Derecelendirme — örnek müşteriler
+    private List<CustomerRatingFactor> _excellentCustomerFactors = new()
+    {
+        new() { Label = "Ödeme Zamanlaması", Value = 96, Weight = 2, Icon = "fa-solid fa-clock", Description = "Ort. 1 gün erken" },
+        new() { Label = "Alışveriş Hacmi", Value = 92, Weight = 1.5, Icon = "fa-solid fa-sack-dollar", Description = "₺412B / yıl" },
+        new() { Label = "Alışveriş Sıklığı", Value = 88, Weight = 1, Icon = "fa-solid fa-repeat", Description = "Haftada 3" },
+        new() { Label = "Risk / Bakiye", Value = 90, Weight = 1.5, Icon = "fa-solid fa-shield-halved", Description = "Limit içinde" }
+    };
+
+    private List<CustomerRatingFactor> _goodCustomerFactors = new()
+    {
+        new() { Label = "Ödeme Zamanlaması", Value = 72, Weight = 2, Icon = "fa-solid fa-clock", Description = "Ort. 6 gün gecikme" },
+        new() { Label = "Alışveriş Hacmi", Value = 68, Weight = 1.5, Icon = "fa-solid fa-sack-dollar", Description = "₺148B / yıl" },
+        new() { Label = "Alışveriş Sıklığı", Value = 75, Weight = 1, Icon = "fa-solid fa-repeat", Description = "Haftada 1" },
+        new() { Label = "Risk / Bakiye", Value = 64, Weight = 1.5, Icon = "fa-solid fa-shield-halved", Description = "Limit %78" }
+    };
+
+    private List<CustomerRatingFactor> _riskyCustomerFactors = new()
+    {
+        new() { Label = "Ödeme Zamanlaması", Value = 24, Weight = 2, Icon = "fa-solid fa-clock", Description = "Ort. 41 gün gecikme" },
+        new() { Label = "Alışveriş Hacmi", Value = 38, Weight = 1.5, Icon = "fa-solid fa-sack-dollar", Description = "₺22B / yıl" },
+        new() { Label = "Alışveriş Sıklığı", Value = 30, Weight = 1, Icon = "fa-solid fa-repeat", Description = "Ayda 1" },
+        new() { Label = "Risk / Bakiye", Value = 18, Weight = 1.5, Icon = "fa-solid fa-shield-halved", Description = "Limit %140 aşımı" }
+    };
+
+    // Müşteri Derecelendirme — canlı simülatör
+    private List<CustomerRatingFactor> _ratingSimFactors = new()
+    {
+        new() { Label = "Ödeme Zamanlaması", Value = 80, Weight = 2, Icon = "fa-solid fa-clock" },
+        new() { Label = "Alışveriş Hacmi", Value = 65, Weight = 1.5, Icon = "fa-solid fa-sack-dollar" },
+        new() { Label = "Alışveriş Sıklığı", Value = 70, Weight = 1, Icon = "fa-solid fa-repeat" },
+        new() { Label = "Risk / Bakiye", Value = 60, Weight = 1.5, Icon = "fa-solid fa-shield-halved" }
+    };
+
+    private void UpdateRatingFactor(int index, double val)
+    {
+        if (index >= 0 && index < _ratingSimFactors.Count)
+        {
+            _ratingSimFactors[index].Value = Math.Clamp(val, 0, 100);
+            _ratingSimFactors = new List<CustomerRatingFactor>(_ratingSimFactors);
+        }
+    }
+
     private static Dictionary<DateTime, int> GenerateHeatmapMockData()
     {
         var data = new Dictionary<DateTime, int>();

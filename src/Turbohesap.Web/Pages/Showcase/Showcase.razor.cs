@@ -52,7 +52,7 @@ public partial class Showcase : ComponentBase
         ShowcaseTab.DataTable => "BİLEŞEN SAYISI: 3 | BİLEŞEN TİPİ: GENERIC | SIRALAMA & SAYFALAMA: ENTEGRE",
         ShowcaseTab.Dialogs => "BİLEŞEN SAYISI: 4 | KATMAN YÖNETİMİ: Z-INDEX PORTAL | ANİMASYON GEÇİŞİ: 150ms",
         ShowcaseTab.Navigation => "BİLEŞEN SAYISI: 3 | SEKME NAVİGASYONU: AKTİF | AKORDİYON GRUPLARI: ENTEGRE",
-        ShowcaseTab.Display => "BİLEŞEN SAYISI: 9 | GÖRSEL TOKEN UYUMU: %100 | GRAFİK KADRANI: SVG TABANLI",
+        ShowcaseTab.Display => "BİLEŞEN SAYISI: 10 | GÖRSEL TOKEN UYUMU: %100 | GRAFİK KADRANI: SVG TABANLI",
         _ => ""
     };
 }

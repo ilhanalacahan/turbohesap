@@ -1,0 +1,84 @@
+@namespace Turbohesap.Web.Components.Data
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThCustomerRating.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrWhiteSpace(CustomerName))
+    {
+        <div class="th-customer-rating__header">
+            <div class="th-customer-rating__identity">
+                <span class="th-customer-rating__name">@CustomerName</span>
+                @if (!string.IsNullOrWhiteSpace(Subtitle))
+                {
+                    <span class="th-customer-rating__subtitle">@Subtitle</span>
+                }
+            </div>
+            <span class="th-customer-rating__tier-badge">
+                <span class="th-customer-rating__tier-dot"></span>
+                @TierLabel
+            </span>
+        </div>
+    }
+
+    <div class="th-customer-rating__main">
+        <div class="th-customer-rating__medallion" style="--th-cr-score: @ScoreCss;">
+            <div class="th-customer-rating__medallion-inner">
+                <span class="th-customer-rating__grade">@Grade</span>
+                <span class="th-customer-rating__score">@ScoreText</span>
+            </div>
+        </div>
+
+        <div class="th-customer-rating__summary">
+            @if (string.IsNullOrWhiteSpace(CustomerName))
+            {
+                <span class="th-customer-rating__tier-badge th-customer-rating__tier-badge--inline">
+                    <span class="th-customer-rating__tier-dot"></span>
+                    @TierLabel
+                </span>
+            }
+
+            @if (ShowStars)
+            {
+                <div class="th-customer-rating__stars" role="img" aria-label="@($"{ScoreText} / 100 puan")">
+                    @for (var i = 1; i <= 5; i++)
+                    {
+                        <i class="@StarIconClass(i)"></i>
+                    }
+                    <span class="th-customer-rating__score-out">@ScoreText<span class="th-customer-rating__score-max"> / 100</span></span>
+                </div>
+            }
+
+            <p class="th-customer-rating__description">@TierDescription</p>
+        </div>
+    </div>
+
+    @if (ShowBreakdown && Factors is { Count: > 0 })
+    {
+        <div class="th-customer-rating__breakdown">
+            @foreach (var factor in Factors)
+            {
+                <div class="th-customer-rating__factor @FactorClass(factor.Value)">
+                    <div class="th-customer-rating__factor-head">
+                        <span class="th-customer-rating__factor-label">
+                            @if (!string.IsNullOrWhiteSpace(factor.Icon))
+                            {
+                                <i class="@factor.Icon th-customer-rating__factor-icon"></i>
+                            }
+                            @factor.Label
+                        </span>
+                        <span class="th-customer-rating__factor-value">
+                            @if (!string.IsNullOrWhiteSpace(factor.Description))
+                            {
+                                <span class="th-customer-rating__factor-desc">@factor.Description</span>
+                            }
+                            <span class="th-customer-rating__factor-score">@Math.Round(factor.Value)</span>
+                        </span>
+                    </div>
+                    <div class="th-customer-rating__factor-track">
+                        <div class="th-customer-rating__factor-fill" style="width: @(FactorWidth(factor.Value))%;"></div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

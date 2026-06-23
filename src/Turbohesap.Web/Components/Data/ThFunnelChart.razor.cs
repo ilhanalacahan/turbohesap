@@ -25,6 +25,12 @@ public partial class ThFunnelChart : TurboComponentBase
 
     private readonly List<FunnelStageDrawData> _drawStages = new();
 
+    private const int StageHeight = 45; // Her aşamanın yüksekliği (px = viewBox birimi)
+    private const int Gap = 6;          // Aşamalar arasındaki boşluk
+
+    /// <summary>SVG yüksekliği; dikey eşleme etiketlerle 1:1 hizalanır (StageHeight + Gap).</summary>
+    private int TotalHeight => _drawStages.Count > 0 ? _drawStages.Count * (StageHeight + Gap) - Gap : 0;
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -39,8 +45,6 @@ public partial class ThFunnelChart : TurboComponentBase
         var maxValue = Stages.First().Value;
         if (maxValue <= 0) maxValue = 1;
 
-        const int stageHeight = 45; // Her aşamanın yüksekliği
-        const int gap = 6;          // Aşamalar arasındaki boşluk
         const int totalWidth = 300;
 
         for (int i = 0; i < Stages.Count; i++)
@@ -57,15 +61,16 @@ public partial class ThFunnelChart : TurboComponentBase
             topWidth = Math.Max(topWidth, 30);
             bottomWidth = Math.Max(bottomWidth, 15);
 
-            var y1 = i * (stageHeight + gap);
-            var y2 = y1 + stageHeight;
+            var y1 = i * (StageHeight + Gap);
+            var y2 = y1 + StageHeight;
 
             var x1 = (totalWidth - topWidth) / 2;
             var x2 = x1 + topWidth;
             var x3 = (totalWidth - bottomWidth) / 2;
             var x4 = x3 + bottomWidth;
 
-            var points = $"{x1},{y1} {x2},{y1} {x4},{y2} {x3},{y2}";
+            var points = string.Create(System.Globalization.CultureInfo.InvariantCulture,
+                $"{x1:F2},{y1} {x2:F2},{y1} {x4:F2},{y2} {x3:F2},{y2}");
             var percentage = (stage.Value / maxValue) * 100;
 
             _drawStages.Add(new FunnelStageDrawData
@@ -75,10 +80,19 @@ public partial class ThFunnelChart : TurboComponentBase
                 Description = stage.Description,
                 Points = points,
                 Percentage = percentage,
-                ColorIndex = i % 4
+                ColorClass = ColorClassFor(i % 4)
             });
         }
     }
+
+    /// <summary>Aşama sırasını sabit bir renk sınıfına eşler (interpolasyon yok).</summary>
+    private static string ColorClassFor(int index) => index switch
+    {
+        0 => "th-funnel-polygon--color-0",
+        1 => "th-funnel-polygon--color-1",
+        2 => "th-funnel-polygon--color-2",
+        _ => "th-funnel-polygon--color-3"
+    };
 
     private class FunnelStageDrawData
     {
@@ -87,6 +101,6 @@ public partial class ThFunnelChart : TurboComponentBase
         public string Description { get; set; } = "";
         public string Points { get; set; } = "";
         public double Percentage { get; set; }
-        public int ColorIndex { get; set; }
+        public string ColorClass { get; set; } = "";
     }
 }

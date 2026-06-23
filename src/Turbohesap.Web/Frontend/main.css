@@ -140,6 +140,7 @@
 @import './css/processflow.css' layer(components);
 @import './css/funnelchart.css' layer(components);
 @import './css/miniprogressbar.css' layer(components);
+@import './css/customerrating.css' layer(components);
 
 /* Kabuk (shell) bileşenleri */
 @import './css/sidebar.css' layer(components);

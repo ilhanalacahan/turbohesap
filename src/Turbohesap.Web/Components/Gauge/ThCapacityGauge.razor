@@ -1,0 +1,66 @@
+@namespace Turbohesap.Web.Components.Gauge
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThCapacityGauge.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <div class="th-capacity-gauge-visual-container">
+        <!-- SVG Kadranı -->
+        <svg viewBox="0 0 100 100" class="th-capacity-gauge-svg">
+            <defs>
+                <!-- Parlama Efekti İçin Gölgeler (Koyu mod ve premium his için) -->
+                <filter id="gauge-glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+            </defs>
+            
+            <!-- Arka Plan Rayı (270 derece) -->
+            <circle cx="50" cy="50" r="40"
+                    class="th-capacity-gauge-track"
+                    stroke-dasharray="188.5 251.3"
+                    transform="rotate(135 50 50)" />
+                    
+            <!-- Değer Yay (Kapasiteye göre dolan) -->
+            <circle cx="50" cy="50" r="40"
+                    class="th-capacity-gauge-value"
+                    stroke-dasharray="@(FilledLength.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)) 251.3"
+                    transform="rotate(135 50 50)" />
+        </svg>
+
+        <!-- Kadran İçi Bilgi Alanı -->
+        <div class="th-capacity-gauge-center-content">
+            <span class="th-capacity-gauge-percent">@Percent.ToString("F0", System.Globalization.CultureInfo.InvariantCulture)%</span>
+            <span class="th-capacity-gauge-status-label">
+                @if (Percent >= ThresholdDanger)
+                {
+                    <span class="th-capacity-gauge-badge th-capacity-gauge-badge--danger">Kritik Dolu</span>
+                }
+                else if (Percent >= ThresholdWarning)
+                {
+                    <span class="th-capacity-gauge-badge th-capacity-gauge-badge--warning">Sınırda</span>
+                }
+                else
+                {
+                    <span class="th-capacity-gauge-badge th-capacity-gauge-badge--success">Müsait</span>
+                }
+            </span>
+        </div>
+    </div>
+
+    <!-- Dış Detaylar -->
+    @if (ShowDetails)
+    {
+        <div class="th-capacity-gauge-details">
+            <span class="th-capacity-gauge-title">@Label</span>
+            @if (!string.IsNullOrEmpty(Subtitle))
+            {
+                <span class="th-capacity-gauge-subtitle">@Subtitle</span>
+            }
+            <div class="th-capacity-gauge-values">
+                <span class="th-capacity-gauge-value-current">@Value.ToString("N0")</span>
+                <span class="th-capacity-gauge-value-separator">/</span>
+                <span class="th-capacity-gauge-value-max">@Max.ToString("N0") @Unit</span>
+            </div>
+        </div>
+    }
+</div>

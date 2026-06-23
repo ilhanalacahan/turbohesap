@@ -1,0 +1,20 @@
+@namespace Turbohesap.Web.Components.Badge
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThShortcutHint.razor.cs *@
+
+<span class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    @if (KeySegments != null && KeySegments.Count > 0)
+    {
+        @for (int i = 0; i < KeySegments.Count; i++)
+        {
+            var currentKey = KeySegments[i];
+            var isLast = i == KeySegments.Count - 1;
+            
+            <kbd class="th-shortcut-kbd">@currentKey</kbd>
+            @if (!isLast)
+            {
+                <span class="th-shortcut-connector">+</span>
+            }
+        }
+    }
+</span>

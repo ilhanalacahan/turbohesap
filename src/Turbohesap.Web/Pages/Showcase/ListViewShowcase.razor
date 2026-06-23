@@ -1,0 +1,101 @@
+@namespace Turbohesap.Web.Pages.Showcase
+@* Kod tarafı: ListViewShowcase.razor.cs *@
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Senaryo 1: Standart Şablon & Tekli Seçim & Arama -->
+    <ThCard Title="Standart Şablon & Tekli Seçim" Subtitle="Arama çubuğu aktif ve standart veri yerleşimiyle tekli seçim listesi" Icon="fa-solid fa-flag">
+        <div class="flex flex-col gap-4">
+            <ThListView TItem="CountryItem"
+                        Items="_countries"
+                        ItemTitle="c => c.Name"
+                        ItemSubtitle="c => c.Continent"
+                        ItemLeftIcon='c => "fa-solid fa-earth-europe text-primary"'
+                        ItemRightBadge="c => c.Code"
+                        ItemRightBadgeVariant='c => "primary"'
+                        Searchable="true"
+                        SearchPlaceholder="Ülke arayın (örn. Türkiye, Almanya)..."
+                        SelectionMode="ListViewSelectionMode.Single"
+                        SelectedItem="_selectedCountry"
+                        SelectedItemChanged="OnCountryChanged"
+                        Height="320px" />
+
+            @if (_selectedCountry != null)
+            {
+                <div class="text-xs text-text-muted bg-surface-2 p-3 rounded border border-border flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-success-fg"></i>
+                    <span>Seçilen Ülke: <strong>@_selectedCountry.Name</strong> | Plaka: <strong>@_selectedCountry.Code</strong></span>
+                </div>
+            }
+        </div>
+    </ThCard>
+
+    <!-- Senaryo 2: Çoklu Seçim & Checkbox -->
+    <ThCard Title="Çoklu Seçim & Seçim Kutusu" Subtitle="Çoklu seçim modu açık ve satır checkbox'ları aktif liste" Icon="fa-solid fa-list-check">
+        <div class="flex flex-col gap-4">
+            <ThListView TItem="ShoppingItem"
+                        Items="_shoppingList"
+                        ItemTitle="s => s.Name"
+                        ItemSubtitle="s => s.Category"
+                        ItemRightText="s => s.Price"
+                        SelectionMode="ListViewSelectionMode.Multiple"
+                        ShowCheckbox="true"
+                        SelectedItems="_selectedShoppingItems"
+                        SelectedItemsChanged="OnShoppingSelectionChanged"
+                        Height="320px" />
+
+            @if (_selectedShoppingItems.Any())
+            {
+                <div class="text-xs text-text-muted bg-surface-2 p-3 rounded border border-border flex flex-col gap-1">
+                    <span class="font-medium mb-1">Seçilen Ürünler:</span>
+                    <div class="flex flex-wrap gap-1.5">
+                        @foreach (var item in _selectedShoppingItems)
+                        {
+                            <span class="th-badge th-badge--sm th-badge--success">
+                                @item.Name (@item.Price)
+                            </span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </ThCard>
+
+    <!-- Senaryo 3: Özel Şablon & Sonsuz Kaydırma (Infinite Scroll) -->
+    <div class="lg:col-span-2">
+        <ThCard Title="Özel Şablon & Sonsuz Kaydırma" Subtitle="Listenin sonuna gelindiğinde asenkron veri yükleme yapan özel tasarımlı log ekranı" Icon="fa-solid fa-terminal">
+            <div class="flex flex-col gap-4">
+                <ThListView TItem="LogEntry"
+                            Items="_logs"
+                            InfiniteScroll="true"
+                            HasMore="_hasMoreLogs"
+                            OnLoadMore="OnLoadMoreLogsAsync"
+                            Height="350px">
+                    <ItemTemplate Context="log">
+                        <div class="flex items-center justify-between w-full py-1 text-xs">
+                            <div class="flex items-center gap-3">
+                                <span class="font-mono text-text-subtle whitespace-nowrap">[@log.Timestamp]</span>
+                                <span class="th-badge th-badge--sm th-badge--@(log.Level == "danger" ? "danger" : (log.Level == "warning" ? "warning" : "info")) uppercase font-semibold text-[10px]">
+                                    @log.Level
+                                </span>
+                                <span class="font-medium text-text">@log.Message</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] text-text-muted font-mono bg-surface-3 px-1.5 py-0.5 rounded border border-border">@log.Source</span>
+                            </div>
+                        </div>
+                    </ItemTemplate>
+                </ThListView>
+
+                <div class="flex items-center justify-between text-xs text-text-subtle bg-surface-2 p-3 rounded border border-border">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-info-circle text-info"></i>
+                        <span>Scrollbar'ı aşağı kaydırarak yeni log verilerini yükletebilirsiniz.</span>
+                    </div>
+                    <span>Toplam Log: <strong>@_logs.Count</strong> | Sınır: <strong>50 Log</strong></span>
+                </div>
+            </div>
+        </ThCard>
+    </div>
+
+</div>

@@ -23,10 +23,13 @@ public partial class ThToastHost : IDisposable
             if (!toast.Fixed && toast.DurationMs > 0 && _scheduled.Add(toast.Id))
             {
                 var id = toast.Id;
-                _ = Task.Delay(toast.DurationMs).ContinueWith(_ =>
+                _ = Task.Delay(toast.DurationMs).ContinueWith(async _ =>
                 {
-                    _scheduled.Remove(id);
-                    Toasts.Remove(id);
+                    await InvokeAsync(() =>
+                    {
+                        _scheduled.Remove(id);
+                        Toasts.Remove(id);
+                    });
                 }, TaskScheduler.Default);
             }
         }

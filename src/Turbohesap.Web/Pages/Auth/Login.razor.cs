@@ -21,9 +21,12 @@ public partial class Login : IDisposable
 
     private readonly Slide[] _slides =
     [
-        new("fa-solid fa-bolt", "Hızlı işlem", "Fatura, tahsilat ve cari hareketleri saniyeler içinde kaydedin."),
-        new("fa-solid fa-shield-halved", "Güvenli altyapı", "JWT tabanlı kimlik, denetim kayıtları ve uçtan uca şifreleme."),
-        new("fa-solid fa-chart-line", "Anlık raporlar", "Satış özeti ve cari bakiyeleri gerçek zamanlı izleyin.")
+        new("fa-solid fa-bolt", "Hızlı İşlem", "Fatura, tahsilat ve cari hareketleri saniyeler içinde kaydedin."),
+        new("fa-solid fa-users-gear", "Müşteri & CRM", "Cari takibi, görüşme notları ve satış fırsatlarını tek yerden yönetin."),
+        new("fa-solid fa-industry", "Esnek Üretim", "İş emirleri, ürün reçeteleri ve istasyon durumlarını anlık izleyin."),
+        new("fa-solid fa-calendar-check", "Akıllı Planlama", "Makine yükleri, üretim takvimleri ve gantt süreç takibi."),
+        new("fa-solid fa-shield-halved", "Güvenli Altyapı", "JWT tabanlı kimlik, denetim kayıtları ve uçtan uca şifreleme."),
+        new("fa-solid fa-chart-line", "Anlık Raporlar", "Satış özeti ve cari bakiyeleri gerçek zamanlı izleyin.")
     ];
 
     protected override void OnInitialized()

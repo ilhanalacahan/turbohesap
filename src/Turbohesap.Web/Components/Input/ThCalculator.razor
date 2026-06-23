@@ -1,0 +1,78 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThCalculator.razor.cs *@
+
+<div class="@RootClass" 
+     style="@Style" 
+     tabindex="0" 
+     @ref="_calculatorRef"
+     @onkeydown="HandleKeyDown"
+     @attributes="AdditionalAttributes">
+    
+    <!-- Ekran Bölümü -->
+    <div class="th-calculator-screen">
+        <div class="th-calculator-expression">
+            @if (string.IsNullOrEmpty(_expression))
+            {
+                <span class="text-text-muted select-none">&nbsp;</span>
+            }
+            else
+            {
+                <span>@_expression</span>
+            }
+        </div>
+        <div class="th-calculator-result @(_hasError ? "th-calculator-result--error" : "")">
+            @_result
+        </div>
+    </div>
+
+    <!-- Hızlı KDV İşlemleri Paneli (Ticari Uygulama Özel) -->
+    <div class="th-calculator-kdv-row">
+        <button type="button" class="th-calculator-btn th-calculator-btn--kdv" @onclick="() => ApplyKdv(20, true)">+KDV %20</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--kdv" @onclick="() => ApplyKdv(20, false)">-KDV %20</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--kdv" @onclick="() => ApplyKdv(10, true)">+KDV %10</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--kdv" @onclick="() => ApplyKdv(10, false)">-KDV %10</button>
+    </div>
+
+    <!-- Tuş Takımı Grid'i -->
+    <div class="th-calculator-grid">
+        <!-- Satır 1 -->
+        <button type="button" class="th-calculator-btn th-calculator-btn--danger" @onclick="Clear">C</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--action" @onclick="Backspace">
+            <i class="fa-solid fa-delete-left"></i>
+        </button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--action" @onclick='() => AppendCharacter("/")'>/</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--action" @onclick='() => AppendCharacter("*")'>*</button>
+
+        <!-- Satır 2 -->
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("7")'>7</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("8")'>8</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("9")'>9</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--action" @onclick='() => AppendCharacter("-")'>-</button>
+
+        <!-- Satır 3 -->
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("4")'>4</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("5")'>5</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("6")'>6</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--action" @onclick='() => AppendCharacter("+")'>+</button>
+
+        <!-- Satır 4 -->
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("1")'>1</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("2")'>2</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick='() => AppendCharacter("3")'>3</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--action" @onclick="CalculateFinal">=</button>
+
+        <!-- Satır 5 -->
+        <button type="button" class="th-calculator-btn th-calculator-btn--num col-span-2" @onclick='() => AppendCharacter("0")'>0</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--num" @onclick="AppendDecimal">,</button>
+        <button type="button" class="th-calculator-btn th-calculator-btn--success" @onclick="SubmitValue" title="Değeri aktar (Ctrl+Enter)">
+            <i class="fa-solid fa-check"></i>
+        </button>
+    </div>
+
+    <!-- Klavye Kısayol İpucu -->
+    <div class="th-calculator-shortcut-hint select-none">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>Değeri aktarmak için <strong>Ctrl + Enter</strong> tuşlayın.</span>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+@namespace Turbohesap.Web.Components.Badge
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThTrending.razor.cs *@
+
+<span class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <i class="@IconClass th-trending-icon"></i>
+    <span class="th-trending-value">
+        @if (ShowPercentSign)
+        {
+            <span class="th-trending-percent-symbol">%</span>
+        }
+        @FormattedValue
+    </span>
+</span>

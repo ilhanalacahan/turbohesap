@@ -1,0 +1,57 @@
+/* ShortcutHint — th-shortcut-hint. Yalnızca --th-* token'ları kullanır. */
+
+.th-shortcut-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1875rem;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+.th-shortcut-kbd {
+  display: inline-block;
+  padding: 0.125rem 0.375rem;
+  font-family: var(--th-font-sans);
+  font-weight: var(--th-fw-semibold);
+  font-size: 0.6875rem;
+  color: var(--th-text-muted);
+  background: var(--th-surface-2);
+  border: 1px solid var(--th-border-strong);
+  border-bottom-width: 2px; /* 3D tuş efekti verir */
+  border-radius: var(--th-radius-xs);
+  line-height: 1;
+  box-shadow: var(--th-shadow-xs);
+}
+
+.th-shortcut-connector {
+  font-size: 0.6875rem;
+  font-weight: var(--th-fw-medium);
+  color: var(--th-text-subtle);
+  user-select: none;
+  padding: 0 0.05rem;
+}
+
+/* Boyut Varyasyonları (sm / md / lg) */
+.th-shortcut-hint--sm .th-shortcut-kbd {
+  font-size: 0.625rem;
+  padding: 0.0625rem 0.25rem;
+}
+.th-shortcut-hint--sm .th-shortcut-connector {
+  font-size: 0.625rem;
+}
+
+.th-shortcut-hint--md .th-shortcut-kbd {
+  font-size: 0.6875rem;
+  padding: 0.125rem 0.375rem;
+}
+.th-shortcut-hint--md .th-shortcut-connector {
+  font-size: 0.6875rem;
+}
+
+.th-shortcut-hint--lg .th-shortcut-kbd {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.5rem;
+}
+.th-shortcut-hint--lg .th-shortcut-connector {
+  font-size: 0.8125rem;
+}

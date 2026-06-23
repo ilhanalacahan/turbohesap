@@ -1,0 +1,126 @@
+@namespace Turbohesap.Web.Components.Input
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<string>
+@* Kod tarafı: ThAddressPicker.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <!-- Trigger Alanı -->
+    <div class="th-address-picker-trigger" @ref="_triggerRef" @onclick="ToggleDropdown">
+        <span class="th-address-picker-icon">
+            <i class="fa-solid fa-warehouse"></i>
+        </span>
+        
+        <div class="th-address-picker-value-container">
+            @if (string.IsNullOrWhiteSpace(Value))
+            {
+                <span class="th-address-picker-placeholder">@Placeholder</span>
+            }
+            else
+            {
+                <div class="th-address-picker-segments">
+                    <span class="th-address-picker-segment">Bölge <strong>@_selectedArea</strong></span>
+                    <span class="th-address-picker-separator">•</span>
+                    <span class="th-address-picker-segment">Koridor <strong>@_selectedRow.ToString("D2")</strong></span>
+                    <span class="th-address-picker-separator">•</span>
+                    <span class="th-address-picker-segment">Raf <strong>@_selectedShelf</strong></span>
+                    <span class="th-address-picker-separator">•</span>
+                    <span class="th-address-picker-segment">Kat <strong>@_selectedLevel.ToString("D2")</strong></span>
+                </div>
+            }
+        </div>
+
+        <div class="th-address-picker-actions">
+            @if (!string.IsNullOrWhiteSpace(Value) && !Disabled)
+            {
+                <button type="button" class="th-address-picker-clear" @onclick="ClearValue" @onclick:stopPropagation="true">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            }
+            <span class="th-address-picker-chevron">
+                <i class="fa-solid fa-chevron-down"></i>
+            </span>
+        </div>
+    </div>
+
+    <!-- Dropdown Panel (React Portal benzeri fixed konumlandırma) -->
+    @if (_isDropdownOpen)
+    {
+        <div class="th-address-picker-dropdown" @ref="_menuRef">
+            <!-- Bölge Seçimi -->
+            <div class="th-address-picker-section">
+                <label class="th-address-picker-label">Bölge (Alan)</label>
+                <div class="th-address-picker-areas">
+                    @foreach (var area in _activeAreas)
+                    {
+                        var currentArea = area;
+                        <button type="button" 
+                                class="th-address-picker-area-btn @(currentArea == _selectedArea ? "th-address-picker-area-btn--active" : "")"
+                                @onclick="() => SelectArea(currentArea)">
+                            @currentArea
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Koridor Seçimi -->
+            <div class="th-address-picker-section">
+                <div class="th-address-picker-row-control">
+                    <span class="th-address-picker-label">Koridor (Aks)</span>
+                    <div class="th-address-picker-stepper">
+                        <button type="button" class="th-address-picker-step-btn" @onclick="() => ChangeRow(-1)" disabled="@(_selectedRow <= 1)">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                        <span class="th-address-picker-step-value">@_selectedRow.ToString("D2")</span>
+                        <button type="button" class="th-address-picker-step-btn" @onclick="() => ChangeRow(1)" disabled="@(_selectedRow >= _activeMaxRows)">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Görsel Raf/Kat Matrisi -->
+            <div class="th-address-picker-section">
+                <label class="th-address-picker-label">Raf ve Kat Konumu</label>
+                <div class="th-address-picker-grid-container">
+                    <!-- Dikey Katlar -->
+                    <div class="th-address-picker-grid">
+                        @for (int level = _activeMaxLevels; level >= 1; level--)
+                        {
+                            var currentLevel = level;
+                            <div class="th-address-picker-grid-row">
+                                <div class="th-address-picker-level-indicator">K@(currentLevel)</div>
+                                
+                                @foreach (var shelf in _activeShelves)
+                                {
+                                    var currentShelf = shelf;
+                                    var isSelected = currentShelf == _selectedShelf && currentLevel == _selectedLevel;
+                                    
+                                    <button type="button" 
+                                            class="th-address-picker-cell @(isSelected ? "th-address-picker-cell--active" : "")"
+                                            title="Raf @(currentShelf) - Kat @(currentLevel)"
+                                            @onclick="() => SelectCell(currentShelf, currentLevel)">
+                                        <i class="fa-solid fa-box-open th-address-picker-cell-icon"></i>
+                                        <span class="th-address-picker-cell-label">@(currentShelf)-@(currentLevel)</span>
+                                    </button>
+                                }
+                            </div>
+                        }
+                        
+                        <!-- Yatay Raf Etiketleri -->
+                        <div class="th-address-picker-grid-row th-address-picker-grid-row--header">
+                            <div class="th-address-picker-level-indicator"></div>
+                            @foreach (var shelf in _activeShelves)
+                            {
+                                <div class="th-address-picker-shelf-indicator">Raf @shelf</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="th-address-picker-footer">
+                <span class="th-address-picker-preview">Seçilen: <strong>@_selectedArea-@_selectedRow.ToString("D2")-@_selectedShelf-@_selectedLevel.ToString("D2")</strong></span>
+                <button type="button" class="th-address-picker-apply-btn" @onclick="CloseMenu">Tamam</button>
+            </div>
+        </div>
+    }
+</div>

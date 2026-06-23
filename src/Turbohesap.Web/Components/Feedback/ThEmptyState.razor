@@ -1,0 +1,24 @@
+@namespace Turbohesap.Web.Components.Feedback
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThEmptyState.razor.cs *@
+
+<div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+    <div class="th-empty-state-visual">
+        <i class="@Icon"></i>
+    </div>
+    
+    <div class="th-empty-state-content">
+        <h3 class="th-empty-state-title">@Title</h3>
+        @if (!string.IsNullOrEmpty(Description))
+        {
+            <p class="th-empty-state-desc">@Description</p>
+        }
+    </div>
+
+    @if (ChildContent != null)
+    {
+        <div class="th-empty-state-actions">
+            @ChildContent
+        </div>
+    }
+</div>

@@ -1,0 +1,10 @@
+@namespace Turbohesap.Web.Components.Input
+@typeparam TValue
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<TValue>
+@* Kod tarafı: ThRadioGroup.razor.cs *@
+
+<CascadingValue Value="this" IsFixed="true">
+    <div class="@RootClass" style="@Style" @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</CascadingValue>

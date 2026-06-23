@@ -1,0 +1,61 @@
+/* AmountDisplay — th-amount-display. Yalnızca --th-* token'ları kullanır. */
+
+.th-amount-display {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--th-font-mono); /* Rakamlar hizalı dursun diye mono font varsayılan */
+  font-weight: var(--th-fw-semibold);
+  box-sizing: border-box;
+}
+
+/* Durum Renkleri */
+.th-amount-display--positive {
+  color: var(--th-success);
+}
+
+.th-amount-display--negative {
+  color: var(--th-danger);
+}
+
+.th-amount-display--neutral {
+  color: var(--th-text);
+}
+
+/* Kuruş Kısmı (Superscript Benzeri Görünüm) */
+.th-amount-display-decimals-wrapper {
+  font-size: 0.78em;
+  opacity: 0.85;
+  margin-left: 0.05em;
+}
+
+.th-amount-display-separator {
+  font-size: 0.9em;
+}
+
+/* Sembol Konumlandırma */
+.th-amount-display-symbol {
+  font-size: 0.85em;
+  font-weight: var(--th-fw-medium);
+  opacity: 0.75;
+}
+
+.th-amount-display-symbol--prepend {
+  margin-right: 0.25em;
+}
+
+.th-amount-display-symbol--append {
+  margin-left: 0.25em;
+}
+
+/* Boyut Varyasyonları */
+.th-amount-display--sm {
+  font-size: 0.8125rem;
+}
+
+.th-amount-display--md {
+  font-size: 0.9375rem;
+}
+
+.th-amount-display--lg {
+  font-size: 1.25rem;
+}

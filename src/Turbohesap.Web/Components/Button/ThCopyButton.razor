@@ -1,0 +1,22 @@
+@namespace Turbohesap.Web.Components.Button
+@inherits Turbohesap.Web.Components.Base.TurboComponentBase
+@* Kod tarafı: ThCopyButton.razor.cs *@
+
+<button type="button" 
+        class="@RootClass" 
+        style="@Style" 
+        title="@(_copied ? SuccessTooltipText : TooltipText)"
+        @onclick="CopyToClipboard" 
+        @onclick:stopPropagation="true"
+        @attributes="AdditionalAttributes">
+    <span class="th-copy-button-icon-wrapper">
+        @if (_copied)
+        {
+            <i class="fa-solid fa-check th-copy-button-icon th-copy-button-icon--check"></i>
+        }
+        else
+        {
+            <i class="fa-regular fa-copy th-copy-button-icon th-copy-button-icon--copy"></i>
+        }
+    </span>
+</button>

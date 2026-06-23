@@ -247,3 +247,222 @@
   font-size: 0.9375rem;
   padding: 0.625rem 0.875rem;
 }
+
+/* --- Yeni Giriş Bileşeni Tasarımı (ThInput / ThDatePicker) --- */
+
+/* Dış sarmalayıcı (Bütüncül kenarlık ve gölge için) */
+.th-input-wrapper-outer {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: var(--th-control-height);
+  background: var(--th-surface);
+  border: 1px solid var(--th-border-strong);
+  border-radius: var(--th-radius-md);
+  transition: border-color var(--th-transition-fast) var(--th-ease),
+    box-shadow var(--th-transition-fast) var(--th-ease);
+  overflow: hidden;
+}
+
+.th-input-wrapper-outer:focus-within {
+  outline: none;
+  border-color: var(--th-primary);
+  box-shadow: 0 0 0 3px var(--th-ring);
+}
+
+/* Boyutlar */
+.th-input-wrapper-outer--sm {
+  height: var(--th-control-height-sm);
+}
+.th-input-wrapper-outer--lg {
+  height: var(--th-control-height-lg);
+}
+
+/* Hata Durumu */
+.th-input-wrapper-outer--error {
+  border-color: var(--th-danger);
+}
+.th-input-wrapper-outer--error:focus-within {
+  box-shadow: 0 0 0 3px var(--th-danger-subtle);
+}
+
+/* Pasif Durum */
+.th-input-wrapper-outer--disabled {
+  background: var(--th-surface-3);
+  color: var(--th-text-subtle);
+  cursor: not-allowed;
+}
+
+/* İç sarmalayıcı (ikon ve asıl metin kutusu) */
+.th-input-inner-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  padding-inline: 0.75rem;
+  gap: 0.5rem;
+}
+
+/* İçerideki asıl input kontrolünü sıfırlama */
+.th-input-field {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: var(--th-text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  padding: 0;
+  outline: none;
+}
+.th-input-field:focus {
+  outline: none;
+  box-shadow: none;
+}
+.th-input-field:disabled {
+  cursor: not-allowed;
+  color: var(--th-text-subtle);
+}
+
+.th-input-wrapper-outer--sm .th-input-field {
+  font-size: 0.8125rem;
+}
+.th-input-wrapper-outer--lg .th-input-field {
+  font-size: 0.9375rem;
+}
+
+/* İkon yerleşimi */
+.th-input-icon-leading,
+.th-input-icon-trailing {
+  color: var(--th-text-subtle);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Prepend ve Append Alanları */
+.th-input-prepend,
+.th-input-append {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+}
+
+/* Prepend/Append içindeki butonların mükemmel entegrasyonu */
+.th-input-prepend .th-btn,
+.th-input-append .th-btn {
+  height: 100% !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  transition: all var(--th-transition-fast) var(--th-ease);
+}
+
+/* Bölücü kenarlıklar */
+.th-input-prepend .th-btn {
+  border-right: 1px solid var(--th-border-strong) !important;
+}
+.th-input-append .th-btn {
+  border-left: 1px solid var(--th-border-strong) !important;
+}
+
+/* Kenar yuvarlatmalarının sarmalayıcıya uyması */
+.th-input-prepend .th-btn:first-child {
+  border-top-left-radius: var(--th-radius-md) !important;
+  border-bottom-left-radius: var(--th-radius-md) !important;
+}
+.th-input-append .th-btn:last-child {
+  border-top-right-radius: var(--th-radius-md) !important;
+  border-bottom-right-radius: var(--th-radius-md) !important;
+}
+
+
+/* --- Radyo Buton Grubu (ThRadioGroup & ThRadio) --- */
+
+.th-radio-group {
+  display: flex;
+  gap: 1rem;
+}
+.th-radio-group--vertical {
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.th-radio-group--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.th-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--th-font-sans);
+  font-size: 0.875rem;
+  color: var(--th-text);
+  transition: opacity var(--th-transition-fast) var(--th-ease);
+}
+.th-radio--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.th-radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.th-radio-control {
+  position: relative;
+  display: inline-block;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 1px solid var(--th-border-strong);
+  border-radius: var(--th-radius-full);
+  background: var(--th-surface);
+  transition: all var(--th-transition-fast) var(--th-ease);
+  flex-shrink: 0;
+}
+
+.th-radio-input:focus-visible + .th-radio-control {
+  outline: 2px solid var(--th-ring);
+  outline-offset: 2px;
+}
+
+.th-radio-input:checked + .th-radio-control {
+  border-color: var(--th-primary);
+  background: var(--th-surface);
+}
+
+.th-radio-input:checked + .th-radio-control::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--th-radius-full);
+  background: var(--th-primary);
+}
+
+.th-radio--disabled .th-radio-control {
+  background: var(--th-surface-3);
+  border-color: var(--th-border);
+}
+
+.th-radio--disabled .th-radio-input:checked + .th-radio-control::after {
+  background: var(--th-text-subtle);
+}
+
+.th-radio-label {
+  font-weight: var(--th-fw-normal);
+}
+

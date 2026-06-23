@@ -1,0 +1,91 @@
+/* SegmentedControl — th-segmented-control. Yalnızca --th-* token'ları kullanır. */
+
+.th-segmented-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--th-surface-2);
+  border: 1px solid var(--th-border-strong);
+  border-radius: var(--th-radius-full);
+  padding: 2px;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.th-segmented-control--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.th-segmented-control--disabled .th-segmented-control-option {
+  cursor: not-allowed;
+}
+
+.th-segmented-control--error {
+  border-color: var(--th-danger);
+}
+
+/* Kayan Seçim Sürgüsü */
+.th-segmented-control-slider {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  background: var(--th-surface);
+  border-radius: var(--th-radius-full);
+  box-shadow: var(--th-shadow-xs);
+  transition: left var(--th-transition) var(--th-ease), width var(--th-transition) var(--th-ease);
+  z-index: 1;
+}
+
+/* Seçenek Düğmeleri */
+.th-segmented-control-option {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--th-text-muted);
+  font-weight: var(--th-fw-medium);
+  text-align: center;
+  cursor: pointer;
+  z-index: 2;
+  position: relative;
+  transition: color var(--th-transition-fast) var(--th-ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.th-segmented-control-option:hover:not(:disabled):not(.th-segmented-control-option--active) {
+  color: var(--th-text);
+}
+
+.th-segmented-control-option--active {
+  color: var(--th-primary);
+  font-weight: var(--th-fw-semibold);
+}
+
+/* Boyut Varyasyonları (sm / md / lg) */
+.th-segmented-control--sm {
+  height: 2rem;
+}
+.th-segmented-control--sm .th-segmented-control-option {
+  font-size: 0.75rem;
+  height: 100%;
+}
+
+.th-segmented-control--md {
+  height: 2.5rem;
+}
+.th-segmented-control--md .th-segmented-control-option {
+  font-size: 0.875rem;
+  height: 100%;
+}
+
+.th-segmented-control--lg {
+  height: 3rem;
+}
+.th-segmented-control--lg .th-segmented-control-option {
+  font-size: 1rem;
+  height: 100%;
+}

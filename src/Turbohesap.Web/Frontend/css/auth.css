@@ -24,7 +24,7 @@
   min-height: 100dvh;
 }
 @media (min-width: 900px) {
-  .th-login { grid-template-columns: 1.05fr 0.95fr; }
+  .th-login { grid-template-columns: 1.12fr 0.88fr; }
 }
 
 /* Sol tanıtım paneli (mobilde gizli) */
@@ -38,7 +38,7 @@
   color: #fff;
   background:
     radial-gradient(900px 500px at 0% 100%, rgba(255, 255, 255, 0.12), transparent 55%),
-    linear-gradient(150deg, var(--th-primary-active), var(--th-primary) 55%, var(--th-accent));
+    linear-gradient(135deg, var(--th-primary-active), var(--th-primary));
 }
 @media (min-width: 900px) { .th-login__brand { display: flex; } }
 
@@ -64,7 +64,7 @@
   backdrop-filter: blur(6px);
   font-size: 1.25rem;
 }
-.th-login__brand-name { font-size: 1.25rem; font-weight: var(--th-fw-bold); letter-spacing: -0.01em; }
+.th-login__brand-name { font-size: 1.25rem; font-weight: var(--th-fw-bold); letter-spacing: -0.01em; color: #fff; }
 
 .th-login__brand-body { position: relative; z-index: 1; max-width: 30rem; }
 .th-login__headline {
@@ -73,6 +73,7 @@
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
+  color: #fff;
 }
 .th-login__subhead { font-size: 1rem; line-height: 1.6; color: rgba(255, 255, 255, 0.82); }
 
@@ -95,7 +96,7 @@
   background: rgba(255, 255, 255, 0.16);
   font-size: 1rem;
 }
-.th-login__slide-title { font-weight: var(--th-fw-semibold); margin-bottom: 0.15rem; }
+.th-login__slide-title { font-weight: var(--th-fw-semibold); margin-bottom: 0.15rem; color: #fff; }
 .th-login__slide-text { font-size: 0.875rem; color: rgba(255, 255, 255, 0.78); line-height: 1.5; }
 
 .th-login__dots { display: flex; gap: 0.4rem; margin-top: 1.25rem; }

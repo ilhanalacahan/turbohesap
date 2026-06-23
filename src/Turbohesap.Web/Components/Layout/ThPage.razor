@@ -6,7 +6,7 @@
    vb.) sayfalarda Flush. Render edilince sayfayı PageTabs'a kaydeder; alt içeriğe sekme tutamacı
    (PageTabHandle) cascading olarak verilir; sayfalar kirli durumu bunun üzerinden bildirir. *@
 <CascadingValue Value="_handle" IsFixed="true">
-    <div class="@(Flush ? "th-page th-page--flush" : "th-page")">
+    <div class="@(Flush ? "th-page th-page--flush" : "th-page")" style="@(Footer is not null && FooterFixed ? "padding-bottom: calc(var(--th-content-padding) + var(--th-footer-height));" : null)">
         @if (!string.IsNullOrEmpty(Title) || Actions is not null)
         {
             <div class="th-page-header">

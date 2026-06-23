@@ -310,6 +310,217 @@ export function registerInterop(): void {
           dialog.style.transform = '';
         }
       };
+    },
+    checkDropdownPosition(element: HTMLElement | null): boolean {
+      if (!element) return false;
+      const rect = element.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const spaceBelow = viewportHeight - rect.bottom;
+      return spaceBelow < 250 && rect.top > spaceBelow;
+    },
+    scrollActiveDropdownItem(container: HTMLElement | null, activeIndex: number) {
+      if (!container) return;
+      const items = container.querySelectorAll('.th-autocomplete-item');
+      const activeItem = items[activeIndex] as HTMLElement;
+      if (activeItem) {
+        activeItem.scrollIntoView({
+          behavior: 'auto',
+          block: 'nearest'
+        });
+      }
+    },
+    initListViewScroll(element: HTMLElement | null, dotnetRef: any) {
+      if (!element) return;
+      function onScroll() {
+        const threshold = 50;
+        const nearBottom = element.scrollHeight - element.scrollTop - element.clientHeight < threshold;
+        if (nearBottom) {
+          dotnetRef.invokeMethodAsync('OnScrollNearBottom');
+        }
+      }
+      element.addEventListener('scroll', onScroll);
+      (element as any)._onListViewScroll = onScroll;
+    },
+    disposeListViewScroll(element: HTMLElement | null) {
+      if (!element) return;
+      const onScroll = (element as any)._onListViewScroll;
+      if (onScroll) {
+        element.removeEventListener('scroll', onScroll);
+        delete (element as any)._onListViewScroll;
+      }
+    },
+    evaluateExpression(expression: string): number {
+      try {
+        const clean = expression.replace(/[^0-9+\-*/().]/g, '');
+        return new Function(`return (${clean})`)();
+      } catch {
+        return NaN;
+      }
+    },
+    initMaskInput(input: HTMLInputElement | null, mask: string, dotnetRef: any) {
+      if (!input) return;
+      
+      function format(value: string): { formatted: string, raw: string } {
+        if (!value) return { formatted: '', raw: '' };
+        
+        if (mask && mask.toLowerCase() === 'plaka') {
+          const clean = value.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+          const match = clean.match(/^(\d{0,2})([A-Z]{0,3})(\d{0,4})/);
+          if (!match) return { formatted: '', raw: '' };
+          
+          let formatted = match[1] || '';
+          if (match[2]) {
+            formatted += ' ' + match[2];
+          }
+          if (match[3]) {
+            formatted += ' ' + match[3];
+          }
+          return { formatted, raw: clean.slice(0, 9) };
+        }
+        
+        const cleanChars = value.replace(/[^0-9a-zA-Z_-]/g, '').split('');
+        if (cleanChars.length === 0) {
+          return { formatted: '', raw: '' };
+        }
+
+        let formatted = '';
+        let raw = '';
+        let cleanIndex = 0;
+        
+        for (let i = 0; i < mask.length; i++) {
+          const maskChar = mask[i];
+          
+          if (maskChar === '#') {
+            while (cleanIndex < cleanChars.length && !/^\d$/.test(cleanChars[cleanIndex])) {
+              cleanIndex++;
+            }
+            if (cleanIndex < cleanChars.length) {
+              const char = cleanChars[cleanIndex++];
+              formatted += char;
+              raw += char;
+            } else {
+              break;
+            }
+          } else if (maskChar === '?') {
+            while (cleanIndex < cleanChars.length && !/^[a-zA-Z]$/.test(cleanChars[cleanIndex])) {
+              cleanIndex++;
+            }
+            if (cleanIndex < cleanChars.length) {
+              const char = cleanChars[cleanIndex++].toUpperCase();
+              formatted += char;
+              raw += char;
+            } else {
+              break;
+            }
+          } else if (maskChar === '*') {
+            while (cleanIndex < cleanChars.length && !/^[0-9a-zA-Z_-]$/.test(cleanChars[cleanIndex])) {
+              cleanIndex++;
+            }
+            if (cleanIndex < cleanChars.length) {
+              const char = cleanChars[cleanIndex++];
+              formatted += char;
+              raw += char;
+            } else {
+              break;
+            }
+          } else {
+            formatted += maskChar;
+            if (cleanIndex < cleanChars.length && cleanChars[cleanIndex].toUpperCase() === maskChar.toUpperCase()) {
+              cleanIndex++;
+            }
+          }
+        }
+        return { formatted, raw };
+      }
+
+      function onInput() {
+        const selectionStart = input!.selectionStart || 0;
+        const prevLength = input!.value.length;
+        
+        const { formatted, raw } = format(input!.value);
+        input!.value = formatted;
+        
+        dotnetRef.invokeMethodAsync('OnMaskedInputChanged', formatted, raw);
+
+        const newLength = formatted.length;
+        const newSelection = selectionStart + (newLength - prevLength);
+        input!.setSelectionRange(newSelection, newSelection);
+      }
+
+      input.addEventListener('input', onInput);
+      (input as any)._onMaskInput = onInput;
+      
+      // İlk değer formatı
+      const initial = format(input.value);
+      input.value = initial.formatted;
+    },
+    disposeMaskInput(input: HTMLInputElement | null) {
+      if (!input) return;
+      const onInput = (input as any)._onMaskInput;
+      if (onInput) {
+        input.removeEventListener('input', onInput);
+        delete (input as any)._onMaskInput;
+      }
+    },
+    initCurrencyInput(input: HTMLInputElement | null, dotnetRef: any) {
+      if (!input) return;
+
+      function formatCurrency(value: string): string {
+        let digits = value.replace(/\D/g, '');
+        if (digits === '') return '';
+        
+        digits = digits.replace(/^0+/, '');
+        if (digits === '') return '0,00';
+        if (digits.length === 1) return '0,0' + digits;
+        if (digits.length === 2) return '0,' + digits;
+        
+        const liras = digits.slice(0, -2);
+        const kurus = digits.slice(-2);
+        
+        const formattedLiras = liras.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return `${formattedLiras},${kurus}`;
+      }
+
+      function onInput() {
+        const originalValue = input!.value;
+        const formatted = formatCurrency(originalValue);
+        input!.value = formatted;
+
+        let digits = originalValue.replace(/\D/g, '');
+        let rawVal = 0;
+        if (digits.length > 0) {
+          rawVal = parseFloat(digits) / 100;
+        }
+
+        dotnetRef.invokeMethodAsync('OnCurrencyInputChanged', rawVal, formatted);
+      }
+
+      input.addEventListener('input', onInput);
+      (input as any)._onCurrencyInput = onInput;
+
+      if (input.value) {
+        input.value = formatCurrency(input.value);
+      }
+    },
+    disposeCurrencyInput(input: HTMLInputElement | null) {
+      if (!input) return;
+      const onInput = (input as any)._onCurrencyInput;
+      if (onInput) {
+        input.removeEventListener('input', onInput);
+        delete (input as any)._onCurrencyInput;
+      }
+    },
+    setCurrencyInputValue(input: HTMLInputElement | null, value: string) {
+      if (!input) return;
+      input.value = value;
+      const event = new Event('input', { bubbles: true });
+      input.dispatchEvent(event);
+    },
+    setMaskInputValue(input: HTMLInputElement | null, value: string) {
+      if (!input) return;
+      input.value = value;
+      const event = new Event('input', { bubbles: true });
+      input.dispatchEvent(event);
     }
   };
 

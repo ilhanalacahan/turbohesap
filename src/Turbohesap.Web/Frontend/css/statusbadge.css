@@ -1,0 +1,100 @@
+/* StatusBadge — th-status-badge. Yalnızca --th-* token'ları kullanır. */
+
+.th-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--th-density-gap);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--th-radius-full);
+  font-weight: var(--th-fw-semibold);
+  font-size: 0.75rem;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  width: max-content;
+}
+
+.th-status-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--th-radius-full);
+  flex-shrink: 0;
+}
+
+/* Varyant Tanımları (Arka plan, kenarlık, metin ve dot renkleri) */
+.th-status-badge--neutral {
+  background: var(--th-surface-2);
+  border-color: var(--th-border);
+  color: var(--th-text-muted);
+}
+.th-status-badge--neutral .th-status-badge-dot {
+  background: var(--th-text-subtle);
+}
+
+.th-status-badge--success {
+  background: var(--th-success-subtle);
+  border-color: var(--th-success-subtle);
+  color: var(--th-success);
+}
+.th-status-badge--success .th-status-badge-dot {
+  background: var(--th-success);
+}
+
+.th-status-badge--warning {
+  background: var(--th-warning-subtle);
+  border-color: var(--th-warning-subtle);
+  color: var(--th-warning);
+}
+.th-status-badge--warning .th-status-badge-dot {
+  background: var(--th-warning);
+}
+
+.th-status-badge--danger {
+  background: var(--th-danger-subtle);
+  border-color: var(--th-danger-subtle);
+  color: var(--th-danger);
+}
+.th-status-badge--danger .th-status-badge-dot {
+  background: var(--th-danger);
+}
+
+.th-status-badge--info {
+  background: var(--th-info-subtle);
+  border-color: var(--th-info-subtle);
+  color: var(--th-info);
+}
+.th-status-badge--info .th-status-badge-dot {
+  background: var(--th-info);
+}
+
+.th-status-badge--accent {
+  background: var(--th-primary-subtle);
+  border-color: var(--th-primary-subtle);
+  color: var(--th-primary);
+}
+.th-status-badge--accent .th-status-badge-dot {
+  background: var(--th-primary);
+}
+
+/* Boyut Varyasyonları (sm / md / lg) */
+.th-status-badge--sm {
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+}
+.th-status-badge--sm .th-status-badge-dot {
+  width: 5px;
+  height: 5px;
+}
+
+.th-status-badge--md {
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+}
+
+.th-status-badge--lg {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+}
+.th-status-badge--lg .th-status-badge-dot {
+  width: 7px;
+  height: 7px;
+}
